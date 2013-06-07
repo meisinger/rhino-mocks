@@ -1,7 +1,7 @@
 properties { 
   $base_dir  = resolve-path .
   $lib_dir = "$base_dir\SharedLibs"
-  $build_dir = "$base_dir\build" 
+  $build_dir = "$base_dir\Build" 
   
   $sln_file = "$base_dir\Rhino.Mocks.sln" 
   $version = "3.6.0.0"
