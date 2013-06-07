@@ -96,10 +96,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\SharedLibs\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.Mocks.CPP.Interfaces, Version=1.0.3078.4206, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SharedLibs\Rhino.Mocks.CPP.Interfaces.dll</HintPath>
-    </Reference>
     <Reference Include="Scripting, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\SharedLibs\Scripting.dll</HintPath>
@@ -261,7 +257,6 @@
     <Compile Include="FieldsProblem\FieldProblem_SamW.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Sander.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Shane.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_Shanon.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Stephan.cs" />
     <Compile Include="FieldsProblem\FieldProblem_StevenS.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Thierry.cs" />
