@@ -33,9 +33,7 @@ using Xunit;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	using Castle.Core.Interceptor;
 	using Castle.DynamicProxy;
-
 	
 	public class FieldProblem_James
 	{
