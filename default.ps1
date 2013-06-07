@@ -8,8 +8,6 @@ properties {
   $humanReadableversion = "3.6"
   $tools_dir = "$base_dir\Tools"
   $release_dir = "$base_dir\Release"
-  $uploadCategory = "Rhino-Mocks"
-  $uploader = "..\Uploader\S3Uploader.exe"
 } 
 
 include .\psake_ext.ps1
@@ -52,16 +50,6 @@ task Init -depends Clean {
 		-clsCompliant "false" `
 		-copyright "Hibernating Rhinos & Ayende Rahien 2004 - 2009"
 	
-	Generate-Assembly-Info `
-		-file "$base_dir\Rhino.Mocks.GettingStarted\Properties\AssemblyInfo.cs" `
-		-title "Rhino Mocks Tests $version" `
-		-description "Mocking Framework for .NET" `
-		-company "Hibernating Rhinos" `
-		-product "Rhino Mocks Tests $version" `
-		-version $version `
-		-clsCompliant "false" `
-		-copyright "Hibernating Rhinos & Ayende Rahien 2004 - 2009"
-		
 	new-item $release_dir -itemType directory 
 	new-item $build_dir -itemType directory 
 	cp $tools_dir\xUnit\*.* $build_dir
@@ -116,22 +104,3 @@ task Release -depends Test, Merge {
     }
 }
 
-
-task Upload -depends Release {
-	Write-Host "Starting upload"
-	if (Test-Path $uploader) {
-		$log = $env:push_msg 
-    if($log -eq $null -or $log.Length -eq 0) {
-      $log = git log -n 1 --oneline		
-    }
-		&$uploader "$uploadCategory" "$release_dir\Rhino.Mocks-$humanReadableversion-Build-$env:ccnetnumericlabel.zip" "$log"
-		
-		if ($lastExitCode -ne 0) {
-      write-host "Failed to upload to S3: $lastExitCode"
-			throw "Error: Failed to publish build"
-		}
-	}
-	else {
-		Write-Host "could not find upload script $uploadScript, skipping upload"
-	}
-}
