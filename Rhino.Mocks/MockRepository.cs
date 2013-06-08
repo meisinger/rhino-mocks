@@ -726,20 +726,24 @@ namespace Rhino.Mocks
         {
             if (type.IsSealed)
                 throw new NotSupportedException("Can't create mocks of sealed classes");
-            List<Type> implementedTypesForGenericInvocationDiscoverability = new List<Type>(extras);
-            implementedTypesForGenericInvocationDiscoverability.Add(type);
-            ProxyInstance proxyInstance = new ProxyInstance(this, implementedTypesForGenericInvocationDiscoverability.ToArray());
-            RhinoInterceptor interceptor = new RhinoInterceptor(this, proxyInstance,invocationVisitorsFactory.CreateStandardInvocationVisitors(proxyInstance, this));
-            ArrayList types = new ArrayList();
-            types.AddRange(extras);
+
+            List<Type> collection = new List<Type>(extras);
+            collection.Add(type);
+
+            ProxyInstance proxyInstance = new ProxyInstance(this, collection.ToArray());
+            RhinoInterceptor interceptor = new RhinoInterceptor(this, proxyInstance, 
+                    invocationVisitorsFactory.CreateStandardInvocationVisitors(proxyInstance, this));
+
+            List<Type> types = new List<Type>(extras);
             types.Add(typeof(IMockedObject));
+
             object proxy;
+
             try
             {
                 proxyGenerationOptions = ProxyGenerationOptions.Default;
-                proxy = GetProxyGenerator(type).CreateClassProxy(type, (Type[])types.ToArray(typeof(Type)),
-                                                   proxyGenerationOptions,
-                                                   argumentsForConstructor, interceptor);
+                proxy = GetProxyGenerator(type).CreateClassProxy(type, types.ToArray(), 
+                        proxyGenerationOptions, argumentsForConstructor, interceptor);
             }
             catch (MissingMethodException mme)
             {
@@ -749,29 +753,34 @@ namespace Rhino.Mocks
             {
                 throw new Exception("Exception in constructor: " + tie.InnerException, tie.InnerException);
             }
+
             IMockedObject mockedObject = (IMockedObject)proxy;
             mockedObject.ConstructorArguments = argumentsForConstructor;
+
             IMockState value = mockStateFactory(mockedObject);
             proxies.Add(proxy, value);
-            GC.SuppressFinalize(proxy);//avoid issues with expectations created/validated on the finalizer thread
+
+            //avoid issues with expectations created/validated on the finalizer thread
+            GC.SuppressFinalize(proxy);
+
             return proxy;
         }
 
         private object MockInterface(CreateMockState mockStateFactory, Type type, Type[] extras)
         {
-            object proxy;
-            List<Type> implementedTypesForGenericInvocationDiscoverability = new List<Type>(extras);
-            implementedTypesForGenericInvocationDiscoverability.Add(type);
-            ProxyInstance proxyInstance = new ProxyInstance(this,
-                                                             implementedTypesForGenericInvocationDiscoverability
-                                                                 .ToArray());
-            RhinoInterceptor interceptor = new RhinoInterceptor(this, proxyInstance,invocationVisitorsFactory.CreateStandardInvocationVisitors(proxyInstance, this));
+            List<Type> collection = new List<Type>(extras);
+            collection.Add(type);
+            
+            ProxyInstance proxyInstance = new ProxyInstance(this, collection.ToArray());
+            RhinoInterceptor interceptor = new RhinoInterceptor(this, proxyInstance, 
+                    invocationVisitorsFactory.CreateStandardInvocationVisitors(proxyInstance, this));
 
-            List<Type> types = new List<Type>();
-            types.AddRange(extras);
+            List<Type> types = new List<Type>(extras);
             types.Add(typeof(IMockedObject));
-            proxy =
-                GetProxyGenerator(type).CreateInterfaceProxyWithoutTarget(type, types.ToArray(), proxyGenerationOptions, interceptor);
+
+            object proxy = GetProxyGenerator(type).CreateInterfaceProxyWithoutTarget(type, types.ToArray(), 
+                    proxyGenerationOptions, interceptor);
+
             IMockState value = mockStateFactory((IMockedObject)proxy);
             proxies.Add(proxy, value);
             return proxy;
@@ -782,18 +791,16 @@ namespace Rhino.Mocks
             if (typeof(Delegate).Equals(type))
                 throw new InvalidOperationException("Cannot mock the Delegate base type.");
 
-            object proxy;
-
             ProxyInstance proxyInstance = new ProxyInstance(this, type);
-            RhinoInterceptor interceptor = new RhinoInterceptor(this, proxyInstance,invocationVisitorsFactory.CreateStandardInvocationVisitors(proxyInstance, this));
+            RhinoInterceptor interceptor = new RhinoInterceptor(this, proxyInstance, 
+                    invocationVisitorsFactory.CreateStandardInvocationVisitors(proxyInstance, this));
 
             Type[] types = new Type[] { typeof(IMockedObject) };
             var delegateTargetInterface = delegateTargetInterfaceCreator.GetDelegateTargetInterface(type);
-            object target = GetProxyGenerator(type).CreateInterfaceProxyWithoutTarget(
-                delegateTargetInterface,
-                types, proxyGenerationOptions, interceptor);
-
-            proxy = Delegate.CreateDelegate(type, target, delegateTargetInterface.Name+ ".Invoke");
+            object target = GetProxyGenerator(type).CreateInterfaceProxyWithoutTarget(delegateTargetInterface, types, 
+                    proxyGenerationOptions, interceptor);
+            
+            object proxy = Delegate.CreateDelegate(type, target, "Invoke");
             delegateProxies.Add(target, proxy);
 
             IMockState value = mockStateFactory(GetMockedObject(proxy));
