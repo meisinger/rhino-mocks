@@ -32,132 +32,139 @@ using System.Text;
 
 namespace Rhino.Mocks.Constraints
 {
-
-	/// <summary>
-	/// Provides access to the constraintes defined in the class <see cref="Is"/> to be used in context
-	/// with the <see cref="Arg&lt;T&gt;"/> syntax.
-	/// </summary>
-	/// <typeparam name="T">The type of the argument</typeparam>
+    /// <summary>
+    /// Provides access to the constraints defined in <see cref="Is"/>
+    /// to be used in context with the <see cref="Arg&lt;T&gt;"/> syntax
+    /// </summary>
+    /// <typeparam name="T">The type of the argument</typeparam>
 	public class IsArg<T>
 	{
+        /// <summary>
+        /// A constraints that accept anything
+        /// </summary>
+        /// <returns></returns>
+        public T Anything
+        {
+            get
+            {
+                ArgManager.AddInArgument(Is.Anything());
+                return default(T);
+            }
+        }
 
-		internal IsArg() { }
+        /// <summary>
+        /// A constraint that accept only nulls
+        /// </summary>
+        /// <returns></returns>
+        public T Null
+        {
+            get
+            {
+                ArgManager.AddInArgument(Is.Null());
+                return default(T);
+            }
+        }
 
+        /// <summary>
+        /// A constraint that accept only non null values
+        /// </summary>
+        /// <returns></returns>
+        public T NotNull
+        {
+            get
+            {
+                ArgManager.AddInArgument(Is.NotNull());
+                return default(T);
+            }
+        }
 
-		/// <summary>
+        /// <summary>
+        /// A constraint that accept only value of the specified type.
+        /// The check is performed on the type that has been defined
+        /// as the argument type.
+        /// </summary>
+        public T TypeOf
+        {
+            get
+            {
+                ArgManager.AddInArgument(Is.TypeOf<T>());
+                return default(T);
+            }
+        }
+
+		internal IsArg() 
+        {
+        }
+
+        /// <summary>
 		/// Evaluate a greater than constraint for <see cref="IComparable"/>.
 		/// </summary>
-		/// <param name="objToCompare">The object the parameter should be greater than</param>
-		public T GreaterThan(IComparable objToCompare)
+		/// <param name="source">The object the parameter should be greater than</param>
+		public T GreaterThan(IComparable source)
 		{
-            objToCompare = ConvertObjectTypeToMatch(objToCompare);
-			ArgManager.AddInArgument(Is.GreaterThan(objToCompare));
+            source = ConvertObjectTypeToMatch(source);
+
+			ArgManager.AddInArgument(Is.GreaterThan(source));
 			return default(T);
 		}
 
 		/// <summary>
 		/// Evaluate a less than constraint for <see cref="IComparable"/>.
 		/// </summary>
-		/// <param name="objToCompare">The object the parameter should be less than</param>
-		public T LessThan(IComparable objToCompare)
+		/// <param name="source">The object the parameter should be less than</param>
+		public T LessThan(IComparable source)
 		{
-            objToCompare = ConvertObjectTypeToMatch(objToCompare);
-			ArgManager.AddInArgument(Is.LessThan(objToCompare));
+            source = ConvertObjectTypeToMatch(source);
+
+			ArgManager.AddInArgument(Is.LessThan(source));
 			return default(T);
 		}
 
 		/// <summary>
 		/// Evaluate a less than or equal constraint for <see cref="IComparable"/>.
 		/// </summary>
-		/// <param name="objToCompare">The object the parameter should be less than or equal to</param>
-		public T LessThanOrEqual(IComparable objToCompare)
+		/// <param name="source">The object the parameter should be less than or equal to</param>
+		public T LessThanOrEqual(IComparable source)
 		{
-		    objToCompare = ConvertObjectTypeToMatch(objToCompare);
-			ArgManager.AddInArgument(Is.LessThanOrEqual(objToCompare));
+		    source = ConvertObjectTypeToMatch(source);
+
+			ArgManager.AddInArgument(Is.LessThanOrEqual(source));
 			return default(T);
 		}
 
 		/// <summary>
 		/// Evaluate a greater than or equal constraint for <see cref="IComparable"/>.
 		/// </summary>
-		/// <param name="objToCompare">The object the parameter should be greater than or equal to</param>
-		public T GreaterThanOrEqual(IComparable objToCompare)
+		/// <param name="source">The object the parameter should be greater than or equal to</param>
+		public T GreaterThanOrEqual(IComparable source)
 		{
-            objToCompare = ConvertObjectTypeToMatch(objToCompare);
-			ArgManager.AddInArgument(Is.GreaterThanOrEqual(objToCompare));
+            source = ConvertObjectTypeToMatch(source);
+
+			ArgManager.AddInArgument(Is.GreaterThanOrEqual(source));
 			return default(T);
 		}
 
 		/// <summary>
 		/// Evaluate an equal constraint for <see cref="IComparable"/>.
 		/// </summary>
-		/// <param name="obj">The object the parameter should equal to</param>
-		public T Equal(object obj)
+		/// <param name="source">The object the parameter should equal to</param>
+		public T Equal(object source)
 		{
-            obj = ConvertObjectTypeToMatch(obj);
-			ArgManager.AddInArgument(Is.Equal(obj));
+            source = ConvertObjectTypeToMatch(source);
+
+			ArgManager.AddInArgument(Is.Equal(source));
 			return default(T);
 		}
 
         /// <summary>
-        /// Converts the <see cref="IComparable" />object type to a better match if this is a primitive type.
-        /// </summary>
-        /// <param name="obj">The obj.</param>
-        /// <returns></returns>
-        private IComparable ConvertObjectTypeToMatch(IComparable obj)
-        {
-            var obj2 = ConvertObjectTypeToMatch(obj as object);
-            if (obj2 is IComparable)
-            {
-                obj = obj2 as IComparable;
-            }
-
-            return obj;
-        }
-
-        /// <summary>
-        /// Converts the object type to match.
-        /// </summary>
-        /// <remarks>
-        /// Because of implicit conversions and the way ArgConstraints this method is needed to check
-        /// object type and potentially change the object type for a better "match" so that obj1.Equals(obj2)
-        /// will return the proper "answer"
-        /// </remarks>
-        /// <param name="obj">The obj.</param>
-        /// <returns></returns>
-	    private object ConvertObjectTypeToMatch(object obj)
-	    {
-	        if (typeof(T).IsPrimitive && typeof(T) != obj.GetType())
-	        {
-	            try
-	            {
-	                obj = Convert.ChangeType(obj, typeof(T));
-	            }
-	            catch (Exception ex)
-	            {
-	                if (ex is InvalidCastException || ex is FormatException)
-	                {
-
-	                }
-	                else
-	                {
-	                    throw;
-	                }
-	            }
-
-	        }
-	        return obj;
-	    }
-
-
-	    /// <summary>
 		/// Evaluate a not equal constraint for <see cref="IComparable"/>.
 		/// </summary>
-		/// <param name="obj">The object the parameter should not equal to</param>
-		public T NotEqual(object obj)
+		/// <param name="source">The object the parameter should not equal to</param>
+		public T NotEqual(object source)
 		{
-            obj = ConvertObjectTypeToMatch(obj);
-			ArgManager.AddInArgument(Is.NotEqual(obj));
+            source = ConvertObjectTypeToMatch(source);
+
+			ArgManager.AddInArgument(Is.NotEqual(source));
 			return default(T);
 		}
 
@@ -165,88 +172,35 @@ namespace Rhino.Mocks.Constraints
 		/// <summary>
 		/// Evaluate a same as constraint.
 		/// </summary>
-		/// <param name="obj">The object the parameter should the same as.</param>
-		public T Same(object obj)
+		/// <param name="source">The object the parameter should the same as.</param>
+		public T Same(object source)
 		{
-            obj = ConvertObjectTypeToMatch(obj);
-			ArgManager.AddInArgument(Is.Same(obj));
+            source = ConvertObjectTypeToMatch(source);
+
+			ArgManager.AddInArgument(Is.Same(source));
 			return default(T);
 		}
 
 		/// <summary>
 		/// Evaluate a not same as constraint.
 		/// </summary>
-		/// <param name="obj">The object the parameter should not be the same as.</param>
-		public T NotSame(object obj)
+		/// <param name="source">The object the parameter should not be the same as.</param>
+		public T NotSame(object source)
 		{
-			ArgManager.AddInArgument(Is.NotSame(obj));
+            source = ConvertObjectTypeToMatch(source);
+
+			ArgManager.AddInArgument(Is.NotSame(source));
 			return default(T);
 		}
 
 		/// <summary>
-		/// A constraints that accept anything
+		/// Throws InvalidOperationException. Use Equal instead.
 		/// </summary>
-		/// <returns></returns>
-		public T Anything
-		{
-			get
-			{
-				ArgManager.AddInArgument(Is.Anything());
-				return default(T);
-			}
-		}
-
-		/// <summary>
-		/// A constraint that accept only nulls
-		/// </summary>
-		/// <returns></returns>
-		public T Null
-		{
-			get
-			{
-				ArgManager.AddInArgument(Is.Null());
-				return default(T);
-			}
-		}
-
-		/// <summary>
-		/// A constraint that accept only non null values
-		/// </summary>
-		/// <returns></returns>
-		public T NotNull
-		{
-			get
-			{
-				ArgManager.AddInArgument(Is.NotNull());
-				return default(T);
-			}
-		}
-
-		/// <summary>
-		/// A constraint that accept only value of the specified type.
-		/// The check is performed on the type that has been defined
-		/// as the argument type.
-		/// </summary>
-		public T TypeOf
-		{
-			get
-			{
-				ArgManager.AddInArgument(Is.TypeOf<T>());
-				return default(T);
-			}
-		}
-
-		/// <summary>
-		/// Throws NotSupportedException. Don't use Equals to define constraints. Use Equal instead.
-		/// </summary>
-		/// <param name="obj"></param>
-		/// <returns></returns>
 		public override bool Equals(object obj)
 		{
-			throw new InvalidOperationException("Don't use Equals() to define constraints, use Equal() instead");
+            throw new InvalidOperationException("\"Equals\" is not supported for constraints. Use \"Equal\" instead.");
 		}
 
-		/* implement GetHashCode to avoid compiler warning */
 		/// <summary>
 		/// Serves as a hash function for a particular type.
 		/// </summary>
@@ -257,6 +211,52 @@ namespace Rhino.Mocks.Constraints
 		{
 			return base.GetHashCode();
 		}
-	}
 
+        /// <summary>
+        /// Converts the <see cref="IComparable"/> object type to a better match if this is a primitive type.
+        /// </summary>
+        /// <param name="source">The obj.</param>
+        /// <returns></returns>
+        private IComparable ConvertObjectTypeToMatch(IComparable source)
+        {
+            var converted = ConvertObjectTypeToMatch(source as object);
+            if (converted is IComparable)
+                source = converted as IComparable;
+
+            return source;
+        }
+
+        /// <summary>
+        /// Converts the object type to match.
+        /// </summary>
+        /// <remarks>
+        /// Because of implicit conversions and the way ArgConstraints this method is needed to check
+        /// object type and potentially change the object type for a better "match" so that obj1.Equals(obj2)
+        /// will return the proper "answer"
+        /// </remarks>
+        /// <param name="source">The obj.</param>
+        /// <returns></returns>
+        private object ConvertObjectTypeToMatch(object source)
+        {
+            if (!typeof(T).IsPrimitive || (typeof(T) == source.GetType()))
+                return source;
+
+            try
+            {
+                return Convert.ChangeType(source, typeof(T));
+            }
+            catch (InvalidCastException)
+            {
+                return source;
+            }
+            catch (FormatException)
+            {
+                return source;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+	}
 }

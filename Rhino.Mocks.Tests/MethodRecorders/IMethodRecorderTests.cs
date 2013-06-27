@@ -40,17 +40,16 @@ namespace Rhino.Mocks.Tests.MethodRecorders
 {
 	public abstract class IMethodRecorderTests
 	{
-		private MockRepository mocks;
 		protected IDemo demo;
+        protected IMethodRecorder recorder;
 		protected MethodInfo voidNoArgs;
+        protected MethodInfo voidThreeArgs;
 		protected AnyArgsExpectation expectationOne,expectationTwo;
-		protected IMethodRecorder recorder;
-		protected MethodInfo voidThreeArgs;
-
+		
 		public IMethodRecorderTests()
 		{
-			mocks = new MockRepository();
-			demo = this.mocks.StrictMock(typeof (IDemo)) as IDemo;
+            demo = MockRepository.GenerateStrictMock(typeof(IDemo)) as IDemo;
+
 			voidNoArgs = typeof (IDemo).GetMethod("VoidNoArgs");
 			voidThreeArgs = typeof (IDemo).GetMethod("VoidThreeStringArgs");
 			expectationOne = new AnyArgsExpectation(new FakeInvocation(this.voidNoArgs), new Range(1, 1));

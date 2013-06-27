@@ -4,47 +4,46 @@ using Xunit;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	
 	public class FieldProblem_StevenS : IDisposable
 	{
-		private MockRepository mocks;
 		private MembershipProvider myMembershipProvider;
 
 		public FieldProblem_StevenS()
 		{
-			mocks = new MockRepository();
-			myMembershipProvider = mocks.StrictMock<MembershipProvider>();
-		} 
+            myMembershipProvider = MockRepository.GenerateStrictMock<MembershipProvider>();
+		}
+
+        public void Dispose()
+        {
+            myMembershipProvider.VerifyAllExpectations();
+        }
 
         [Fact]
         public void LoadFromUserId()
         {
-            SetupResult.For(myMembershipProvider.Name).Return("Foo");
+            myMembershipProvider.Expect(x => x.Name)
+                .Repeat.Any()
+                .Return("Foo");
 
-            Expect.Call(myMembershipProvider.GetUser("foo",false)).Return(null);
+            myMembershipProvider.Expect(x => x.GetUser("foo", false))
+                .Return(null);
 
-            mocks.ReplayAll();
-
-        	myMembershipProvider.GetUser("foo", false);
+            myMembershipProvider.GetUser("foo", false);
         }
 
 		[Fact]
 		public void LoadFromUserId_Object()
 		{
-			SetupResult.For(myMembershipProvider.Name).Return("Foo");
+            myMembershipProvider.Expect(x => x.Name)
+                .Repeat.Any()
+                .Return("Foo");
 
-			object foo = "foo";
-			Expect.Call(myMembershipProvider.GetUser(foo, false)).Return(null);
-
-			mocks.ReplayAll();
+            object foo = "foo";
+            myMembershipProvider.Expect(x => x.GetUser(foo, false))
+                .Return(null);
 
 			myMembershipProvider.GetUser(foo, false);
-		} 
-
-
-		public void Dispose()
-		{
-			mocks.VerifyAll();
+            
 		}
 	}
 }

@@ -36,7 +36,6 @@ using Rhino.Mocks.Exceptions;
 
 namespace Rhino.Mocks.Tests
 {
-
 	public class Metric : IMetric
 	{
 		IApplicationSession m_objIApplicationSession;
@@ -44,9 +43,7 @@ namespace Rhino.Mocks.Tests
 		{
 			m_objIApplicationSession = pv_objIApplicationSession;
 		}
-
-
-
+        
 		public IMetric Numerator
 		{
 			get
@@ -66,8 +63,7 @@ namespace Rhino.Mocks.Tests
 		}
 	}
 
-
-	public interface IMetric
+    public interface IMetric
 	{
 		IMetric Numerator { get;}
 	}
@@ -82,79 +78,65 @@ namespace Rhino.Mocks.Tests
 		DataSet FetchMetric(string MetricName);
 		DataSet FetchMetric(long MetricID);
 	}
-
-
-
-	#region TestFixture
-	
+    
 	public class FieldProblem_Owen
 	{
-		MockRepository m_objMockRepository;
 		IApplicationSession m_objIApplication;
 		IMetricBroker m_objIMetricBroker;
-
+        IMetric m_objIMetric;
 		DataSet m_objDSRatioMetric;
-
-		IMetric m_objIMetric;
-
+        
 		public FieldProblem_Owen()
 		{
-			#region Mock Objects
-			m_objMockRepository = new MockRepository();
-			m_objIApplication = (IApplicationSession)m_objMockRepository.StrictMock(typeof(IApplicationSession));
-			m_objIMetricBroker = (IMetricBroker)m_objMockRepository.StrictMock(typeof(IMetricBroker));
-			#endregion
+            m_objDSRatioMetric = new DataSet();
 
-			#region DataSets
+            m_objIApplication = (IApplicationSession)MockRepository.GenerateStrictMock(typeof(IApplicationSession));
+            m_objIMetricBroker = (IMetricBroker)MockRepository.GenerateStrictMock(typeof(IMetricBroker));
+			
+			m_objIApplication.Expect(x => x.IMetricBroker)
+                .Return(m_objIMetricBroker);
 
-			m_objDSRatioMetric = new DataSet();
-
-			using (m_objMockRepository.Ordered())
-			{
-				Rhino.Mocks.Expect.Call(m_objIApplication.IMetricBroker).Return(m_objIMetricBroker);
-				Rhino.Mocks.Expect.Call(m_objIMetricBroker.FetchMetric("Risk")).Return(m_objDSRatioMetric);
-			}
-			m_objMockRepository.ReplayAll();
-
-			#endregion
+            m_objIMetricBroker.Expect(x => x.FetchMetric("Risk"))
+                .Return(m_objDSRatioMetric);
 
 			m_objIMetric = Metric.GetByName(m_objIApplication, "Risk");
-			m_objMockRepository.VerifyAll();
+            
+            m_objIApplication.VerifyAllExpectations();
+            m_objIMetricBroker.VerifyAllExpectations();
 		}
+
 		[Fact]
 		public void T001_SavingShouldNotInvalidateOtherCachedSingleObjects()
 		{
-			m_objMockRepository.BackToRecord(m_objIApplication);
-			m_objMockRepository.BackToRecord(m_objIMetricBroker);
+            m_objIApplication.BackToRecord(BackToRecordOptions.All);
+            m_objIMetricBroker.BackToRecord(BackToRecordOptions.All);
+			
 			long lOtherID = 200;
 			DataSet objDSOtherMetric = new DataSet();
 
-			using (m_objMockRepository.Ordered())
-			{
-				Rhino.Mocks.Expect.Call(m_objIApplication.IMetricBroker).Return(m_objIMetricBroker);
-				Rhino.Mocks.Expect.Call(m_objIMetricBroker.FetchMetric(lOtherID)).Return(objDSOtherMetric);
-			}
-			m_objMockRepository.ReplayAll();
+            m_objIApplication.Expect(x => x.IMetricBroker)
+                .Return(m_objIMetricBroker);
+
+            m_objIMetricBroker.Expect(x => x.FetchMetric(lOtherID))
+                .Return(objDSOtherMetric);
+
+            m_objIApplication.Replay();
+            m_objIMetricBroker.Replay();
 
 			IMetric objOtherMetric = Metric.GetByID(m_objIApplication, lOtherID);
-			m_objMockRepository.VerifyAll();
+            m_objIApplication.VerifyAllExpectations();
+            m_objIMetricBroker.VerifyAllExpectations();
 
-			m_objMockRepository.BackToRecord(m_objIApplication);
-			m_objMockRepository.BackToRecord(m_objIMetricBroker);
+            m_objIApplication.BackToRecord(BackToRecordOptions.All);
+            m_objIMetricBroker.BackToRecord(BackToRecordOptions.All);
+            m_objIApplication.Replay();
+            m_objIMetricBroker.Replay();
 
-			m_objMockRepository.ReplayAll();
 			//missing expectations here. 
-
-			//cause a stack overflow error
-			
-			Assert.Throws<ExpectationViolationException>("IApplicationSession.get_IMetricBroker(); Expected #0, Actual #1.",
-			                                             () =>
-			                                             {
-															 IMetric objMetric = m_objIMetric.Numerator;
-			                                             });
+            //cause a stack overflow error
+			Assert.Throws<ExpectationViolationException>(
+                "IApplicationSession.get_IMetricBroker(); Expected #0, Actual #1.",
+                () => { IMetric objMetric = m_objIMetric.Numerator; });
 		}
-
 	}
-
-	#endregion
 }

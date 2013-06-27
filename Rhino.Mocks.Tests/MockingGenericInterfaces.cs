@@ -37,37 +37,40 @@ namespace Rhino.Mocks.Tests
     
     public class MockingGenericInterfaces : IDisposable
     {
-        MockRepository mocks;
-
-		public MockingGenericInterfaces()
+        public MockingGenericInterfaces()
         {
-            mocks = new MockRepository();
         }
 
         public void Dispose()
         {
-            mocks.VerifyAll();
         }
 
         [Fact]
         public void MockAGenericInterface()
         {
-            IList<int> list = mocks.StrictMock<IList<int>>();
+            IList<int> list = MockRepository.GenerateStrictMock<IList<int>>();
             Assert.NotNull(list);
-            Expect.Call(list.Count).Return(5);
-            mocks.ReplayAll();
+
+            list.Expect(x => x.Count)
+                .Return(5);
+
             Assert.Equal(5, list.Count);
+            list.VerifyAllExpectations();
         }
 
         [Fact]
         public void DynamicMockOfGeneric()
         {
-            IList<int> list = mocks.DynamicMock<IList<int>>();
+            IList<int> list = MockRepository.GenerateDynamicMock<IList<int>>();
             Assert.NotNull(list);
-            Expect.Call(list.Count).Return(5);
-            mocks.ReplayAll();
+
+            list.Expect(x => x.Count)
+                .Return(5);
+            
             Assert.Equal(5, list.Count);
             list.Add(4);
+
+            list.VerifyAllExpectations();
         }
     }
 }

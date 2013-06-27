@@ -42,43 +42,43 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		public void DelegateToGenericMock()
 		{
 			MockRepository mocks = new MockRepository();
-			IEMailFormatter<string> formatterMock = mocks.StrictMock<IEMailFormatter<string>>();
-			SmtpEMailSenderBase<string> senderMock = (SmtpEMailSenderBase<string>)mocks.StrictMock(typeof(SmtpEMailSenderBase<string>));
-			senderMock.SetFormatter(formatterMock);
-			LastCall.Do((Action<IEMailFormatter<string>>)delegate(IEMailFormatter<string> formatter)
-			{
-				Assert.NotNull(formatter);
-			});
-			mocks.ReplayAll();
+            IEMailFormatter<string> formatterMock = MockRepository.GenerateStrictMock<IEMailFormatter<string>>();
+			SmtpEMailSenderBase<string> senderMock = (SmtpEMailSenderBase<string>)MockRepository
+                .GenerateStrictMock(typeof(SmtpEMailSenderBase<string>));
 
-			senderMock.SetFormatter( formatterMock );
+            senderMock.Expect(x => x.SetFormatter(formatterMock))
+                .Do((Action<IEMailFormatter<string>>)delegate(IEMailFormatter<string> formatter)
+                {
+                    Assert.NotNull(formatter);
+                });
 
-			mocks.VerifyAll();
+            senderMock.SetFormatter(formatterMock);
+            senderMock.VerifyAllExpectations();
 		}
 
 		[Fact]
 		public void Invalid_DelegateToGenericMock()
 		{
-			MockRepository mocks = new MockRepository();
-			IEMailFormatter<string> formatterMock = mocks.StrictMock<IEMailFormatter<string>>();
-			SmtpEMailSenderBase<string> senderMock = (SmtpEMailSenderBase<string>)mocks.StrictMock(typeof(SmtpEMailSenderBase<string>));
-			senderMock.SetFormatter(formatterMock);
-			Assert.Throws<InvalidOperationException>("Callback arguments didn't match the method arguments",
-			                                         () =>
-			                                         LastCall.Do(
-			                                         	(Action<IEMailFormatter<int>>) delegate(IEMailFormatter<int> formatter)
-			                                         	{
-			                                         		Assert.NotNull(formatter);
-			                                         	}));
+            IEMailFormatter<string> formatterMock = MockRepository.GenerateStrictMock<IEMailFormatter<string>>();
+            SmtpEMailSenderBase<string> senderMock = (SmtpEMailSenderBase<string>)MockRepository
+                .GenerateStrictMock(typeof(SmtpEMailSenderBase<string>));
+            
+			Assert.Throws<InvalidOperationException>(
+                "Callback arguments didn't match the method arguments",
+                () => senderMock.Expect(x => x.SetFormatter(formatterMock))
+                    .Do((Action<IEMailFormatter<int>>)delegate(IEMailFormatter<int> formatter)
+                    {
+                        Assert.NotNull(formatter);
+                    }));
 		}
 	}
+
 	public interface IEMailFormatter<T>
 	{
-		
 	}
+
 	public abstract class SmtpEMailSenderBase<T>
     {
-
 		public virtual void SetFormatter(IEMailFormatter<T> formatter)
         {
         }

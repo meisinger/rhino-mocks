@@ -33,19 +33,18 @@ using Xunit;
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
     //Bug 46
-    
     public class InterfaceInheritance
     {
         [Fact]
         public void CreateObjectUsingInterfaceInheritance()
         {
-            MockRepository mocks = new MockRepository();
-            ILocalizer localizer = (ILocalizer)mocks.StrictMock(typeof(ILocalizer));
+            ILocalizer localizer = (ILocalizer)MockRepository.GenerateStrictMock(typeof(ILocalizer));
             Assert.NotNull(localizer);
+
             typeof(ILocalizer).IsAssignableFrom(localizer.GetType());
             typeof(ICloneable).IsAssignableFrom(localizer.GetType());
-            mocks.ReplayAll();
-            mocks.VerifyAll();
+
+            localizer.VerifyAllExpectations();
         }
 
         public interface ILocalizer : ICloneable

@@ -34,14 +34,12 @@ using Rhino.Mocks.Impl;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-    
     public class FieldProblem_Bruce
     {
         [Fact]
         public void CreateClassWithDefaultCtor()
         {
-            MockRepository mocks = new MockRepository();
-            ClassWithDefaultCtor cwdc = (ClassWithDefaultCtor)mocks.DynamicMock(typeof(ClassWithDefaultCtor));
+            ClassWithDefaultCtor cwdc = (ClassWithDefaultCtor)MockRepository.GenerateDynamicMock(typeof(ClassWithDefaultCtor));
             Assert.NotNull(cwdc);
         }
 

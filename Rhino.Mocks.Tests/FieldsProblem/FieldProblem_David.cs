@@ -34,30 +34,32 @@ using System.Web.UI;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-    
     public class FieldProblem_David
     {
         [Fact]
         public void MockWebUIPageClass()
         {
-            MockRepository mocks = new MockRepository();
-            Page page = (Page)mocks.StrictMock(typeof(Page));
+            Page page = (Page)MockRepository.GenerateStrictMock(typeof(Page));
+
+            page.Expect(x => x.Validate());
+
             page.Validate();
-            mocks.ReplayAll();
-            page.Validate();
-            mocks.VerifyAll();
+            page.VerifyAllExpectations();
         }
 
         [Fact]
         public void MockClassWithVirtualMethodCallFromConstructor()
         {
-            MockRepository mocks = new MockRepository();
-            ClassWithVirtualMethodCallFromConstructor cwvmcfc = (ClassWithVirtualMethodCallFromConstructor)mocks.StrictMock(typeof(ClassWithVirtualMethodCallFromConstructor));
+            ClassWithVirtualMethodCallFromConstructor cwvmcfc = (ClassWithVirtualMethodCallFromConstructor)
+                MockRepository.GenerateStrictMock(typeof(ClassWithVirtualMethodCallFromConstructor));
+
             Assert.NotNull(cwvmcfc);
-            Expect.Call(cwvmcfc.ToString()).Return("Success");
-            mocks.ReplayAll();
+
+            cwvmcfc.Expect(x => x.ToString())
+                .Return("Success");
+
             Assert.Equal("Success", cwvmcfc.ToString());
-            mocks.VerifyAll();
+            cwvmcfc.VerifyAllExpectations();
         }
 
         public class ClassWithVirtualMethodCallFromConstructor

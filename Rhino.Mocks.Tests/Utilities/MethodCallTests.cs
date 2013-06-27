@@ -34,48 +34,56 @@ using Rhino.Mocks.Utilities;
 
 namespace Rhino.Mocks.Tests.Utilities
 {
-	
 	public class MethodCallTests
 	{
 		[Fact]
 		public void MethodCallToString()
 		{
-			string actual = MethodCallUtil.StringPresentation(null, GetMethodInfo("StartsWith", ""), new object[] {"abcd"});
+            string actual = MethodCallUtil.StringPresentation(null, 
+                GetMethodInfo("StartsWith", ""), new object[] { "abcd" });
+
 			Assert.Equal("String.StartsWith(\"abcd\");", actual);
 		}
 
 		[Fact]
 		public void MethodCallToStringWithSeveralArguments()
 		{
-			string actual = MethodCallUtil.StringPresentation(null,GetMethodInfo("IndexOf", "abcd", 4), new object[] {"abcd", 4});
+            string actual = MethodCallUtil
+                .StringPresentation(null, GetMethodInfo("IndexOf", "abcd", 4), new object[] { "abcd", 4 });
+
 			Assert.Equal("String.IndexOf(\"abcd\", 4);", actual);
 		}
 
 		[Fact]
 		public void MethodCallCtorWontAcceptNullMethod()
 		{
-			Assert.Throws<ArgumentNullException>(
-				"Value cannot be null.\r\nParameter name: method",
-				() => MethodCallUtil.StringPresentation(null, null, null));
+            Assert.Throws<ArgumentNullException>(
+                "Value cannot be null.\r\nParameter name: method",
+                () => MethodCallUtil.StringPresentation(null, null, null));
 		}
 
 		[Fact]
 		public void MethodCallCtorWontAcceptNullArgs()
 		{
-            MethodInfo method = typeof(string).GetMethod("StartsWith", new Type[] { typeof(string) });
-			Assert.Throws<ArgumentNullException>("Value cannot be null.\r\nParameter name: args",
-			                                     () => MethodCallUtil.StringPresentation(null, method, null));
+            MethodInfo method = typeof(string)
+                .GetMethod("StartsWith", new Type[] { typeof(string) });
+
+            Assert.Throws<ArgumentNullException>(
+                "Value cannot be null.\r\nParameter name: args",
+                () => MethodCallUtil.StringPresentation(null, method, null));
 		}
 
 		[Fact]
 		public void MethodCallWithArgumentsMissing()
 		{
-            MethodInfo method = typeof(string).GetMethod("StartsWith", new Type[] { typeof(string) });
-            Assert.Equal("String.StartsWith(missing parameter);", MethodCallUtil.StringPresentation(null,method, new object[0]));
+            MethodInfo method = typeof(string)
+                .GetMethod("StartsWith", new Type[] { typeof(string) });
+
+            Assert.Equal(
+                "String.StartsWith(missing parameter);", 
+                MethodCallUtil.StringPresentation(null, method, new object[0]));
 
 		}
-
-		#region Implementation
 
 		private static Type[] TypesFromArgs(object[] args)
 		{
@@ -93,7 +101,5 @@ namespace Rhino.Mocks.Tests.Utilities
 			MethodInfo method = typeof (string).GetMethod(name, types);
 			return method;
 		}
-
-		#endregion
 	}
 }

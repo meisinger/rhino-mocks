@@ -37,50 +37,34 @@ using Rhino.Mocks.Tests.Callbacks;
 
 namespace Rhino.Mocks.Tests.Constraints
 {
-	
 	public class ConstraintTests
 	{
 		private IDemo demo;
-		private MockRepository mocks;
-
+		
 		public ConstraintTests()
 		{
-			mocks = new MockRepository();
-			demo = (IDemo) this.mocks.StrictMock(typeof (IDemo));
+			demo = (IDemo)MockRepository.GenerateStrictMock(typeof(IDemo));
 		}
 
         [Fact]
 		public void UsingPredicate()
 		{
-			demo.VoidStringArg(null);
-			LastCall.Constraints(
-				Is.Matching<string>(delegate(string s) 
-				{
-					return s.Length == 2;  
-				}) 
-				&&
-				Is.Matching<string>(delegate(string s)
-				{
-					return s.EndsWith("b");	
-				}));
-			mocks.Replay(demo);
-			
-			demo.VoidStringArg("ab");
+            demo.Expect(x => x.VoidStringArg(null))
+                .Constraints(
+                    Is.Matching<string>(delegate(string s) { return s.Length == 2; }) &&
+                    Is.Matching<string>(delegate(string s) { return s.EndsWith("b"); })
+                );
 
-			mocks.VerifyAll();
+			demo.VoidStringArg("ab");
+            demo.VerifyAllExpectations();
 		}
 
 		[Fact]
 		public void UsingPredicateConstraintWhenTypesNotMatching()
 		{
-			demo.VoidStringArg(null);
-			LastCall.Constraints(
-				Is.Matching<DataSet>(delegate(DataSet s)
-				{
-					return false;
-				}));
-			mocks.Replay(demo);
-
+            demo.Expect(x => x.VoidStringArg(null))
+                .Constraints(Is.Matching<DataSet>(delegate(DataSet s) { return false; }));
+			
 			Assert.Throws<InvalidOperationException>(
 				"Predicate accept System.Data.DataSet but parameter is System.String which is not compatible",
 				() => demo.VoidStringArg("ab"));
@@ -89,28 +73,19 @@ namespace Rhino.Mocks.Tests.Constraints
         [Fact]
         public void UsingPredicateConstraintWithSubtype()
         {
-            demo.VoidStringArg(null);
-            LastCall.Constraints(
-                Is.Matching<object>(delegate(object o)
-            {
-                return o.Equals("ab");
-            }));
-            mocks.Replay(demo);
-
+            demo.Expect(x => x.VoidStringArg(null))
+                .Constraints( Is.Matching<object>(delegate(object o) { return o.Equals("ab"); }));
+            
             demo.VoidStringArg("ab");
-
-            mocks.VerifyAll();
+            demo.VerifyAllExpectations();
         }
 
 		[Fact]
 		public void UsingPredicateWhenExpectationViolated()
 		{
-			demo.VoidStringArg(null);
-			LastCall.Constraints(
-				Is.Matching<string>(JustPredicate)
-				);
-			mocks.Replay(demo);
-
+            demo.Expect(x => x.VoidStringArg(null))
+                .Constraints(Is.Matching<string>(JustPredicate));
+			
 			Assert.Throws<ExpectationViolationException>(
 				"IDemo.VoidStringArg(\"cc\"); Expected #0, Actual #1.\r\nIDemo.VoidStringArg(Predicate (ConstraintTests.JustPredicate(obj);)); Expected #1, Actual #0.",
 				() => demo.VoidStringArg("cc"));
@@ -168,19 +143,19 @@ namespace Rhino.Mocks.Tests.Constraints
 		[Fact]
 		public void SettingConstraintOnAMock()
 		{
-			demo.VoidStringArg("Ayende");
-			LastCall.On(demo).Constraints(Text.Contains("World"));
-			mocks.Replay(demo);
+            demo.Expect(x => x.VoidStringArg("Ayende"))
+                .Constraints(Text.Contains("World"));
+			
 			demo.VoidStringArg("Hello, World");
-			mocks.Verify(demo);
+            demo.VerifyAllExpectations();
 		}
 
 		[Fact]
 		public void ConstraintFailingThrows()
 		{
-			demo.VoidStringArg("Ayende");
-			LastCall.On(demo).Constraints(Text.Contains("World"));
-			mocks.Replay(demo);
+            demo.Expect(x => x.VoidStringArg("Ayende"))
+                .Constraints(Text.Contains("World"));
+
 			Assert.Throws<ExpectationViolationException>(
 				"IDemo.VoidStringArg(\"Hello, world\"); Expected #0, Actual #1.\r\nIDemo.VoidStringArg(contains \"World\"); Expected #1, Actual #0.",
 				() => demo.VoidStringArg("Hello, world"));
@@ -189,40 +164,39 @@ namespace Rhino.Mocks.Tests.Constraints
 		[Fact]
 		public void ConstraintWithTooMuchForArguments()
 		{
-			demo.VoidStringArg("Ayende");
 			Assert.Throws<InvalidOperationException>(
-				"The number of constraints is not the same as the number of the method's parameters!",
-				() => LastCall.On(demo).Constraints(Text.Contains("World"), Is.Equal("Rahien")));
+                "The number of constraints is not the same as the number of the method's parameters!",
+                () => demo.Expect(x => x.VoidStringArg("Ayende"))
+                        .Constraints(Text.Contains("World"), Is.Equal("Rahien")));
 		}
 
 		[Fact]
 		public void ConstraintWithTooFewForArguments()
 		{
-			demo.VoidThreeArgs(1, "Ayende", 3.14f);
 			Assert.Throws<InvalidOperationException>(
 				"The number of constraints is not the same as the number of the method's parameters!",
-				() => LastCall.On(demo).Constraints(Text.Contains("World"), Is.Equal("Rahien")));
+				() => demo.Expect(x => x.VoidThreeArgs(1, "Ayende", 3.14f))
+                        .Constraints(Text.Contains("World"), Is.Equal("Rahien")));
 		}
 
 		[Fact]
 		public void ConstraintsThatWerentCallCauseVerifyFailure()
 		{
-			this.demo.VoidStringArg("Ayende");
-			LastCall.On(this.demo).Constraints(Text.Contains("World"));
-			this.mocks.Replay(this.demo);
-			Assert.Throws<ExpectationViolationException>("IDemo.VoidStringArg(contains \"World\"); Expected #1, Actual #0.",
-			                                             () => this.mocks.Verify(this.demo));
+            demo.Expect(x => x.VoidStringArg("Ayende"))
+                .Constraints(Text.Contains("World"));
+
+            Assert.Throws<ExpectationViolationException>(
+                "IDemo.VoidStringArg(contains \"World\"); Expected #1, Actual #0.",
+                () => demo.VerifyAllExpectations());
 		}
 
 		[Fact]
 		public void AddConstraintAndThenTryToIgnoreArgs()
 		{
-			this.demo.VoidStringArg("Ayende");
-			Assert.Throws<InvalidOperationException>("This method has already been set to ConstraintsExpectation."
-			                                         ,
-			                                         () =>
-			                                         LastCall.On(this.demo).Constraints(Text.Contains("World")).Callback<string>(
-			                                         	"".StartsWith));
+			Assert.Throws<InvalidOperationException>(
+                "This method has already been set to ConstraintsExpectation.",
+                () => demo.Expect(x => x.VoidStringArg("Ayende"))
+                    .Constraints(Text.Contains("World")).Callback<string>("".StartsWith));
 		}
 
 	}

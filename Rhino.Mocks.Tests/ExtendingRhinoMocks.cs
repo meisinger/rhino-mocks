@@ -38,18 +38,20 @@ using Rhino.Mocks.Interfaces;
 
 namespace Rhino.Mocks.Tests
 {
-	
 	public class ExtendingRhinoMocksFixture
 	{
 		[Fact]
 		public void CanUseCustomMocks()
 		{
 			CarRepository carRepository = new CarRepository();
-			carRepository.Add(new Car("Volvo"));
+            carRepository.Add(new Car("Volvo"));
+
 			MyMockRepository mocks = new MyMockRepository();
 			IView view = (IView)mocks.QueryableMock(typeof(IView));
+
 			Presenter presenter = new Presenter(carRepository, view);
 			presenter.Render();
+
 			Car car = (Car)mocks.Query(view);
 			Assert.Equal("Volvo", car.Make);
 		}

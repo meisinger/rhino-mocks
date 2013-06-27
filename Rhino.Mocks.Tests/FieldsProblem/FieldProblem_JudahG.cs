@@ -15,21 +15,18 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void IsMatching()
 		{
-			MockRepository mocks = new MockRepository();
-			IView view = mocks.StrictMock<IView>();
-			using (mocks.Record())
-			{
-				view.Foo = null;
-				Predicate<int> alwaysReturnsTrue = delegate(int input)
-				{
-					return true;
-				};
-				LastCall.Constraints(Is.Matching(alwaysReturnsTrue));
-			}
-			using (mocks.Playback())
-			{
-				view.Foo = 1;
-			}
+            Predicate<int> alwaysReturnsTrue = delegate(int input)
+            {
+                return true;
+            };
+
+			IView view = MockRepository.GenerateStrictMock<IView>();
+
+            view.Expect(x => x.Foo = null)
+                .Constraints(Is.Matching(alwaysReturnsTrue));
+
+            view.Foo = 1;
+            view.VerifyAllExpectations();
 		}
 	}
 }

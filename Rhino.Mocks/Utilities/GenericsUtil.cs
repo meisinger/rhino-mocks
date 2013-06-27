@@ -33,103 +33,117 @@ using Castle.DynamicProxy;
 
 namespace Rhino.Mocks.Utilities
 {
-	/// <summary>
-	/// Utility class for dealing with messing generics scenarios.
-	/// </summary>
+    /// <summary>
+    /// Utiliy class for dealing with Generics
+    /// </summary>
 	public static class GenericsUtil
 	{
 		/// <summary>
-		/// There are issues with trying to get this to work correctly with open generic types, since this is an edge case, 
-		/// I am letting the runtime handle it.
-		/// </summary>
-		public static bool HasOpenGenericParam(Type returnType)
+        /// Determines if the type is an open generic type.
+        /// </summary>
+        /// <remarks>
+        /// There are issues with trying to get this to work correctly 
+        /// with open generic types, since this is an edge case, 
+        /// I am letting the runtime handle it.
+        /// </remarks>
+        /// <param name="type">type to check</param>
+        /// <returns>true if type is open generic; otherwise false</returns>
+        public static bool HasOpenGenericParam(Type type)
 		{
-			//not bound to particular type, only way I know of doing this, since IsGeneric and IsGenericTypeDefination will both lie
-			//when used with generic method parameters
-			if (returnType.FullName == null)
+			// not bound to particular type, only way I know of 
+            // doing this, since IsGeneric and IsGenericTypeDefination 
+            // will both lie when used with generic method parameters
+			if (type.FullName == null)
 				return true;
-			foreach (Type genericArgument in returnType.GetGenericArguments())
+
+			foreach (Type argument in type.GetGenericArguments())
 			{
-				if (genericArgument.FullName == null)
+				if (argument.FullName == null)
 					return true;
-				if (genericArgument.IsGenericType)
+
+				if (argument.IsGenericType)
 				{
-					if (HasOpenGenericParam(genericArgument))
+					if (HasOpenGenericParam(argument))
 						return true;
 				}
 			}
+
 			return false;
 		}
 
 		/// <summary>
-		/// Gets the real type, including de-constructing and constructing the type of generic
-		/// methods parameters.
+        /// Identifies the actual type.
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="invocation">The invocation.</param>
-		/// <returns></returns>
+		/// <returns>actual type</returns>
 		public static Type GetRealType(Type type, IInvocation invocation)
 		{
 			if (!HasOpenGenericParam(type))
 				return type;
-			Dictionary<string, Type> nameToType = CreateTypesTableFromInvocation(invocation);
-			string typeName = type.AssemblyQualifiedName ?? type.Name; // if the AssemblyQualifiedName is null, we have an open type
-			if (nameToType.ContainsKey(typeName))
-				return nameToType[typeName];
-			Type[] types = new List<Type>(nameToType.Values).ToArray();
-			return ReconstructGenericType(type, nameToType);
+
+            // if the AssemblyQualifiedName is null, we have an open type
+			string name = type.AssemblyQualifiedName ?? type.Name; 
+
+			Dictionary<string, Type> names = CreateTypesTableFromInvocation(invocation);
+			if (names.ContainsKey(name))
+				return names[name];
+
+			return ReconstructGenericType(type, names);
 		}
 
 		/// <summary>
-		/// Because we need to support complex types here (simple generics were handled above) we
+		/// Because we need to support complex types here we
 		/// need to be aware of the following scenarios:
 		/// List[T] and List[Foo[T]]
 		/// </summary>
-		private static Type ReconstructGenericType(Type type, Dictionary<string, Type> nameToType)
+		private static Type ReconstructGenericType(Type type, Dictionary<string, Type> names)
 		{
-			Type genericTypeDef = type.GetGenericTypeDefinition();
-			List<Type> genericArgs = new List<Type>();
-			foreach (Type genericArgument in type.GetGenericArguments())
+			List<Type> collection = new List<Type>();
+			foreach (Type argument in type.GetGenericArguments())
 			{
-				if(nameToType.ContainsKey(genericArgument.Name))
-				{
-					genericArgs.Add(nameToType[genericArgument.Name]);
-				}
-				else
-				{
-					genericArgs.Add( ReconstructGenericType(genericArgument, nameToType));
-				}
+                Type argumentType;
+                if (!names.TryGetValue(argument.Name, out argumentType))
+                    argumentType = ReconstructGenericType(argument, names);
+
+                collection.Add(argumentType);
 			}
-			return genericTypeDef.MakeGenericType(genericArgs.ToArray());
+
+			Type definition = type.GetGenericTypeDefinition();
+			return definition.MakeGenericType(collection.ToArray());
 		}
 
 		private static Dictionary<string, Type> CreateTypesTableFromInvocation(IInvocation invocation)
 		{
-			Dictionary<string, Type> nameToType = new Dictionary<string, Type>();
 			Type genericType = GetTypeWithGenericArgumentsForMethodParameters(invocation);
-			Type[] genericArguments = genericType.GetGenericTypeDefinition().GetGenericArguments();
+
 			Type[] types = genericType.GetGenericArguments();
-			for (int i = 0; i < genericArguments.Length; i++)
+			Type[] arguments = genericType.GetGenericTypeDefinition().GetGenericArguments();
+
+            Dictionary<string, Type> names = new Dictionary<string, Type>();
+			for (int i = 0; i < arguments.Length; i++)
 			{
-				string genericName = genericArguments[i].Name;
-				nameToType[genericName] = types[i];
+				string name = arguments[i].Name;
+				names[name] = types[i];
 			}
-			return nameToType;
+
+			return names;
 		}
 
 		private static Type GetTypeWithGenericArgumentsForMethodParameters(IInvocation invocation)
 		{
-			Type genericType = invocation.GetType();
-			if (genericType.IsGenericType) //generic method
-				return genericType;
-			//Generic class:
+			Type invocationType = invocation.GetType();
+			if (invocationType.IsGenericType)
+				return invocationType;
 
-			Type type = MockRepository.GetMockedObject(invocation.Proxy).GetDeclaringType(invocation.Method);
-			if (type == null)
-				throw new InvalidOperationException("BUG: Could not find a declaring type for method " + invocation.Method);
-			return type;
+			Type type = MockRepository
+                .GetMockedObject(invocation.Proxy)
+                .GetDeclaringType(invocation.Method);
+
+			if (type != null)
+                return type;
+
+            throw new InvalidOperationException("BUG: Could not find a declaring type for method " + invocation.Method);
 		}
-
-		
 	}
 }

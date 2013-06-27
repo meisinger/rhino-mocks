@@ -34,14 +34,12 @@ using MSHTML;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	
 	public class FieldProblem_Luke
 	{
 		[Fact]
 		public void CanMockIE()
 		{
-			MockRepository mockRepository = new MockRepository();
-			IHTMLEventObj2 mock = mockRepository.StrictMock<IHTMLEventObj2>();
+			IHTMLEventObj2 mock = MockRepository.GenerateStrictMock<IHTMLEventObj2>();
 			Assert.NotNull(mock);
 		}
 
@@ -49,27 +47,25 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		public void CanMockComInterface()
 		{
 			MockRepository mocks = new MockRepository();
-			IServiceProvider serviceProvider = (IServiceProvider)
-											   mocks.StrictMultiMock(typeof(IServiceProvider), typeof(IHTMLDataTransfer));
+            IServiceProvider serviceProvider = (IServiceProvider)MockRepository
+                .GenerateStrictMock(typeof(IServiceProvider), typeof(IHTMLDataTransfer));
+
 			Assert.NotNull(serviceProvider);
 		}
 
 		[Fact] 
 		public void TryToMockClassWithProtectedInternalAbstractClass()
 		{
-			MockRepository mockRepository = new MockRepository();
-			mockRepository.StrictMock<SomeClassWithProtectedInternalAbstractClass>();
+			MockRepository.GenerateStrictMock<SomeClassWithProtectedInternalAbstractClass>();
 		}
 
 		[Fact] 
 		public void TryToMockClassWithProtectedAbstractClass()
 		{
-			MockRepository mockRepository = new MockRepository();
-			mockRepository.StrictMock<SomeClassWithProtectedAbstractClass>();
+            MockRepository.GenerateStrictMock<SomeClassWithProtectedAbstractClass>();
 		}
 
-		public abstract class
-			SomeClassWithProtectedInternalAbstractClass
+		public abstract class SomeClassWithProtectedInternalAbstractClass
 		{
 			protected internal abstract void Quack();
 		}
@@ -80,12 +76,10 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		}
 	}
 
-	[ComImport, Guid("6D5140C1-7436-11CE-8034-00AA006009FA"),
-	 InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+	[ComImport, Guid("6D5140C1-7436-11CE-8034-00AA006009FA"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 	public interface IServiceProvider
 	{
 		[return: MarshalAs(UnmanagedType.IUnknown)]
 		object QueryService([In] ref Guid guidService, [In] ref Guid riid);
 	}
-
 }

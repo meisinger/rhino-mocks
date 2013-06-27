@@ -33,9 +33,9 @@ using System.Collections;
 
 namespace Rhino.Mocks.Impl
 {
-	/// <summary>
-	/// Validate arguments for methods
-	/// </summary>
+    /// <summary>
+    /// Provides common validation against arguments for methods
+    /// </summary>
 	public static class Validate
 	{
 		/// <summary>
@@ -44,8 +44,8 @@ namespace Rhino.Mocks.Impl
 		/// <param name="obj">The object to validate</param>
 		/// <param name="name">The name of the argument</param>
 		/// <exception cref="ArgumentNullException">
-		/// If the obj is null, an ArgumentNullException with the passed name
-		/// is thrown.
+		/// If the obj is null, an ArgumentNullException with 
+        /// the passed name is thrown.
 		/// </exception>
 		public static void IsNotNull(object obj, string name)
 		{
@@ -72,22 +72,18 @@ namespace Rhino.Mocks.Impl
 			return RecursiveCollectionEqual(new object[] { expectedArg }, new object[] { actualArg });
 		}
 
-		#region Implementation
-
-        private static bool RecursiveCollectionEqual(ICollection expectedArgs, ICollection actualArgs)
+		private static bool RecursiveCollectionEqual(ICollection expectedArgs, ICollection actualArgs)
         {
-            if(expectedArgs == null && actualArgs == null)
+            if (expectedArgs == null && actualArgs == null)
                 return true;
-            if(expectedArgs==null || actualArgs==null)
+            if (expectedArgs == null || actualArgs == null)
                 return false;
-
             if (expectedArgs.Count != actualArgs.Count)
                 return false;
 
             IEnumerator expectedArgsEnumerator = expectedArgs.GetEnumerator();
             IEnumerator actualArgsEnumerator = actualArgs.GetEnumerator();
-            while (expectedArgsEnumerator.MoveNext()
-                && actualArgsEnumerator.MoveNext())
+            while (expectedArgsEnumerator.MoveNext() && actualArgsEnumerator.MoveNext())
             {
                 object expected = expectedArgsEnumerator.Current;
                 object actual = actualArgsEnumerator.Current;
@@ -110,8 +106,10 @@ namespace Rhino.Mocks.Impl
 
                     continue;
                 }
+
                 return false;
             }
+
             return true;
         }
 
@@ -123,16 +121,17 @@ namespace Rhino.Mocks.Impl
         {
             IMockedObject expectedMock = expected as IMockedObject;
             IMockedObject actualMock = actual as IMockedObject;
-            //none are mocked object
+
+            // none are mocked object
             if (expectedMock == null && actualMock == null)
             {
                 return expected.Equals(actual);
             }
-            //if any of them is a mocked object, use mocks equality
-            //this may not be what the user is expecting, but it is needed, because
-            //otherwise we get into endless loop.
+
+            // if any of them is a mocked object, use mocks equality
+            // this may not be what the user is expecting, but it is needed, because
+            // otherwise we get into endless loop.
             return MockedObjectsEquality.Instance.Equals(expected,actual);
         }
-		#endregion
 	}
 }

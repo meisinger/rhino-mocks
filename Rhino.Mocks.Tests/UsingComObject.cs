@@ -33,7 +33,6 @@ using Xunit;
 
 namespace Rhino.Mocks.Tests
 {
-    
     public class UsingComObject
     {
         public interface IMockTest
@@ -44,15 +43,16 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void UsingScriptingFileSystem()
         {
-            MockRepository mocks = new MockRepository();
             Type fsoType = Type.GetTypeFromProgID("Scripting.FileSystemObject");
             Scripting.FileSystemObject fso = (Scripting.FileSystemObject)Activator.CreateInstance(fsoType);
-            IMockTest test = mocks.StrictMock(typeof(IMockTest)) as IMockTest;
-            Expect.Call(test.GetFileSystemObject()).Return(fso);
-            mocks.ReplayAll();
-            Assert.Same(fso, test.GetFileSystemObject());
-            mocks.VerifyAll();
 
+            IMockTest test = MockRepository.GenerateStrictMock(typeof(IMockTest)) as IMockTest;
+            test.Expect(x => x.GetFileSystemObject())
+                .Return(fso);
+
+            Assert.Same(fso, test.GetFileSystemObject());
+
+            test.VerifyAllExpectations();
         }
     }
 }

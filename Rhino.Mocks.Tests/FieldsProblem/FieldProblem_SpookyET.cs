@@ -35,19 +35,14 @@ using Xunit;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-    
     public class FieldProblem_SpookyET : IDisposable
     {
-        MockRepository mocks;
-
-		public FieldProblem_SpookyET()
+        public FieldProblem_SpookyET()
         {
-            mocks = new MockRepository();
         }
 
         public void Dispose()
         {
-            mocks.VerifyAll();
         }
 
         [Fact]
@@ -55,18 +50,25 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         {
             byte[] responseData = Encoding.UTF8.GetBytes("200 OK");
             Stream stream = new MemoryStream(responseData);
-            WebRequest request = (WebRequest)mocks.StrictMock(typeof(WebRequest));
-            WebResponse response = (WebResponse)mocks.StrictMock(typeof(WebResponse));
-            Expect.On(request).Call(request.GetResponse()).Return(response);
-            Expect.On(response).Call(response.GetResponseStream()).Return(stream);
 
-            mocks.ReplayAll();
+
+            WebRequest request = (WebRequest)MockRepository.GenerateStrictMock(typeof(WebRequest));
+            WebResponse response = (WebResponse)MockRepository.GenerateStrictMock(typeof(WebResponse));
+
+            request.Expect(x => x.GetResponse())
+                .Return(response);
+
+            response.Expect(x => x.GetResponseStream())
+                .Return(stream);
 
             Stream returnedStream = GetResponseStream(request);
 
             Assert.Same(stream, returnedStream);
             string returnedString = new StreamReader(returnedStream).ReadToEnd();
             Assert.Equal("200 OK", returnedString);
+
+            request.VerifyAllExpectations();
+            response.VerifyAllExpectations();
         }
 
         /// <summary>
@@ -76,40 +78,39 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void UsingReturnAndThenIgnoreArgs()
         {
-            IDemo demo = (IDemo)mocks.StrictMock(typeof(IDemo));
-            Expect.On(demo).Call(demo.StringArgString(null)).Return("ayende").IgnoreArguments();
-            mocks.ReplayAll();
+            IDemo demo = (IDemo)MockRepository.GenerateStrictMock(typeof(IDemo));
+
+            demo.Expect(x => x.StringArgString(null))
+                .IgnoreArguments()
+                .Return("ayende");
+
             Assert.Equal("ayende", demo.StringArgString("rahien"));
+            demo.VerifyAllExpectations();
         }
 
         [Fact]
         public void WebRequestWhenDisposing()
         {
-            MockRepository mockRepository;
-            WebRequest webRequestMock;
-            WebResponse webResponseMock;
+            WebRequest webRequestMock = (WebRequest)MockRepository
+                .GenerateStrictMock(typeof(WebRequest));
 
-            mockRepository = new MockRepository();
-            webRequestMock = (WebRequest)mockRepository.StrictMock(typeof(WebRequest));
-            webResponseMock = (WebResponse)mockRepository.StrictMock(typeof(WebResponse));
+            WebResponse webResponseMock = (WebResponse)MockRepository
+                .GenerateStrictMock(typeof(WebResponse));
 
-            using (mockRepository.Ordered())
-            {
-                Expect.On(webRequestMock).
-                    Call(webRequestMock.GetResponse()).
-                    Return(webResponseMock);
-                Expect.On(webResponseMock).
-                    Call(webResponseMock.GetResponseStream()).
-                    Return(new MemoryStream());
-            }
-            webResponseMock.Close();
+            webRequestMock.Expect(x => x.GetResponse())
+                .Return(webResponseMock);
 
-            mockRepository.ReplayAll();
+            webResponseMock.Expect(x => x.GetResponseStream())
+                .Return(new MemoryStream());
+
+            webResponseMock.Expect(x => x.Close());
 
             WebResponse response = webRequestMock.GetResponse();
             response.GetResponseStream();
             webResponseMock.Close();
-            mockRepository.VerifyAll();
+
+            webRequestMock.VerifyAllExpectations();
+            webResponseMock.VerifyAllExpectations();
         }
 
         private Stream GetResponseStream(WebRequest request)

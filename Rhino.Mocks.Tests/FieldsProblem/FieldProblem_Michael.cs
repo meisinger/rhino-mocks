@@ -33,7 +33,6 @@ using Xunit;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	
 	public class FieldProblem_Michael
 	{
 		public interface IProvider
@@ -45,22 +44,25 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void TestChar()
 		{
-			MockRepository mocks = new MockRepository();
-			IProvider mockProvider = (IProvider)mocks.StrictMock(typeof(IProvider));
-			SetupResult.For(mockProvider.GetChar()).Return('X');
-			mocks.ReplayAll();
-			Assert.Equal('X', mockProvider.GetChar()); // actual is a random char
+			IProvider mockProvider = (IProvider)MockRepository.GenerateStrictMock(typeof(IProvider));
+
+            mockProvider.Expect(x => x.GetChar())
+                .Return('X');
+
+            // actual is a random char
+			Assert.Equal('X', mockProvider.GetChar()); 
 		}
 
 		[Fact]
 		public void TestInt32()
 		{
-			MockRepository mocks = new MockRepository();
-			IProvider mockProvider = (IProvider)mocks.StrictMock(typeof(IProvider));
-			SetupResult.For(mockProvider.GetInt32()).Return(100);
-			mocks.ReplayAll();
-			Assert.Equal(100, mockProvider.GetInt32()); // actual is 100
-		}
+            IProvider mockProvider = (IProvider)MockRepository.GenerateStrictMock(typeof(IProvider));
 
+            mockProvider.Expect(x => x.GetInt32())
+                .Return(100);
+
+            // actual is 100
+			Assert.Equal(100, mockProvider.GetInt32());
+		}
 	}
 }

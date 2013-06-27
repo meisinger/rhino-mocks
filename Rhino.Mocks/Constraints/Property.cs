@@ -32,24 +32,12 @@ using Rhino.Mocks.Constraints;
 
 namespace Rhino.Mocks.Constraints
 {
-	/*
-	 * Class: Property
-	 * 
-	 * Constraints for dealing with object's properties
-	 */ 
-	/// <summary>
-	/// Central location for constraints for object's properties
-	/// </summary>
+    /// <summary>
+    /// Provides access to common constraints concerning an objects properties
+    /// </summary>
 	public static class Property
 	{
-		/*
-		 * Method: Value
-		 * 
-		 * Determines that the parameter has property with the specified value
-		 * 
-		 */ 
-
-        /// <summary>
+		/// <summary>
 		/// Constrains the parameter to have property with the specified value
 		/// </summary>
 		/// <param name="propertyName">Name of the property.</param>
@@ -93,12 +81,6 @@ namespace Rhino.Mocks.Constraints
             return new PropertyConstraint(declaringType, propertyName, propertyConstraint);
         }
 
-		/*
-		 * Method: IsNull
-		 * 
-		 * Determines that the parameter has property with null value
-		 * 
-		 */ 
 		/// <summary>
 		/// Determines whether the parameter has the specified property and that it is null.
 		/// </summary>
@@ -120,12 +102,6 @@ namespace Rhino.Mocks.Constraints
             return new PropertyIs(declaringType, propertyName, null);
         }
 
-		/*
-		 * Method: IsNotNull
-		 * 
-		 * Determines that the parameter has property with non-null value
-		 * 
-		 */ 
 		/// <summary>
 		/// Determines whether the parameter has the specified property and that it is not null.
 		/// </summary>

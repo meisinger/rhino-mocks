@@ -35,145 +35,225 @@ using Rhino.Mocks.Exceptions;
 
 namespace Rhino.Mocks.Tests.Callbacks
 {
-	
 	public class CallbackTests
 	{
-		private MockRepository mocks;
 		private IDemo demo;
 		private bool callbackCalled;
 
 		public CallbackTests()
 		{
 			System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
-			mocks = new MockRepository();
-			demo = (IDemo) mocks.StrictMock(typeof (IDemo));
+
+            demo = MockRepository.GenerateStrictMock<IDemo>();
 			callbackCalled = false;
 		}
 
 		[Fact]
 		public void CallbackIsCalled()
 		{
-			demo.VoidStringArg("Ayende");
-			LastCall.On(demo).Callback<string>(StringMethod);
-			mocks.Replay(demo);
+            //demo.VoidStringArg("Ayende");
+            //LastCall.On(demo).Callback<string>(StringMethod);
+            //mocks.Replay(demo);
+            //demo.VoidStringArg("");
+            //mocks.Verify(demo);
+            //Assert.True(callbackCalled);
+
+            demo.Expect(x => x.VoidStringArg("Ayende"))
+                .Callback<string>(StringMethod);
+
 			demo.VoidStringArg("");
-			mocks.Verify(demo);
+            demo.VerifyAllExpectations();
 			Assert.True(callbackCalled);
 		}
 
 		[Fact]
 		public void GetSameArgumentsAsMethod()
 		{
-			demo.VoidThreeArgs(0, "", 0f);
-			LastCall.On(demo).Callback<int, string, float>(ThreeArgsAreSame);
-			mocks.Replay(demo);
-			demo.VoidThreeArgs(1, "Ayende", 3.14f);
-			mocks.Verify(demo);
-			Assert.True(callbackCalled);
+            //demo.VoidThreeArgs(0, "", 0f);
+            //LastCall.On(demo).Callback<int, string, float>(ThreeArgsAreSame);
+            //mocks.Replay(demo);
+            //demo.VoidThreeArgs(1, "Ayende", 3.14f);
+            //mocks.Verify(demo);
+            //Assert.True(callbackCalled);
+
+            demo.Expect(x => x.VoidThreeArgs(0, "", 0f))
+                .Callback<int, string, float>(ThreeArgsAreSame);
+
+            demo.VoidThreeArgs(1, "Ayende", 3.14f);
+            demo.VerifyAllExpectations();
+            Assert.True(callbackCalled);
 		}
 
 		[Fact]
 		public void DifferentArgumentsFromMethodThrows()
 		{
-			demo.VoidThreeArgs(0, "", 0f);
-			Assert.Throws<InvalidOperationException>("Callback arguments didn't match the method arguments",
-			                                         ()=> LastCall.On(demo).Callback<int, string, string>(OtherThreeArgs));
+            //demo.VoidThreeArgs(0, "", 0f);
+
+            //Assert.Throws<InvalidOperationException>(
+            //    "Callback arguments didn't match the method arguments",
+            //    ()=> LastCall.On(demo).Callback<int, string, string>(OtherThreeArgs));
+
+            Assert.Throws<InvalidOperationException>(
+                "Callback arguments didn't match the method arguments",
+                () => demo.Expect(x => x.VoidThreeArgs(0, "", 0f))
+                        .Callback<int, string, string>(OtherThreeArgs));
 		}
 
 		[Fact]
 		public void IgnoreArgsWhenUsingCallbacks()
 		{
-			demo.VoidThreeArgs(0, "", 0f);
-			LastCall.On(demo).Callback<int, string, float>(ThreeArgsAreSame);
-			mocks.Replay(demo);
-			demo.VoidThreeArgs(1, "Ayende", 3.14f);
-			mocks.Verify(demo);
+            //demo.VoidThreeArgs(0, "", 0f);
+            //LastCall.On(demo).Callback<int, string, float>(ThreeArgsAreSame);
+            //mocks.Replay(demo);
+            //demo.VoidThreeArgs(1, "Ayende", 3.14f);
+            //mocks.Verify(demo);
+
+            demo.Expect(x => x.VoidThreeArgs(0, "", 0f))
+                .Callback<int, string, float>(ThreeArgsAreSame);
+
+            demo.VoidThreeArgs(1, "Ayende", 3.14f);
+            demo.VerifyAllExpectations();
 		}
 
 		[Fact]
 		public void SetReturnValueOnMethodWithCallback()
 		{
-			demo.ReturnIntNoArgs();
-			LastCall.On(demo).Callback(NoArgsMethod).Return(5);
-			mocks.Replay(demo);
-			Assert.Equal(5, demo.ReturnIntNoArgs());
-			mocks.Verify(demo);
+            //demo.ReturnIntNoArgs();
+            //LastCall.On(demo).Callback(NoArgsMethod).Return(5);
+            //mocks.Replay(demo);
+            //Assert.Equal(5, demo.ReturnIntNoArgs());
+            //mocks.Verify(demo);
+
+            demo.Expect(x => x.ReturnIntNoArgs())
+                .Callback(NoArgsMethod)
+                .Return(5);
+
+            Assert.Equal(5, demo.ReturnIntNoArgs());
+            demo.VerifyAllExpectations();
 		}
 
 		[Fact]
 		public void CallbackWithDifferentSignatureFails()
 		{
-			demo.VoidThreeArgs(0, "", 0f);
-			Assert.Throws<InvalidOperationException>(
-				"Callback arguments didn't match the method arguments",
-				() => LastCall.On(demo).Callback<string>(StringMethod));
+            //demo.VoidThreeArgs(0, "", 0f);
+            //Assert.Throws<InvalidOperationException>(
+            //    "Callback arguments didn't match the method arguments",
+            //    () => LastCall.On(demo).Callback<string>(StringMethod));
+
+            Assert.Throws<InvalidOperationException>(
+                "Callback arguments didn't match the method arguments",
+                () => demo.Expect(x => x.VoidThreeArgs(0, "", 0f))
+                        .Callback<string>(StringMethod));
 		}
 
 		[Fact]
 		public void GetMessageFromCallbackWhenNotReplaying()
 		{
-			demo.VoidThreeArgs(0, "", 0f);
-			LastCall.On(demo).Callback<int, string, float>(ThreeArgsAreSame);
-			mocks.Replay(demo);
-			Assert.Throws<ExpectationViolationException>(
-				"IDemo.VoidThreeArgs(callback method: CallbackTests.ThreeArgsAreSame); Expected #1, Actual #0.",
-				() => mocks.Verify(demo));
+            //demo.VoidThreeArgs(0, "", 0f);
+            //LastCall.On(demo).Callback<int, string, float>(ThreeArgsAreSame);
+            //mocks.Replay(demo);
+            //Assert.Throws<ExpectationViolationException>(
+            //    "IDemo.VoidThreeArgs(callback method: CallbackTests.ThreeArgsAreSame); Expected #1, Actual #0.",
+            //    () => mocks.Verify(demo));
+
+            demo.Expect(x => x.VoidThreeArgs(0, "", 0f))
+                .Callback<int, string, float>(ThreeArgsAreSame);
+
+            Assert.Throws<ExpectationViolationException>(
+                "IDemo.VoidThreeArgs(callback method: CallbackTests.ThreeArgsAreSame); Expected #1, Actual #0.",
+                () => demo.VerifyAllExpectations());
 		}
 
 		[Fact]
 		public void GetMessageFromCallbackWhenCalledTooMuch()
 		{
-			demo.VoidThreeArgs(0, "", 0f);
-			LastCall.On(demo).Callback<int, string, float>(ThreeArgsAreSame);
-			mocks.Replay(demo);
-			demo.VoidThreeArgs(1, "Ayende", 3.14f);
+            //demo.VoidThreeArgs(0, "", 0f);
+            //LastCall.On(demo).Callback<int, string, float>(ThreeArgsAreSame);
+            //mocks.Replay(demo);
+            //demo.VoidThreeArgs(1, "Ayende", 3.14f);
 			
-			Assert.Throws<ExpectationViolationException>("IDemo.VoidThreeArgs(1, \"Ayende\", 3.14); Expected #1, Actual #2.",
-														 () => demo.VoidThreeArgs(1, "Ayende", 3.14f));
+            //Assert.Throws<ExpectationViolationException>("IDemo.VoidThreeArgs(1, \"Ayende\", 3.14); Expected #1, Actual #2.",
+            //                                             () => demo.VoidThreeArgs(1, "Ayende", 3.14f));
+
+            demo.Expect(x => x.VoidThreeArgs(0, "", 0f))
+                .Callback<int, string, float>(ThreeArgsAreSame);
+
+            demo.VoidThreeArgs(1, "Ayende", 3.14f);
+
+            Assert.Throws<ExpectationViolationException>(
+                "IDemo.VoidThreeArgs(1, \"Ayende\", 3.14); Expected #1, Actual #2.",
+                () => demo.VoidThreeArgs(1, "Ayende", 3.14f));
 		}
-
-
+        
 		[Fact]
 		public void CallbackWhenMethodHasReturnValue()
 		{
-			demo.ReturnIntNoArgs();
-			LastCall.On(demo).Callback(NoArgsMethod);
-			Assert.Throws<InvalidOperationException>(
-				"Previous method 'IDemo.ReturnIntNoArgs(callback method: CallbackTests.NoArgsMethod);' requires a return value or an exception to throw.",
-				() => mocks.Replay(demo));
+            //demo.ReturnIntNoArgs();
+            //LastCall.On(demo).Callback(NoArgsMethod);
+            //Assert.Throws<InvalidOperationException>(
+            //    "Previous method 'IDemo.ReturnIntNoArgs(callback method: CallbackTests.NoArgsMethod);' requires a return value or an exception to throw.",
+            //    () => mocks.Replay(demo));
+
+            demo.Expect(x => x.ReturnIntNoArgs())
+                .Callback(NoArgsMethod);
+
+            Assert.Throws<InvalidOperationException>(
+                "Previous method 'IDemo.ReturnIntNoArgs(callback method: CallbackTests.NoArgsMethod);' requires a return value or an exception to throw.",
+                () => demo.ReturnIntNoArgs());
 		}
-
-
+        
 		[Fact]
 		public void CallbackAndConstraintsOnSameMethod()
 		{
-			demo.StringArgString("");
-			Assert.Throws<InvalidOperationException>("This method has already been set to CallbackExpectation.",
-			                                         () => LastCall.On(demo).Callback<string>(StringMethod)
-			                                               	.Constraints(Is.Anything()));
+            //demo.StringArgString("");
+
+            //Assert.Throws<InvalidOperationException>(
+            //    "This method has already been set to CallbackExpectation.",
+            //    () => LastCall.On(demo)
+            //        .Callback<string>(StringMethod)
+            //        .Constraints(Is.Anything()));
+
+            Assert.Throws<InvalidOperationException>(
+                "This method has already been set to CallbackExpectation.",
+                () => demo.Expect(x => x.StringArgString(""))
+                    .Callback<string>(StringMethod)
+                    .Constraints(Is.Anything()));
 		}
 
 		[Fact]
 		public void ExceptionInCallback()
 		{
-			demo.ReturnIntNoArgs();
-			LastCall.On(demo).Callback(NoArgsThrowing).Return(5);
-			mocks.Replay(demo);
-			Assert.Throws<ExternalException>("I'm not guilty, is was /him/",
-			                                 () => Assert.Equal(5, demo.ReturnIntNoArgs()));
+            //demo.ReturnIntNoArgs();
+            //LastCall.On(demo).Callback(NoArgsThrowing).Return(5);
+            //mocks.Replay(demo);
+            //Assert.Throws<ExternalException>("I'm not guilty, is was /him/",
+            //                                 () => Assert.Equal(5, demo.ReturnIntNoArgs()));
+
+            demo.Expect(x => x.ReturnIntNoArgs())
+                .Callback(NoArgsThrowing)
+                .Return(5);
+
+			Assert.Throws<ExternalException>(
+                "I'm not guilty, is was /him/",
+                () => Assert.Equal(5, demo.ReturnIntNoArgs()));
 		}
 
 		[Fact]
 		public void CallbackCanFailExpectationByReturningFalse()
 		{
-			demo.VoidNoArgs();
-			LastCall.On(demo).Callback(NoArgsMethodFalse);
-			mocks.Replay(demo);
-			Assert.Throws<ExpectationViolationException>("IDemo.VoidThreeArgs(1, \"Ayende\", 3.14); Expected #0, Actual #1.",
-			                                             () => demo.VoidThreeArgs(1, "Ayende", 3.14f));
-		}
+            //demo.VoidNoArgs();
+            //LastCall.On(demo).Callback(NoArgsMethodFalse);
+            //mocks.Replay(demo);
+            //Assert.Throws<ExpectationViolationException>("IDemo.VoidThreeArgs(1, \"Ayende\", 3.14); Expected #0, Actual #1.",
+            //                                             () => demo.VoidThreeArgs(1, "Ayende", 3.14f));
 
-		#region Implementation Details
+            demo.Expect(x => x.VoidNoArgs())
+                .Callback(NoArgsMethodFalse);
+
+			Assert.Throws<ExpectationViolationException>(
+                "IDemo.VoidThreeArgs(1, \"Ayende\", 3.14); Expected #0, Actual #1.",
+                () => demo.VoidThreeArgs(1, "Ayende", 3.14f));
+		}
 
 		private bool StringMethod(string s)
 		{
@@ -191,6 +271,7 @@ namespace Rhino.Mocks.Tests.Callbacks
 			Assert.Equal(1, i);
 			Assert.Equal("Ayende", s);
 			Assert.Equal(3.14f, f);
+
 			callbackCalled = true;
 			return true;
 		}
@@ -209,8 +290,6 @@ namespace Rhino.Mocks.Tests.Callbacks
 		{
 			throw new ExternalException("I'm not guilty, is was /him/");
 		}
-
-		#endregion
 	}
 
 	public class DelegateDefinations

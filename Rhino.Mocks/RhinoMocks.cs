@@ -32,10 +32,6 @@ using Rhino.Mocks.Interfaces;
 
 namespace Rhino.Mocks
 {
-	/* class: RhinoMocks
-     * Used for [assembly: InternalsVisibleTo(RhinoMocks.StrongName)]
-     */
-
 	/// <summary>
 	/// Used for [assembly: InternalsVisibleTo(RhinoMocks.StrongName)]
 	/// Used for [assembly: InternalsVisibleTo(RhinoMocks.NormalName)]

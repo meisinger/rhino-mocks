@@ -33,77 +33,73 @@ using System.ComponentModel;
 using System.IO;
 using System.Text;
 using System.Xml;
-
 using Xunit;
 using Rhino.Mocks.Exceptions;
 using Rhino.Mocks.Interfaces;
 
 namespace Rhino.Mocks.Tests
 {
-    
     public class MultiMocks
     {
-        #region CanCreateAStrictMultiMockFromTwoInterfaces
         [Fact]
         public void CanCreateAStrictMultiMockFromTwoInterfacesNonGeneric()
         {
-            MockRepository mocks = new MockRepository();
-            IDemo demo = (IDemo)mocks.StrictMultiMock(typeof(IDemo), typeof(IDisposable));
-            CanCreateAStrictMultiMockFromTwoInterfacesCommon(mocks, demo);
+            IDemo demo = (IDemo)MockRepository.GenerateStrictMock(typeof(IDemo), typeof(IDisposable));
+            CanCreateAStrictMultiMockFromTwoInterfacesCommon(demo);
         }
 
         [Fact]
         public void CanCreateAStrictMultiMockFromTwoInterfacesGeneric()
         {
-            MockRepository mocks = new MockRepository();
-            IDemo demo = mocks.StrictMultiMock<IDemo>(typeof(IDisposable));
-            CanCreateAStrictMultiMockFromTwoInterfacesCommon(mocks, demo);
+            IDemo demo = MockRepository.GenerateStrictMultiMock<IDemo>(typeof(IDisposable));
+            CanCreateAStrictMultiMockFromTwoInterfacesCommon(demo);
         }
 
-        private static void CanCreateAStrictMultiMockFromTwoInterfacesCommon(MockRepository mocks, IDemo demo)
+        private static void CanCreateAStrictMultiMockFromTwoInterfacesCommon(IDemo demo)
         {
-            demo.ReturnIntNoArgs();
-            LastCall.Return(1);
+            demo.Expect(x => x.ReturnIntNoArgs())
+                .Return(1);
+
             IDisposable disposable = demo as IDisposable;
-
+            
             Assert.NotNull(disposable);
-            disposable.Dispose();
-
-            mocks.ReplayAll();
-
+            disposable.Expect(x => x.Dispose());
+            
             Assert.Equal(1, demo.ReturnIntNoArgs());
             disposable.Dispose();
 
-            mocks.VerifyAll();
+            demo.VerifyAllExpectations();
+            // disposable.VerifyAllExpectations();
         }
-        #endregion
-
-        #region ClearStrictCollectionAndDisposesIt
+        
         [Fact]
         public void ClearStrictCollectionAndDisposesItNonGeneric()
         {
-            MockRepository mocks = new MockRepository();
-            CollectionBase collection = (CollectionBase)mocks.StrictMultiMock(typeof(CollectionBase),
-                                                                              typeof(IDisposable));
-            ClearStrictCollectionAndDisposesItCommon(mocks, collection);
+            CollectionBase collection = (CollectionBase)MockRepository.GenerateStrictMock(
+                typeof(CollectionBase), typeof(IDisposable));
+
+            ClearStrictCollectionAndDisposesItCommon(collection);
         }
 
         [Fact]
         public void ClearStrictCollectionAndDisposesItGeneric()
         {
-            MockRepository mocks = new MockRepository();
-            CollectionBase collection = mocks.StrictMultiMock<CollectionBase>(typeof(IDisposable));
-            ClearStrictCollectionAndDisposesItCommon(mocks, collection);
+            CollectionBase collection = MockRepository.GenerateStrictMultiMock<CollectionBase>(typeof(IDisposable));
+
+            ClearStrictCollectionAndDisposesItCommon(collection);
         }
 
-        private static void ClearStrictCollectionAndDisposesItCommon(MockRepository mocks, CollectionBase collection)
+        private static void ClearStrictCollectionAndDisposesItCommon(CollectionBase collection)
         {
-            collection.Clear();
-            ((IDisposable)collection).Dispose();
+            collection.Expect(x => x.Clear());
 
-            mocks.ReplayAll();
+            IDisposable disposable = (IDisposable)collection;
+            disposable.Expect(x => x.Dispose());
+
             CleanCollection(collection);
-            mocks.VerifyAll();
+
+            collection.VerifyAllExpectations();
+            //disposable.VerifyAllExpectations();
         }
 
         private static void CleanCollection(CollectionBase collection)
@@ -113,271 +109,243 @@ namespace Rhino.Mocks.Tests
             if(disposable!=null)
                 disposable.Dispose();
         }
-        #endregion
-
-        #region CanCreateAStrictMultiMockFromClassAndTwoInterfacesNonGeneric
+        
         [Fact]
         public void CanCreateAStrictMultiMockFromClassAndTwoInterfacesNonGeneric()
         {
-            MockRepository mocks = new MockRepository();
-            XmlReader reader = (XmlReader)mocks.StrictMultiMock(typeof(XmlReader), typeof(ICloneable), typeof(IHasXmlNode));
+            XmlReader reader = (XmlReader)MockRepository.GenerateStrictMock(typeof(XmlReader), typeof(ICloneable), typeof(IHasXmlNode));
 
-            CanCreateAStrictMultiMockFromClassAndTwoInterfacesCommon(mocks, reader);
+            CanCreateAStrictMultiMockFromClassAndTwoInterfacesCommon(reader);
         }
 
         [Fact]
         public void CanCreateAStrictMultiMockFromClassAndTwoInterfacesGeneric()
         {
-            MockRepository mocks = new MockRepository();
-            XmlReader reader = mocks.StrictMultiMock<XmlReader>(typeof(ICloneable), typeof(IHasXmlNode));
+            XmlReader reader = MockRepository.GenerateStrictMultiMock<XmlReader>(typeof(ICloneable), typeof(IHasXmlNode));
 
-            CanCreateAStrictMultiMockFromClassAndTwoInterfacesCommon(mocks, reader);
+            CanCreateAStrictMultiMockFromClassAndTwoInterfacesCommon(reader);
         }
 
-        private static void CanCreateAStrictMultiMockFromClassAndTwoInterfacesCommon(MockRepository mocks, XmlReader reader)
+        private static void CanCreateAStrictMultiMockFromClassAndTwoInterfacesCommon(XmlReader reader)
         {
-            Expect.Call( reader.AttributeCount ).Return( 3 );
+            reader.Expect(x => x.AttributeCount)
+                .Return(3);
 
             ICloneable cloneable = reader as ICloneable;
             Assert.NotNull( cloneable );
 
-            Expect.Call( cloneable.Clone() ).Return( reader );
+            cloneable.Expect(x => x.Clone())
+                .Return(reader);
 
             IHasXmlNode hasXmlNode = reader as IHasXmlNode;
             Assert.NotNull( hasXmlNode );
 
             XmlNode node = new XmlDocument();
-            Expect.Call( hasXmlNode.GetNode() ).Return( node );
-
-            mocks.ReplayAll();
-
+            hasXmlNode.Expect(x => x.GetNode())
+                .Return(node);
+            
             Assert.Equal( 3, reader.AttributeCount );
             Assert.Equal( node, hasXmlNode.GetNode() );
 
             Assert.Same( cloneable, cloneable.Clone() );
 
-            mocks.VerifyAll();
+            reader.VerifyAllExpectations();
+            // cloneable.VerifyAllExpectations();
+            // hasXmlNode.VerifyAllExpectations();
         }
-        #endregion
 
-        #region CanCreateAStrictMultiMockWithConstructorArgs
         [Fact]
         public void CanCreateAStrictMultiMockWithConstructorArgsNonGeneric()
         {
-            MockRepository mocks = new MockRepository();
-
             StringBuilder stringBuilder = new StringBuilder();
-            IFormatProvider formatProvider = (IFormatProvider)mocks.StrictMock(typeof(IFormatProvider));
+            IFormatProvider formatProvider = (IFormatProvider)MockRepository.GenerateStrictMock(typeof(IFormatProvider));
 
-            StringWriter mockedWriter = (StringWriter)mocks.StrictMultiMock(
+            StringWriter mockedWriter = (StringWriter)MockRepository.GenerateStrictMock(
                 typeof(StringWriter),
                 new Type[] { typeof(IDataErrorInfo) },
                 stringBuilder,
                 formatProvider
             );
 
-            CommonConstructorArgsTest(mocks, stringBuilder, formatProvider, mockedWriter, MockType.Strict);
+            CommonConstructorArgsTest(stringBuilder, formatProvider, mockedWriter, MockType.Strict);
         }
 
         [Fact]
         public void CanCreateAStrictMultiMockWithConstructorArgsGeneric()
         {
-            MockRepository mocks = new MockRepository();
-
             StringBuilder stringBuilder = new StringBuilder();
-            IFormatProvider formatProvider = mocks.StrictMock<IFormatProvider>();
+            IFormatProvider formatProvider = MockRepository.GenerateStrictMock<IFormatProvider>();
 
-            StringWriter mockedWriter = mocks.StrictMultiMock<StringWriter>(
+            StringWriter mockedWriter = MockRepository.GenerateStrictMultiMock<StringWriter>(
                 new Type[] { typeof(IDataErrorInfo) },
                 stringBuilder,
                 formatProvider
             );
 
-            CommonConstructorArgsTest(mocks, stringBuilder, formatProvider, mockedWriter, MockType.Strict);
+            CommonConstructorArgsTest(stringBuilder, formatProvider, mockedWriter, MockType.Strict);
         }
 
-        #endregion
-
-        #region CanCreateADynamicMultiMockFromTwoInterfacesNonGeneric
         [Fact]
         public void CanCreateADynamicMultiMockFromTwoInterfacesNonGeneric()
         {
-            MockRepository mocks = new MockRepository();
-            object o = mocks.DynamicMultiMock(typeof(IDemo), typeof(IEditableObject));
+            object o = MockRepository.GenerateDynamicMock(typeof(IDemo), typeof(IEditableObject));
 
             IDemo demo = o as IDemo;
             IEditableObject editable = o as IEditableObject;
 
-            CanCreateADynamicMultiMockFromTwoInterfacesCommon(mocks, demo, editable);
+            CanCreateADynamicMultiMockFromTwoInterfacesCommon(demo, editable);
         }
 
         [Fact]
         public void CanCreateADynamicMultiMockFromTwoInterfacesGeneric()
         {
-            MockRepository mocks = new MockRepository();
-            IDemo demo = mocks.DynamicMultiMock<IDemo>(typeof(IEditableObject));
+            IDemo demo = MockRepository.GenerateDynamicMultiMock<IDemo>(typeof(IEditableObject));
             IEditableObject editable = demo as IEditableObject;
 
-            CanCreateADynamicMultiMockFromTwoInterfacesCommon(mocks, demo, editable);
+            CanCreateADynamicMultiMockFromTwoInterfacesCommon(demo, editable);
         }
 
-        private static void CanCreateADynamicMultiMockFromTwoInterfacesCommon(MockRepository mocks, IDemo demo, IEditableObject editable)
+        private static void CanCreateADynamicMultiMockFromTwoInterfacesCommon(IDemo demo, IEditableObject editable)
         {
             Assert.NotNull(demo);
             Assert.NotNull(editable);
 
             // Set expectation on one member on each interface
+            demo.Expect(x => x.ReadOnly)
+                .Return("foo");
 
-            Expect.Call(demo.ReadOnly).Return("foo");
-            editable.BeginEdit();
-
-            mocks.ReplayAll();
-
+            editable.Expect(x => x.BeginEdit());
+            
             // Drive two members on each interface to check dynamic nature
-
             Assert.Equal("foo", demo.ReadOnly);
             demo.VoidNoArgs();
 
             editable.BeginEdit();
             editable.EndEdit();
 
-            mocks.VerifyAll();
+            demo.VerifyAllExpectations();
+            // editable.VerifyAllExpectations();
         }
-        #endregion
 
-        #region CanCreateADynamicMultiMockWithConstructorArgs
         [Fact]
         public void CanCreateADynamicMultiMockWithConstructorArgsNonGeneric()
-        {
-            MockRepository mocks = new MockRepository();
-
+        {            
             StringBuilder stringBuilder = new StringBuilder();
-            IFormatProvider formatProvider = (IFormatProvider)mocks.StrictMock(typeof(IFormatProvider));
+            IFormatProvider formatProvider = (IFormatProvider)MockRepository.GenerateStrictMock(typeof(IFormatProvider));
 
-            StringWriter mockedWriter = (StringWriter)mocks.DynamicMultiMock(
+            StringWriter mockedWriter = (StringWriter)MockRepository.GenerateDynamicMock(
                 typeof(StringWriter),
                 new Type[] { typeof(IDataErrorInfo) },
                 stringBuilder,
                 formatProvider
             );
-            CommonConstructorArgsTest(mocks, stringBuilder, formatProvider, mockedWriter, MockType.Dynamic);
+
+            CommonConstructorArgsTest(stringBuilder, formatProvider, mockedWriter, MockType.Dynamic);
         }
 
         [Fact]
         public void CanCreateADynamicMultiMockWithConstructorArgsGeneric()
         {
-            MockRepository mocks = new MockRepository();
-
             StringBuilder stringBuilder = new StringBuilder();
-            IFormatProvider formatProvider = mocks.StrictMock<IFormatProvider>();
+            IFormatProvider formatProvider = MockRepository.GenerateStrictMock<IFormatProvider>();
 
-            StringWriter mockedWriter = mocks.DynamicMultiMock<StringWriter>(
+            StringWriter mockedWriter = MockRepository.GenerateDynamicMultiMock<StringWriter>(
                 new Type[] { typeof(IDataErrorInfo) },
                 stringBuilder,
                 formatProvider
             );
-            CommonConstructorArgsTest(mocks, stringBuilder, formatProvider, mockedWriter, MockType.Dynamic);
+
+            CommonConstructorArgsTest(stringBuilder, formatProvider, mockedWriter, MockType.Dynamic);
         }
 
-        #endregion
-
-        #region CanCreateAPartialMultiMockFromClassAndTwoInterfacesNonGeneric
         [Fact]
         public void CanCreateAPartialMultiMockFromClassAndTwoInterfacesNonGeneric()
         {
-            MockRepository mocks = new MockRepository();
-            XmlReader reader = (XmlReader)mocks.PartialMultiMock(typeof(XmlReader), typeof(ICloneable), typeof(IHasXmlNode));
+            XmlReader reader = (XmlReader)MockRepository.GeneratePartialMock(typeof(XmlReader), typeof(ICloneable), typeof(IHasXmlNode));
 
-            CanCreateAPartialMultiMockFromClassAndTwoInterfacesCommon(mocks, reader);
+            CanCreateAPartialMultiMockFromClassAndTwoInterfacesCommon(reader);
         }
 
         [Fact]
         public void CanCreateAPartialMultiMockFromClassAndTwoInterfacesGeneric()
         {
-            MockRepository mocks = new MockRepository();
-            XmlReader reader = mocks.PartialMultiMock<XmlReader>(typeof(ICloneable), typeof(IHasXmlNode));
+            XmlReader reader = MockRepository.GeneratePartialMultiMock<XmlReader>(typeof(ICloneable), typeof(IHasXmlNode));
 
-            CanCreateAPartialMultiMockFromClassAndTwoInterfacesCommon(mocks, reader);
+            CanCreateAPartialMultiMockFromClassAndTwoInterfacesCommon(reader);
         }
 
-        private static void CanCreateAPartialMultiMockFromClassAndTwoInterfacesCommon(MockRepository mocks, XmlReader reader)
+        private static void CanCreateAPartialMultiMockFromClassAndTwoInterfacesCommon(XmlReader reader)
         {
-            Expect.Call(reader.AttributeCount).Return(3);
+            reader.Expect(x => x.AttributeCount)
+                .Return(3);
 
             ICloneable cloneable = reader as ICloneable;
             Assert.NotNull(cloneable);
 
-            Expect.Call(cloneable.Clone()).Return(reader);
+            cloneable.Expect(x => x.Clone())
+                .Return(reader);
 
             IHasXmlNode hasXmlNode = reader as IHasXmlNode;
             Assert.NotNull(hasXmlNode);
 
             XmlNode node = new XmlDocument();
-            Expect.Call(hasXmlNode.GetNode()).Return(node);
-
-            mocks.ReplayAll();
-
+            hasXmlNode.Expect(x => x.GetNode())
+                .Return(node);
+            
             Assert.Equal(3, reader.AttributeCount);
             Assert.Equal(node, hasXmlNode.GetNode());
 
             Assert.Same(cloneable, cloneable.Clone());
 
-            mocks.VerifyAll();
+            reader.VerifyAllExpectations();
+            // cloneable.VerifyAllExpectations();
+            // hasXmlNode.VerifyAllExpectations();
         }
-        #endregion
-
-        #region CanConstructAPartialMultiMockWithConstructorArgs
+        
         [Fact]
         public void CanCreateAPartialMultiMockWithConstructorArgsNonGeneric()
         {
-            MockRepository mocks = new MockRepository();
-
             StringBuilder stringBuilder = new StringBuilder();
-            IFormatProvider formatProvider = (IFormatProvider)mocks.StrictMock(typeof(IFormatProvider));
+            IFormatProvider formatProvider = (IFormatProvider)MockRepository.GenerateStrictMock(typeof(IFormatProvider));
 
-            StringWriter mockedWriter = (StringWriter)mocks.PartialMultiMock(
+            StringWriter mockedWriter = (StringWriter)MockRepository.GeneratePartialMock(
                 typeof(StringWriter),
                 new Type[] { typeof(IDataErrorInfo) },
                 stringBuilder,
                 formatProvider
             );
 
-            CommonConstructorArgsTest(mocks, stringBuilder, formatProvider, mockedWriter, MockType.Partial);
+            CommonConstructorArgsTest(stringBuilder, formatProvider, mockedWriter, MockType.Partial);
         }
 
         [Fact]
         public void CanCreateAPartialMultiMockWithConstructorArgsGeneric()
         {
-            MockRepository mocks = new MockRepository();
-
             StringBuilder stringBuilder = new StringBuilder();
-            IFormatProvider formatProvider = mocks.StrictMock<IFormatProvider>();
+            IFormatProvider formatProvider = MockRepository.GenerateStrictMock<IFormatProvider>();
 
-            StringWriter mockedWriter = mocks.PartialMultiMock<StringWriter>(
+            StringWriter mockedWriter = MockRepository.GeneratePartialMultiMock<StringWriter>(
                 new Type[] { typeof(IDataErrorInfo) },
                 stringBuilder,
                 formatProvider
             );
             
-            CommonConstructorArgsTest(mocks, stringBuilder, formatProvider, mockedWriter, MockType.Partial);
+            CommonConstructorArgsTest(stringBuilder, formatProvider, mockedWriter, MockType.Partial);
         }
-        #endregion
-
-        #region Check cannot create multi mocks using extra classes
+        
         [Fact]
         public void CannotMultiMockUsingClassesAsExtras()
         {
-            MockRepository mocks = new MockRepository();
-        	Assert.Throws<ArgumentException>(() => mocks.StrictMultiMock(typeof (XmlReader), typeof (XmlWriter)));
+            Assert.Throws<ArgumentException>(
+                () => MockRepository.GenerateStrictMock(typeof(XmlReader), typeof(XmlWriter)));
         }
-        #endregion
-
-        #region RepeatedInterfaceMultiMocks
+        
         public interface IMulti
         {
             void OriginalMethod1();
             void OriginalMethod2();
         }
+
         public class MultiClass : IMulti
         {
             // NON-virtual method
@@ -385,6 +353,7 @@ namespace Rhino.Mocks.Tests
             // VIRTUAL method
             public virtual void OriginalMethod2() { }
         }
+
         public interface ISpecialMulti : IMulti
         {
             void ExtraMethod();
@@ -393,23 +362,20 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void RepeatedInterfaceMultiMocks()
         {
-            MockRepository mocks = new MockRepository();
-            object o = mocks.StrictMultiMock(typeof(MultiClass), typeof(ISpecialMulti));
+            object o = MockRepository.GenerateStrictMock(typeof(MultiClass), typeof(ISpecialMulti));
 
             Assert.True(o is MultiClass, "Object should be MultiClass");
             Assert.True(o is IMulti, "Object should be IMulti");
             Assert.True(o is ISpecialMulti, "Object should be ISpecialMulti");
         }
-        #endregion
-
-        #region CommonConstructorArgsTest
+        
         private enum MockType { Strict, Dynamic, Partial }
 
         // Helper class to provide a common set of tests for constructor-args based
         // multi-mocks testing.  Exercises a mocked StringWriter (which should also be an IDataErrorInfo)
         // constructed with a mocked IFormatProvider.  The test checks the semantics
         // of the mocked StringWriter to compare it with the expected semantics.
-        private static void CommonConstructorArgsTest(MockRepository mocks, StringBuilder stringBuilder, IFormatProvider formatProvider, StringWriter mockedWriter, MockType mockType)
+        private static void CommonConstructorArgsTest(StringBuilder stringBuilder, IFormatProvider formatProvider, StringWriter mockedWriter, MockType mockType)
         {
             string stringToWrite = "The original string";
             string stringToWriteLine = "Extra bit";
@@ -418,21 +384,27 @@ namespace Rhino.Mocks.Tests
             Assert.NotNull(errorInfo);
 
             // Configure expectations for mocked writer
-            SetupResult.For(mockedWriter.FormatProvider).CallOriginalMethod(OriginalCallOptions.CreateExpectation);
-            mockedWriter.Write((string)null);
-						LastCall.IgnoreArguments().CallOriginalMethod(OriginalCallOptions.CreateExpectation);
+            mockedWriter.Expect(x => x.FormatProvider)
+                .CallOriginalMethod(OriginalCallOptions.CreateExpectation);
 
-            mockedWriter.Flush();
-						LastCall.Repeat.Any().CallOriginalMethod(OriginalCallOptions.CreateExpectation);
+            mockedWriter.Expect(x => x.Write((string)null))
+                .IgnoreArguments()
+                .CallOriginalMethod(OriginalCallOptions.CreateExpectation);
 
-            mockedWriter.Close();
+            mockedWriter.Expect(x => x.Flush())
+                .CallOriginalMethod(OriginalCallOptions.CreateExpectation)
+                .Repeat.Any();
 
-            // Configure expectations for object through interface
-            Expect.Call(errorInfo.Error).Return(null).Repeat.Once();
-            Expect.Call(errorInfo.Error).Return("error!!!").Repeat.Once();
+            mockedWriter.Expect(x => x.Close());
 
-            mocks.ReplayAll();
+            errorInfo.Expect(x => x.Error)
+                .Return(null)
+                .Repeat.Once();
 
+            errorInfo.Expect(x => x.Error)
+                .Return("error!!!")
+                .Repeat.Once();
+            
             // Ensure that arguments arrived okay
             // Is the format provider correct
             Assert.Same(formatProvider, mockedWriter.FormatProvider);
@@ -451,7 +423,6 @@ namespace Rhino.Mocks.Tests
             }
             catch (ExpectationViolationException)
             {
-                // We're operating strictly.
                 Assert.Equal(MockType.Strict, mockType);
             }
 
@@ -460,25 +431,24 @@ namespace Rhino.Mocks.Tests
             {
                 case MockType.Dynamic:
                 case MockType.Strict:
-                    // The writeline won't have done anything
                     expectedStringBuilderContents = stringToWrite;
                     break;
                 case MockType.Partial:
-                    // The writeline will have worked
                     expectedStringBuilderContents = stringToWrite + stringToWriteLine + Environment.NewLine;
                     break;
             }
 
             Assert.Equal(expectedStringBuilderContents, stringBuilder.ToString());
 
-            // Satisfy expectations.
             mockedWriter.Close();
             Assert.Null(errorInfo.Error);
             Assert.Equal("error!!!", errorInfo.Error);
 
-        	if(MockType.Strict != mockType)
-				mocks.VerifyAll();
+            if (MockType.Strict != mockType)
+            {
+                mockedWriter.VerifyAllExpectations();
+                //errorInfo.VerifyAllExpectations();
+            }
         }
-        #endregion
     }
 }

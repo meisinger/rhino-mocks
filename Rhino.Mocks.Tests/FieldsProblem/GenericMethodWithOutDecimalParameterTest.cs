@@ -1,8 +1,8 @@
+
+using Xunit;
+
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	using Xunit;
-
-	
 	public class GenericMethodWithOutDecimalParameterTest
 	{
 		public interface IMyInterface
@@ -13,23 +13,17 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void GenericMethodWithOutDecimalParameter()
 		{
-			MockRepository mocks = new MockRepository();
-			IMyInterface mock = mocks.StrictMock<IMyInterface>();
+			IMyInterface mock = MockRepository.GenerateStrictMock<IMyInterface>();
 
 			decimal expectedOutParameter = 1.234M;
-			using (mocks.Record())
-			{
-				decimal emptyOutParameter;
-				mock.GenericMethod(out emptyOutParameter);
-				LastCall.OutRef(expectedOutParameter);
-			}
+            decimal emptyOutParameter;
 
-			using (mocks.Playback())
-			{
-				decimal outParameter;
-				mock.GenericMethod(out outParameter);
-				Assert.Equal(expectedOutParameter, outParameter);
-			}
+            mock.Expect(x => x.GenericMethod(out emptyOutParameter))
+                .OutRef(expectedOutParameter);
+
+            decimal outParameter;
+            mock.GenericMethod(out outParameter);
+            Assert.Equal(expectedOutParameter, outParameter);
 		}
 
 		public static void Foo(out decimal d)

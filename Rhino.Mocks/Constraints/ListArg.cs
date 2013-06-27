@@ -5,23 +5,26 @@ using System.Collections;
 
 namespace Rhino.Mocks.Constraints
 {
-	/// <summary>
-	/// Provides access to the constraints defined in the class <see cref="Text"/> to be used in context
-	/// with the <see cref="Arg&lt;T&gt;"/> syntax.
-	/// </summary>
-	public class ListArg<T> // where T : IEnumerable
+    /// <summary>
+    /// Provides access to the constraints defined in <see cref="List"/>
+    /// to be used in context with the <see cref="Arg&lt;T&gt;"/> syntax
+    /// </summary>
+    /// <typeparam name="T">The type of the argument</typeparam>
+	public class ListArg<T>
 	{
-		internal ListArg() { ;}
+		internal ListArg() 
+        {
+        }
 
 		/// <summary>
 		/// Determines whether the specified object is in the parameter.
 		/// The parameter must be IEnumerable.
 		/// </summary>
-		/// <param name="obj">Obj.</param>
+		/// <param name="item">item.</param>
 		/// <returns></returns>
-		public T IsIn(object obj)
+		public T IsIn(object item)
 		{
-			ArgManager.AddInArgument(List.IsIn(obj));
+			ArgManager.AddInArgument(List.IsIn(item));
 			return default(T);
 		}
 
@@ -76,17 +79,13 @@ namespace Rhino.Mocks.Constraints
 		}
 
 		/// <summary>
-		/// Throws NotSupportedException. Don't use Equals to define constraints. Use Equal instead.
+		/// Throws InvalidOperationException. Use Equal instead.
 		/// </summary>
-		/// <param name="obj"></param>
-		/// <returns></returns>
 		public override bool Equals(object obj)
 		{
-			throw new InvalidOperationException("Don't use Equals() to define constraints, use Equal() instead");
+            throw new InvalidOperationException("\"Equals\" is not supported for constraints. Use \"Equal\" instead.");
 		}
 
-
-		/* implement GetHashCode to avoid compiler warning */
 		/// <summary>
 		/// Serves as a hash function for a particular type.
 		/// </summary>

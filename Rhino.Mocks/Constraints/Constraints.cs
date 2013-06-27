@@ -29,9 +29,7 @@
 
 using System;
 using System.Collections;
-#if DOTNET35
 using System.Linq.Expressions;
-#endif
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -89,7 +87,9 @@ namespace Rhino.Mocks.Constraints
         /// <param name="publicFieldName">Name of the public field.</param>
         /// <param name="constraint">Constraint to place on the public field value.</param>
         public PublicFieldConstraint(string publicFieldName, AbstractConstraint constraint)
-            : this(null, publicFieldName, constraint) {}
+            : this(null, publicFieldName, constraint) 
+        {
+        }
 
         /// <summary>
         /// Creates a new <see cref="PublicFieldConstraint"/> instance, specifying a disambiguating
@@ -112,6 +112,7 @@ namespace Rhino.Mocks.Constraints
         {
             if (obj == null)
                 return false;
+
             FieldInfo field;
 
             if (declaringType == null)

@@ -32,18 +32,15 @@ using Xunit;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	
 	public class FieldProblem_Wade
 	{
 		[Fact]
 		public void CanMockClassWithCoClass()
 		{
-			MockRepository mocks = new MockRepository();
-			clsDBRecordSet contacts = mocks.StrictMock<clsDBRecordSet>();
+            clsDBRecordSet contacts = MockRepository.GenerateStrictMock<clsDBRecordSet>();
 		}
 	}
-
-
+    
 	[ComImport]
 	[CoClass(typeof (clsDBRecordSetClass))]
 	[Guid("1D606603-02F0-4443-8A54-9AE4EDB5EEFA")]

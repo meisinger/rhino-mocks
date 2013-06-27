@@ -6,37 +6,39 @@ using Xunit;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	
 	public class FieldProblem_Mark
 	{
 		[Fact]
 		public void GoodExplanationForUsingRepeatNeverAndReturn()
 		{
-			MockRepository mocks = new MockRepository();
-			ILogWriter eventLogMock = (ILogWriter)mocks.DynamicMock(typeof(ILogWriter));
+            ILogWriter eventLogMock = (ILogWriter)MockRepository.GenerateDynamicMock(typeof(ILogWriter));
 			Log log = new Log(null, eventLogMock, "MOCK", true, false);
 
-			Expect.Call(eventLogMock.WriteLog(EventLogEntryType.SuccessAudit, "MOCK", null, null, 0)).Return(true);
-			
+            eventLogMock.Expect(x => x.WriteLog(EventLogEntryType.SuccessAudit, "MOCK", null, null, 0))
+                .Return(true);
+
 			Assert.Throws<InvalidOperationException>(
 				"After specifying Repeat.Never(), you cannot specify a return value, exception to throw or an action to execute",
-				() => Expect.Call(eventLogMock.WriteLog(EventLogEntryType.FailureAudit, "MOCK", null, null, 0))
-				.Repeat.Never().Return(true));
+				() => eventLogMock.Expect(x => x.WriteLog(EventLogEntryType.FailureAudit, "MOCK", null, null, 0))
+                        .Repeat.Never()
+                        .Return(true));
 		}
 
 		//This is exactly like the one above, but the calls to repeat and return are reverse
 		[Fact]
 		public void GoodExplanationForUsingReturnAndRepeatNever()
 		{
-			MockRepository mocks = new MockRepository();
-			ILogWriter eventLogMock = (ILogWriter)mocks.DynamicMock(typeof(ILogWriter));
+            ILogWriter eventLogMock = (ILogWriter)MockRepository.GenerateDynamicMock(typeof(ILogWriter));
 			Log log = new Log(null, eventLogMock, "MOCK", true, false);
 
-			Expect.Call(eventLogMock.WriteLog(EventLogEntryType.SuccessAudit, "MOCK", null, null, 0)).Return(true);
-			Assert.Throws<InvalidOperationException>(
-				"After specifying Repeat.Never(), you cannot specify a return value, exception to throw or an action to execute",
-				() => Expect.Call(eventLogMock.WriteLog(EventLogEntryType.FailureAudit, "MOCK", null, null, 0))
-				.Return(true).Repeat.Never());
+            eventLogMock.Expect(x => x.WriteLog(EventLogEntryType.SuccessAudit, "MOCK", null, null, 0))
+                .Return(true);
+
+            Assert.Throws<InvalidOperationException>(
+                "After specifying Repeat.Never(), you cannot specify a return value, exception to throw or an action to execute",
+                () => eventLogMock.Expect(x => x.WriteLog(EventLogEntryType.FailureAudit, "MOCK", null, null, 0))
+                        .Return(true)
+                        .Repeat.Never());
 		}
 	}
 

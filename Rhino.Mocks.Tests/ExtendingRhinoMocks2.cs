@@ -37,18 +37,14 @@ using Rhino.Mocks.Interfaces;
 
 namespace Rhino.Mocks.Tests
 {
-	
 	public class ExtendingRhinoMocks2
 	{
 		[Fact]
 		public void DeleteThisTest()
 		{
-			MockRepository mockRepository = new MockRepository();
-			MockedClass mock = mockRepository.StrictMock<MockedClass>();
+			MockedClass mock = MockRepository.GenerateStrictMock<MockedClass>();
 			
-			mock.Method("expectedParameter");
-
-			mockRepository.ReplayAll();
+            mock.Expect(x => x.Method("expectedParameter"));
 
 			Assert.Throws<ExpectationViolationException>(() => mock.Method("invalidParameter"));
 		}
@@ -77,12 +73,12 @@ namespace Rhino.Mocks.Tests
 
 	public class VerifyExpectationAndCallOriginalRecordState : RecordMockState
 	{
-		public VerifyExpectationAndCallOriginalRecordState(IMockedObject mockedObject, MockRepository repository) : base(mockedObject, repository)
+		public VerifyExpectationAndCallOriginalRecordState(IMockedObject mockedObject, MockRepository repository) 
+            : base(mockedObject, repository)
 		{
 		}
 
-
-		/// <summary>
+        /// <summary>
 		/// AssertWasCalled that we can move to replay state and move 
 		/// to the reply state.
 		/// </summary>

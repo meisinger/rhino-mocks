@@ -33,9 +33,8 @@ using System.Reflection;
 using System.Security.Permissions;
 using Xunit;
 using Rhino.Mocks.Exceptions;
+
 [assembly:EnvironmentPermission(SecurityAction.RequestMinimum)]
-
-
 namespace Rhino.Mocks.Tests.Remoting
 {
 
@@ -43,7 +42,6 @@ namespace Rhino.Mocks.Tests.Remoting
 	/// Test scenarios where mock objects are called from different
 	/// application domain.
 	/// </summary>
-	
 	public class ContextSwitchTests : IDisposable
 	{
 		private AppDomain otherDomain;
@@ -60,12 +58,9 @@ namespace Rhino.Mocks.Tests.Remoting
 			contextSwitcher = (ContextSwitcher)otherDomain.CreateInstanceAndUnwrap(
 				Assembly.GetExecutingAssembly().GetName().Name,
 				typeof(ContextSwitcher).FullName);
-
 		}
 
-
-
-		public void Dispose()
+        public void Dispose()
 		{
 			AppDomain.Unload(otherDomain);
 		}
@@ -73,96 +68,100 @@ namespace Rhino.Mocks.Tests.Remoting
 		[Fact]
 		public void MockInterface()
 		{
-			MockRepository mocks = new MockRepository();
-			IDemo demo = (IDemo)mocks.StrictMock(typeof(IDemo));
-			Expect.Call(demo.ReturnIntNoArgs()).Return(54);
-			demo.VoidStringArg("54");
-			mocks.ReplayAll();
+			IDemo demo = (IDemo)MockRepository.GenerateStrictMock(typeof(IDemo));
+
+            demo.Expect(x => x.ReturnIntNoArgs())
+                .Return(54);
+
+            demo.Expect(x => x.VoidStringArg("54"));
+			
 			contextSwitcher.DoStuff(demo);
-			mocks.VerifyAll();
+            demo.VerifyAllExpectations();
 		}
 
-	
 		[Fact]
 		public void MockInterfaceWithSameName()
 		{
-			MockRepository mocks = new MockRepository();
-			IDemo demo = (IDemo)mocks.StrictMock(typeof(IDemo));
-			Expect.Call(demo.ReturnIntNoArgs()).Return(54);
-			demo.VoidStringArg("54");
-			Other.IDemo remotingDemo = (Other.IDemo)mocks.StrictMock(typeof(Other.IDemo));
-			remotingDemo.ProcessString("in");
-			mocks.ReplayAll();
+			IDemo demo = (IDemo)MockRepository.GenerateStrictMock(typeof(IDemo));
+            Other.IDemo remotingDemo = (Other.IDemo)MockRepository.GenerateStrictMock(typeof(Other.IDemo));
+
+            demo.Expect(x => x.ReturnIntNoArgs())
+                .Return(54);
+
+            demo.Expect(x => x.VoidStringArg("54"));
+
+            remotingDemo.Expect(x => x.ProcessString("in"));
+			
 			contextSwitcher.DoStuff(demo);
 			contextSwitcher.DoStuff(remotingDemo);
-			mocks.VerifyAll();
+
+            demo.VerifyAllExpectations();
+            remotingDemo.VerifyAllExpectations();
 		}
 
 		[Fact]
 		public void MockInterfaceExpectException()
 		{
-			MockRepository mocks = new MockRepository();
-			IDemo demo = (IDemo)mocks.StrictMock(typeof(IDemo));
-			Expect.Call(demo.ReturnIntNoArgs()).Throw(new InvalidOperationException("That was expected."));
-			mocks.ReplayAll();
+            IDemo demo = (IDemo)MockRepository.GenerateStrictMock(typeof(IDemo));
+
+            demo.Expect(x => x.ReturnIntNoArgs())
+                .Throw(new InvalidOperationException("That was expected."));
+
 			Assert.Throws<InvalidOperationException>(
 				"That was expected.",
 				() => contextSwitcher.DoStuff(demo));
 		}
 
-
-
 		[Fact]
 		public void MockInterfaceUnexpectedCall()
 		{
-			MockRepository mocks = new MockRepository();
-			IDemo demo = (IDemo)mocks.StrictMock(typeof(IDemo));
-			Expect.Call(demo.ReturnIntNoArgs()).Return(34);
-			demo.VoidStringArg("bang");
-			mocks.ReplayAll();
+			IDemo demo = (IDemo)MockRepository.GenerateStrictMock(typeof(IDemo));
+
+            demo.Expect(x => x.ReturnIntNoArgs())
+                .Return(34);
+
+            demo.Expect(x => x.VoidStringArg("bang"));
+			
 			Assert.Throws<ExpectationViolationException>(
 				"IDemo.VoidStringArg(\"34\"); Expected #0, Actual #1.\r\nIDemo.VoidStringArg(\"bang\"); Expected #1, Actual #0.",
 				() => contextSwitcher.DoStuff(demo));
 		}
 
-
-
 		[Fact]
 		public void MockClass()
 		{
-			MockRepository mocks = new MockRepository();
-			RemotableDemoClass demo = (RemotableDemoClass)mocks.StrictMock(typeof(RemotableDemoClass));
-			Expect.Call(demo.Two()).Return(44);
-			mocks.ReplayAll();
+			RemotableDemoClass demo = (RemotableDemoClass)MockRepository.GenerateStrictMock(typeof(RemotableDemoClass));
+
+            demo.Expect(x => x.Two())
+                .Return(44);
+
 			Assert.Equal(44, contextSwitcher.DoStuff(demo));
-			mocks.VerifyAll();
+            demo.VerifyAllExpectations();
 		}
-
-
 
 		public void MockClassExpectException()
 		{
-			MockRepository mocks = new MockRepository();
-			RemotableDemoClass demo = (RemotableDemoClass)mocks.StrictMock(typeof(RemotableDemoClass));
-			Expect.Call(demo.Two()).Throw(new InvalidOperationException("That was expected for class."));
-			mocks.ReplayAll();
+            RemotableDemoClass demo = (RemotableDemoClass)MockRepository.GenerateStrictMock(typeof(RemotableDemoClass));
+
+            demo.Expect(x => x.Two())
+                .Throw(new InvalidOperationException("That was expected for class."));
+
 			Assert.Throws<InvalidOperationException>(
 				"That was expected for class.",
 				() => contextSwitcher.DoStuff(demo));
 		}
 
-
 		[Fact]
 		public void MockClassUnexpectedCall()
 		{
-			MockRepository mocks = new MockRepository();
-			RemotableDemoClass demo = (RemotableDemoClass)mocks.StrictMock(typeof(RemotableDemoClass));
-			Expect.Call(demo.Prop).Return(11);
-			mocks.ReplayAll();
+            RemotableDemoClass demo = (RemotableDemoClass)MockRepository.GenerateStrictMock(typeof(RemotableDemoClass));
+
+            demo.Expect(x => x.Prop)
+                .Return(11);
+
 			Assert.Throws<ExpectationViolationException>(
 				"RemotableDemoClass.Two(); Expected #0, Actual #1.",
 				() => contextSwitcher.DoStuff(demo));
 		}
 	}
-
 }

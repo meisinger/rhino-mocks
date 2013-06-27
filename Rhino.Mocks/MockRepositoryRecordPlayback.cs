@@ -31,30 +31,21 @@ using System.Runtime.InteropServices;
 
 namespace Rhino.Mocks
 {
-	///<summary>
-	/// Adds optional new usage:
-	///   using(mockRepository.Record()) {
-	///      Expect.Call(mock.Method()).Return(retVal);
-	///   }
-	///   using(mockRepository.Playback()) {
-	///      // Execute code
-	///   }
-	/// N.B. mockRepository.ReplayAll() and mockRepository.VerifyAll()
-	///      calls are taken care of by Record/Playback
-	///</summary>
 	public partial class MockRepository
 	{
-		///<summary>
-		///</summary>
-		///<returns></returns>
+        /// <summary>
+        /// Changes the repository to Record mode
+        /// </summary>
+        /// <returns>Disposable Record Mode</returns>
 		public IDisposable Record()
 		{
 			return new RecordModeChanger(this);
 		}
 
-		///<summary>
-		///</summary>
-		///<returns></returns>
+        /// <summary>
+        /// Changes the repository to Replay mode
+        /// </summary>
+        /// <returns>Disposable Playback Mode</returns>
 		public IDisposable Playback()
 		{
 			return new PlaybackModeChanger(this);
@@ -82,8 +73,8 @@ namespace Rhino.Mocks
 	{
 		internal static bool ExceptionWasThrownAndDisposableActionShouldNotBeCalled()
 		{
-			//If we're running under Mono, then we don't want to call Marshall.GetExceptionCode as it
-			// currently is not implemented
+			// if we are running under Mono, then we don't want to call 
+            // Marshall.GetExceptionCode as it currently is not implemented
 			Type t = Type.GetType("Mono.Runtime");
 			if (t == null)
 			{
@@ -93,24 +84,26 @@ namespace Rhino.Mocks
 					return true;
 				}
 			}
+
 			return false;
 		}
 	}
 
 	internal class RecordModeChanger : IDisposable
 	{
-		private readonly MockRepository m_repository;
+		private readonly MockRepository repository;
 
 		public RecordModeChanger(MockRepository repository)
 		{
-			m_repository = repository;
+            this.repository = repository;
 		}
 
 		public void Dispose()
 		{
 			if (DisposableActionsHelper.ExceptionWasThrownAndDisposableActionShouldNotBeCalled())
 				return;
-			m_repository.ReplayAll();
+
+            repository.ReplayAll();
 		}
 	}
 }

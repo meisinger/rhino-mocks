@@ -1,36 +1,27 @@
+
+using System;
+using System.Diagnostics;
+using Rhino.Mocks.Exceptions;
+using Xunit;
+
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	using System;
-	using System.Diagnostics;
-	using Exceptions;
-	using Xunit;
-
-	
 	public class FieldProblem_Shane
 	{
-		[Fact]
+		[Fact(Skip = "Test No Longer Valid (Ordering Removed)")]
 		public void WillMerge_UnorderedRecorder_WhenRecorderHasSingleRecorderInside()
 		{
-			MockRepository mocks = new MockRepository();
-			ICustomer customer = mocks.StrictMock<ICustomer>();
+            CustomerMapper mapper = new CustomerMapper();
 
-			CustomerMapper mapper = new CustomerMapper();
+			ICustomer customer = MockRepository.GenerateStrictMock<ICustomer>();
+            customer.Expect(x => x.Id)
+                .Return(0);
 
-			using (mocks.Record())
-			using (mocks.Ordered())
-			{
-				Expect.Call(customer.Id).Return(0);
+            customer.Expect(x => x.IsPreferred = true);
 
-				customer.IsPreferred = true;
-			}
-
-			Assert.Throws<ExpectationViolationException>("Unordered method call! The expected call is: 'Ordered: { ICustomer.get_Id(); }' but was: 'ICustomer.set_IsPreferred(True);'", () =>
-			{
-				using (mocks.Playback())
-				{
-					mapper.MarkCustomerAsPreferred(customer);
-				}
-			});
+            Assert.Throws<ExpectationViolationException>(
+                "Unordered method call! The expected call is: 'Ordered: { ICustomer.get_Id(); }' but was: 'ICustomer.set_IsPreferred(True);'",
+                () => mapper.MarkCustomerAsPreferred(customer));
 		}
 	}
 

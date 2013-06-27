@@ -1,26 +1,20 @@
-#if DOTNET35
+
+using Xunit;
+
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	using Xunit;
-
-	
-	public class FieldProblem_Eduardo
+    public class FieldProblem_Eduardo
 	{
 		[Fact]
 		public void CanSetExpectationOnReadWritePropertyUsingRecordPlaybackSyntax()
 		{
-			var mocks = new MockRepository();
-			var demo = mocks.DynamicMock<IDemo>();
+			var demo = MockRepository.GenerateDynamicMock<IDemo>();
 
-			using (mocks.Record())
-			{
-				demo.Expect(x => x.Prop).SetPropertyWithArgument("Eduardo");
-			}
+			demo.Expect(x => x.Prop)
+                .SetPropertyWithArgument("Eduardo");
 
-			using (mocks.Playback())
-			{
-				demo.Prop = "Eduardo";
-			}
+            demo.Prop = "Eduardo";
+            demo.VerifyAllExpectations();
 		}
 
 		[Fact]
@@ -28,12 +22,11 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		{
 			var demo = MockRepository.GenerateMock<IDemo>();
 
-			demo.Expect(x => x.Prop).SetPropertyWithArgument("Eduardo");
+			demo.Expect(x => x.Prop)
+                .SetPropertyWithArgument("Eduardo");
 
 			demo.Prop = "Eduardo";
-
 			demo.VerifyAllExpectations();
 		}
 	}
 }
-#endif

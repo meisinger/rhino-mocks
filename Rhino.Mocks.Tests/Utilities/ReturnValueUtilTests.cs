@@ -32,20 +32,19 @@ using Rhino.Mocks.Utilities;
 
 namespace Rhino.Mocks.Tests.Utilities
 {
-	
 	public class ReturnValueUtilTests
 	{
 		[Fact]
 		public void DefaultReturnValue()
 		{
-			Assert.Null(ReturnValueUtil.DefaultValue(typeof (string),null));
-			Assert.Equal(0, ReturnValueUtil.DefaultValue(typeof (int),null));
-			Assert.Equal((short) 0, ReturnValueUtil.DefaultValue(typeof (short),null));
-			Assert.Equal((char) 0, ReturnValueUtil.DefaultValue(typeof (char),null));
-			Assert.Equal(0L, ReturnValueUtil.DefaultValue(typeof (long),null));
-			Assert.Equal(0f, ReturnValueUtil.DefaultValue(typeof (float),null));
-			Assert.Equal(0d, ReturnValueUtil.DefaultValue(typeof (double),null));
-			Assert.Equal(TestEnum.DefaultValue, ReturnValueUtil.DefaultValue(typeof (TestEnum),null));
+            Assert.Null(ReturnValueUtil.DefaultValue(typeof(string), null));
+            Assert.Equal(0, ReturnValueUtil.DefaultValue(typeof(int), null));
+            Assert.Equal((short)0, ReturnValueUtil.DefaultValue(typeof(short), null));
+            Assert.Equal((char)0, ReturnValueUtil.DefaultValue(typeof(char), null));
+            Assert.Equal(0L, ReturnValueUtil.DefaultValue(typeof(long), null));
+            Assert.Equal(0f, ReturnValueUtil.DefaultValue(typeof(float), null));
+            Assert.Equal(0d, ReturnValueUtil.DefaultValue(typeof(double), null));
+            Assert.Equal(TestEnum.DefaultValue, ReturnValueUtil.DefaultValue(typeof(TestEnum), null));
 		}
 
 		private enum TestEnum

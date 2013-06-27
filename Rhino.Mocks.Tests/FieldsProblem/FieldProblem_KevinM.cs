@@ -26,7 +26,6 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion
 
-#if DOTNET35
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -34,7 +33,6 @@ using Rhino.Mocks.Constraints;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	
 	public class FieldProblem_KevinM
 	{
 		[Fact]
@@ -110,4 +108,3 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		}
 	}
 }
-#endif

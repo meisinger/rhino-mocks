@@ -32,25 +32,19 @@ using Xunit;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	
 	public class FieldProblem_Thierry
 	{
 		[Fact]
 		public void ReproducedWithOutArraysContainingMockedObject2()
 		{
-			MockRepository mocks = new MockRepository();
-			IPlugin plugin = mocks.StrictMock<IPlugin>();
+			IPlugin plugin = MockRepository.GenerateStrictMock<IPlugin>();
 			IPlugin[] allPlugins;
 
 			// PluginMng
-			IPluginMng pluginMng = (IPluginMng) mocks.StrictMock(typeof (IPluginMng));
-			pluginMng.GetPlugins(out allPlugins);
-
-			LastCall.IgnoreArguments().OutRef(
-				new object[] {new IPlugin[] {plugin}}
-				);
-
-			mocks.ReplayAll();
+			IPluginMng pluginMng = (IPluginMng)MockRepository.GenerateStrictMock(typeof (IPluginMng));
+            pluginMng.Expect(x => x.GetPlugins(out allPlugins))
+                .IgnoreArguments()
+                .OutRef(new object[] { new IPlugin[] { plugin } });
 
 			pluginMng.GetPlugins(out allPlugins);
 
@@ -61,50 +55,49 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void MockGenericMethod1()
 		{
-			MockRepository mocks = new MockRepository();
-			IWithGeneric1 stubbed = mocks.StrictMock<IWithGeneric1>();
+            byte myValue = 3;
+            int returnedValue = 3;
 
-			byte myValue = 3;
-			int returnedValue = 3;
-
-			Expect.Call(stubbed.DoNothing<byte>(myValue)).Return(returnedValue);
-			mocks.ReplayAll();
+			IWithGeneric1 stubbed = MockRepository.GenerateStrictMock<IWithGeneric1>();
+            stubbed.Expect(s => s.DoNothing<byte>(myValue))
+                .Return(returnedValue);
+			
 			int x = stubbed.DoNothing<byte>(myValue);
 			Assert.Equal(myValue, x);
 
-			mocks.VerifyAll();
+            stubbed.VerifyAllExpectations();
 		}
 
 		[Fact]
 		public void MockGenericMethod2()
 		{
-			MockRepository mocks = new MockRepository();
-			IWithGeneric2 stubbed = mocks.StrictMock<IWithGeneric2>();
+            byte myValue = 4;
 
-			byte myValue = 4;
-			Expect.Call(stubbed.DoNothing<byte>(myValue)).Return(myValue);
-			mocks.ReplayAll();
+			IWithGeneric2 stubbed = MockRepository.GenerateStrictMock<IWithGeneric2>();
+            stubbed.Expect(s => s.DoNothing<byte>(myValue))
+                .Return(myValue);
+			
 			byte x = stubbed.DoNothing<byte>(myValue);
 			Assert.Equal(myValue, x);
 
-			mocks.VerifyAll();
+            stubbed.VerifyAllExpectations();
 		}
 
 		[Fact]
 		public void CanMockComplexReturnType()
 		{
-			MockRepository mocks = new MockRepository();
-			IWithGeneric2 stubbed = mocks.StrictMock<IWithGeneric2>();
+            byte myValue = 4;
+            List<byte> bytes = new List<byte>();
+            bytes.Add(myValue);
 
-			byte myValue = 4;
-			List<byte> bytes = new List<byte>();
-			bytes.Add(myValue);
-			Expect.Call(stubbed.DoNothing<IList<byte>>(null)).Return(bytes);
-			mocks.ReplayAll();
+            IWithGeneric2 stubbed = MockRepository.GenerateStrictMock<IWithGeneric2>();
+            stubbed.Expect(x => x.DoNothing<IList<byte>>(null))
+                .Return(bytes);
+
 			IList<byte> bytesResult = stubbed.DoNothing<IList<byte>>(null);
 			Assert.Equal(bytes, bytesResult);
 
-			mocks.VerifyAll();
+            stubbed.VerifyAllExpectations();
 		}
 	}
 

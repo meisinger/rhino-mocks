@@ -29,19 +29,15 @@
 
 using System;
 using System.Text;
-
 using Xunit;
 using Rhino.Mocks;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-    
     public class FieldsProblem_Royston
     {
-        private MockRepository mMocks;
-		public FieldsProblem_Royston()
+        public FieldsProblem_Royston()
         {
-            mMocks = new MockRepository();
         }
 
 		public interface IDuplicateType<T>
@@ -57,14 +53,11 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
 			// This should not blow up.
 
-			IDuplicateType<object[]> mock1 =
-				mMocks.StrictMock<IDuplicateType<object[]>>();
+            IDuplicateType<object[]> mock1 = MockRepository.GenerateStrictMock<IDuplicateType<object[]>>();
+            IDuplicateType<object[]> mock2 = MockRepository.GenerateStrictMock<IDuplicateType<object[]>>();
 
-			IDuplicateType<object[]> mock2 =
-				mMocks.StrictMock<IDuplicateType<object[]>>();
-
-			mMocks.ReplayAll();
-			mMocks.VerifyAll();
+            mock1.VerifyAllExpectations();
+            mock2.VerifyAllExpectations();
 		}
 
         [Fact]
@@ -72,11 +65,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         {
             IIntf1 i1 = CreateAndConfigureMock();
 
-            mMocks.ReplayAll();
-
             i1.VirtualGo();
-
-            mMocks.VerifyAll();
+            i1.VerifyAllExpectations();
         }
 
         [Fact]
@@ -84,64 +74,45 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         {
             IIntf1 i1 = CreateAndConfigureMock();
 
-            mMocks.ReplayAll();
-            
             i1.NonVirtualGo();
-
-            mMocks.VerifyAll();
+            i1.VerifyAllExpectations();
         }
 
         [Fact]
         public void BackToRecordProblem()
         {
-            IIntf1 i1 = (IIntf1)mMocks.StrictMock(typeof(IIntf1));
+            IIntf1 i1 = (IIntf1)MockRepository.GenerateStrictMock(typeof(IIntf1));
 
-            using (mMocks.Ordered())
-            {
-                i1.A();
-                using (mMocks.Unordered())
-                {
-                    i1.B();
-                    i1.C();
-                    LastCall.Repeat.Times(1, 2);
-                }
-            }
-
-            mMocks.ReplayAll();
+            i1.Expect(x => x.A());
+            i1.Expect(x => x.B());
+            i1.Expect(x => x.C())
+                .Repeat.Times(1, 2);
 
             i1.A();
             i1.C();
             i1.B();
 
-            mMocks.VerifyAll();
+            i1.VerifyAllExpectations();
 
-            mMocks.BackToRecord(i1);
+
+            i1.BackToRecord(BackToRecordOptions.All);
+            i1.Expect(x => x.A());
+            i1.Expect(x => x.B());
+            i1.Replay();
 
             i1.A();
             i1.B();
 
-            mMocks.Replay(i1);
-
-            i1.A();
-            i1.B();
-
-            mMocks.Verify(i1);
-
+            i1.VerifyAllExpectations();
         }
 
         private IIntf1 CreateAndConfigureMock()
         {
-            IIntf1 i1 = (IIntf1)mMocks.PartialMock( typeof(Cls1) );
+            IIntf1 i1 = (IIntf1)MockRepository.GeneratePartialMock(typeof(Cls1));
+            i1.Expect(x => x.A());
+            i1.Expect(x => x.B());
+            i1.Expect(x => x.A());
 
-            using ( mMocks.Ordered() )
-            {
-                using ( mMocks.Unordered() )
-                {
-                    i1.A();
-                    i1.B();
-                }
-                i1.A();
-            }
             return i1;
         }
 

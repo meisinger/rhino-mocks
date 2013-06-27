@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Xunit;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	using Xunit;
-
-	
 	public class FieldProblem_MarkHildreth
 	{
 		[Fact]
@@ -48,6 +46,5 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		public class MyEntity : Entity
 		{
 		}
-
 	}
 }

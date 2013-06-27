@@ -27,39 +27,44 @@
 #endregion
 
 
-#if DOTNET35
-
 using System;
 using Xunit;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	
 	public class FieldProblem_Kythorn
 	{
 		[Fact]
 		public void CallingAssertWasCalledOnAnObjectThatIsInRecordModeShouldResultInFailure()
 		{
-			var service = MockRepository.GenerateStub<IService>();
-			var view = new MockRepository().Stub<IView>();
-			service.Stub(x => x.GetString()).Return("Test");
-			var presenter = new Presenter(view, service);
-			presenter.OnViewLoaded();
-			Assert.Throws<InvalidOperationException>(
-				"Cannot assert on an object that is not in replay mode. Did you forget to call ReplayAll() ?",
-				() => view.AssertWasCalled(x => x.Message = "Test"));
+            var service = MockRepository.GenerateStub<IService>();
+            var view = MockRepository.GenerateStub<IView>();
+
+            service.Stub(x => x.GetString())
+                .Return("Test");
+
+            view.BackToRecord();
+
+            var presenter = new Presenter(view, service);
+            presenter.OnViewLoaded();
+
+            Assert.Throws<InvalidOperationException>(
+                "Cannot assert on an object that is not in replay mode. Did you forget to call ReplayAll() ?",
+                () => view.AssertWasCalled(x => x.Message = "Test"));
 		}
 
 		[Fact]
 		public void CanUseStubSyntaxOnMocksInRecordMode()
 		{
-			MockRepository mocks = new MockRepository();
-			var service = mocks.Stub<IService>();
-			var view = mocks.Stub<IView>();
-			service.Stub(x => x.GetString()).Return("Test");
+			var service = MockRepository.GenerateStub<IService>();
+            var view = MockRepository.GenerateStub<IView>();
+
+			service.Stub(x => x.GetString())
+                .Return("Test");
+
 			var presenter = new Presenter(view, service);
-			mocks.ReplayAll();
 			presenter.OnViewLoaded();
+
 			view.AssertWasCalled(x => x.Message = "Test");
 		}
 
@@ -68,10 +73,15 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		{
 			var service = MockRepository.GenerateStub<IService>();
 			var view = MockRepository.GenerateStub<IView>();
-			service.Stub(x => x.GetString()).Return("Test");
+
+			service.Stub(x => x.GetString())
+                .Return("Test");
+
 			view.Expect(x => x.Message = "Test");
+
 			var presenter = new Presenter(view, service);
 			presenter.OnViewLoaded();
+
 			view.VerifyAllExpectations();
 		}
 
@@ -101,8 +111,5 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 				view.Message = service.GetString();
 			}
 		}
-	}
-
-	
+	}	
 }
-#endif

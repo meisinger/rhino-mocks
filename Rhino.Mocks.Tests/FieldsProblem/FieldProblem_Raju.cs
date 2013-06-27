@@ -3,7 +3,6 @@ using Rhino.Mocks.Constraints;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-    
     public class FieldProblem_Raju
     {
         public class A
@@ -29,23 +28,19 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void TestMethod1()
         {
-            MockRepository mock = new MockRepository();
-
-            MyInterface myInterface = mock.StrictMock<MyInterface>();
-
             A a = new A();
             a.a = 10;
             a.b = 12;
 
-            myInterface.retValue(a);
-            LastCall.Return(5).Constraints(
-                Property.Value("a",10) && Property.Value("b",12)
-                );
-            mock.ReplayAll();
+            MyInterface myInterface = MockRepository.GenerateStrictMock<MyInterface>();
+            myInterface.Expect(x => x.retValue(a))
+                .Constraints(Property.Value("a", 10) && Property.Value("b", 12))
+                .Return(5);
 
             int ret = myInterface.retValue(a);
-            mock.VerifyAll();
+            
             Assert.True(ret == 5);
+            myInterface.VerifyAllExpectations();
         }
     }
 }

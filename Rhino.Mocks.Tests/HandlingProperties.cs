@@ -33,91 +33,103 @@ using Xunit;
 
 namespace Rhino.Mocks.Tests
 {
-    
     public class HandlingProperties
     {
         IDemo demo;
-        MockRepository mocks;
-
+        
 		public HandlingProperties()
         {
-            mocks = new MockRepository();
-            demo = (IDemo)mocks.StrictMock(typeof(IDemo));
+            demo = (IDemo)MockRepository.GenerateStrictMock(typeof(IDemo));
         }
 
         [Fact]
         public void PropertyBehaviorForSingleProperty()
         {
-            Expect.Call(demo.Prop).PropertyBehavior();
-            mocks.ReplayAll();
+            demo.Expect(x => x.Prop)
+                .PropertyBehavior();
+
             for (int i = 0; i < 49; i++)
             {
                 demo.Prop = "ayende" + i;
                 Assert.Equal("ayende" + i, demo.Prop);
             }
-            mocks.VerifyAll();
+
+            demo.VerifyAllExpectations();
         }
 
         [Fact]
         public void ExceptionIfLastMethodCallIsNotProperty()
         {
-        	Assert.Throws<InvalidOperationException>("Last method call was not made on a setter or a getter",
-        	                                         () => Expect.Call(demo.EnumNoArgs()).PropertyBehavior());
+        	Assert.Throws<InvalidOperationException>(
+                "Last method call was not made on a setter or a getter",
+                () => demo.Expect(x => x.EnumNoArgs())
+                        .PropertyBehavior());
         }
 
         [Fact]
         public void ExceptionIfPropHasOnlyGetter()
         {
-        	Assert.Throws<InvalidOperationException>("Property must be read/write",
-        	                                         () => Expect.Call(demo.ReadOnly).PropertyBehavior());
+        	Assert.Throws<InvalidOperationException>(
+                "Property must be read/write",
+                () => demo.Expect(x => x.ReadOnly)
+                        .PropertyBehavior());
         }
 
         [Fact]
         public void ExceptionIfPropHasOnlySetter()
         {
-        	Assert.Throws<InvalidOperationException>("Property must be read/write",
-        	                                         () => Expect.Call(demo.WriteOnly).PropertyBehavior());
+        	Assert.Throws<InvalidOperationException>(
+                "Property must be read/write",
+                () => demo.Expect(x => x.WriteOnly)
+                    .PropertyBehavior());
         }
 
         [Fact]
         public void IndexedPropertiesSupported()
         {
-            IWithIndexers x = (IWithIndexers)mocks.StrictMock(typeof(IWithIndexers));
-            Expect.Call(x[1]).PropertyBehavior();
-            Expect.Call(x["",1]).PropertyBehavior();
-            mocks.ReplayAll();
+            IWithIndexers with = (IWithIndexers)MockRepository.GenerateStrictMock(typeof(IWithIndexers));
 
-            x[1] = 10;
-            x[10] = 100;
-            Assert.Equal(10, x[1]);
-            Assert.Equal(100, x[10]);
+            with.Expect(x => x[1])
+                .PropertyBehavior();
 
-            x["1", 2] = "3";
-            x["2", 3] = "5";
-            Assert.Equal("3", x["1", 2]);
-            Assert.Equal("5", x["2", 3]);
+            with.Expect(x => x["", 1])
+                .PropertyBehavior();
 
-            mocks.VerifyAll();
+            with[1] = 10;
+            with[10] = 100;
+            Assert.Equal(10, with[1]);
+            Assert.Equal(100, with[10]);
+
+            with["1", 2] = "3";
+            with["2", 3] = "5";
+            Assert.Equal("3", with["1", 2]);
+            Assert.Equal("5", with["2", 3]);
+
+            with.VerifyAllExpectations();
         }
 
         [Fact]
         public void IndexPropertyWhenValueTypeAndNotFoundThrows()
         {
-            IWithIndexers x = (IWithIndexers)mocks.StrictMock(typeof(IWithIndexers));
-            Expect.Call(x[1]).PropertyBehavior();
-            mocks.ReplayAll();
-        	Assert.Throws<InvalidOperationException>(
+            IWithIndexers with = (IWithIndexers)MockRepository.GenerateStrictMock(typeof(IWithIndexers));
+
+            with.Expect(x => x[1])
+                .PropertyBehavior();
+
+            Assert.Throws<InvalidOperationException>(
         		"Can't return a value for property Item because no value was set and the Property return a value type.",
-        		() => GC.KeepAlive(x[1]));
+        		() => GC.KeepAlive(with[1]));
         }
 
         [Fact]
         public void IndexPropertyWhenRefTypeAndNotFoundReturnNull()
         {
-            IWithIndexers x = (IWithIndexers)mocks.StrictMock(typeof(IWithIndexers));
-            Expect.Call(x["",3]).PropertyBehavior();
-            mocks.ReplayAll();
-            Assert.Null(x["", 2]);
+            IWithIndexers with = (IWithIndexers)MockRepository.GenerateStrictMock(typeof(IWithIndexers));
+
+            with.Expect(x => x["", 3])
+                .PropertyBehavior();
+            
+            Assert.Null(with["", 2]);
         }
 
         public interface IWithIndexers

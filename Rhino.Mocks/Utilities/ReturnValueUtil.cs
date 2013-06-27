@@ -32,27 +32,30 @@ using Castle.DynamicProxy;
 
 namespace Rhino.Mocks.Utilities
 {
-	/// <summary>
-	/// Utility to get the default value for a type
-	/// </summary>
+    /// <summary>
+    /// Utility class to get the default value for a given type
+    /// </summary>
 	public class ReturnValueUtil
 	{
 		/// <summary>
-		/// The default value for a type.
-		/// Null for reference types and void
-		/// 0 for value types.
-		/// First element for enums
-		/// Note that we need to get the value even for opened generic types, such as those from
-		/// generic methods.
+		/// The default value for a type
 		/// </summary>
-		/// <param name="type">Type.</param>
-		/// <param name="invocation">The invocation.</param>
+        /// <remarks>
+        /// Returns NULL for reference types or void.
+        /// Returns the first element for enums.
+        /// Returns the default value for value types.
+        /// Note that we need to get the value even for opened generic types, such as those from
+        /// generic methods.
+        /// </remarks>
+		/// <param name="type">type</param>
+		/// <param name="invocation">the invocation</param>
 		/// <returns>the default value</returns>
 		public static object DefaultValue(Type type, IInvocation invocation)
 		{
 			type = GenericsUtil.GetRealType(type, invocation);
-			if (type.IsValueType == false || type==typeof(void))
+			if (type.IsValueType == false || type == typeof(void))
 				return null;
+
 			return Activator.CreateInstance(type);
 		}
 	}

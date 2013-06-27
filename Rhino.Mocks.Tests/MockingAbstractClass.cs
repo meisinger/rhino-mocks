@@ -28,64 +28,68 @@
 
 
 using System;
+using Xunit;
 
 namespace Rhino.Mocks.Tests
 {
-	using Xunit;
-
-	
-	public class MockingAbstractClass : IDisposable
+    public class MockingAbstractClass : IDisposable
 	{
-		private MockRepository mocks;
-
 		public MockingAbstractClass()
 		{
-			mocks = new MockRepository();
 		}
 
 		public void Dispose()
 		{
-			mocks.VerifyAll();
 		}
 
 		[Fact]
 		public void MockAbsPropertyGetter()
 		{
-			AbsCls ac = (AbsCls)mocks.StrictMock(typeof(AbsCls));
-			Expect.Call(ac.AbPropGet).Return("n");
-			mocks.ReplayAll();
+			AbsCls ac = (AbsCls)MockRepository.GenerateStrictMock(typeof(AbsCls));
+
+            ac.Expect(x => x.AbPropGet)
+                .Return("n");
+
 			Assert.Equal("n", ac.AbPropGet);
+            ac.VerifyAllExpectations();
 		}
 
 		[Fact]
 		public void MockAbsPropertySetter()
 		{
-			AbsCls ac = (AbsCls)mocks.StrictMock(typeof(AbsCls));
-			Expect.Call(ac.AbPropSet = "n");
-			mocks.ReplayAll();
+			AbsCls ac = (AbsCls)MockRepository.GenerateStrictMock(typeof(AbsCls));
+
+            ac.Expect(x => x.AbPropSet = "n");
+			
 			ac.AbPropSet = "n";
+            ac.VerifyAllExpectations();
 		}
 
 
 		[Fact]
 		public void MockAbsProp()
 		{
-			AbsCls ac = (AbsCls)mocks.StrictMock(typeof(AbsCls));
-			Expect.Call(ac.AbProp = "n");
-			Expect.Call(ac.AbProp).Return("u");
-			mocks.ReplayAll();
+			AbsCls ac = (AbsCls)MockRepository.GenerateStrictMock(typeof(AbsCls));
+
+            ac.Expect(x => x.AbProp = "n");
+            ac.Expect(x => x.AbProp)
+                .Return("u");
+
 			ac.AbProp = "n";
 			Assert.Equal("u", ac.AbProp);
+            ac.VerifyAllExpectations();
 		}
 
 		[Fact]
 		public void MockAbstractMethod()
 		{
-			AbsCls ac = (AbsCls)mocks.StrictMock(typeof(AbsCls));
-			Expect.Call(ac.Method()).Return(45);
-			mocks.ReplayAll();
+			AbsCls ac = (AbsCls)MockRepository.GenerateStrictMock(typeof(AbsCls));
+
+            ac.Expect(x => x.Method())
+                .Return(45);
+			
 			Assert.Equal(45, ac.Method());
-	
+            ac.VerifyAllExpectations();
 		}
 
 		public abstract class AbsCls

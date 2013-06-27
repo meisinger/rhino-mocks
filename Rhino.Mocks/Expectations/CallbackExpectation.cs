@@ -41,14 +41,15 @@ namespace Rhino.Mocks.Expectations
 	/// </summary>
 	public class CallbackExpectation : AbstractExpectation
 	{
-		private Delegate callback;
+		private readonly Delegate callback;
 
 		/// <summary>
 		/// Creates a new <see cref="CallbackExpectation"/> instance.
 		/// </summary>
 		/// <param name="expectation">Expectation.</param>
 		/// <param name="callback">Callback.</param>
-		public CallbackExpectation(IExpectation expectation, Delegate callback) : base(expectation)
+		public CallbackExpectation(IExpectation expectation, Delegate callback) 
+            : base(expectation)
 		{
 			this.callback = callback;
 			ValidateCallback();
@@ -60,7 +61,8 @@ namespace Rhino.Mocks.Expectations
 		/// <param name="invocation">Invocation for this expectation</param>
 		/// <param name="callback">Callback.</param>
 		/// <param name="expectedRange">Number of method calls for this expectations</param>
-		public CallbackExpectation(IInvocation invocation, Delegate callback, Range expectedRange) : base(invocation, expectedRange)
+		public CallbackExpectation(IInvocation invocation, Delegate callback, Range expectedRange) 
+            : base(invocation, expectedRange)
 		{
 			this.callback = callback;
 			ValidateCallback();
@@ -90,11 +92,18 @@ namespace Rhino.Mocks.Expectations
 		{
 			get
 			{
-				StringBuilder sb = new StringBuilder();
-                sb.Append(Method.DeclaringType.Name).Append(".").Append(Method.Name);
-				sb.Append("(").Append("callback method: ").Append(callback.Method.DeclaringType.Name);
-				sb.Append(".").Append(callback.Method.Name).Append(");");
-				return CreateErrorMessage(sb.ToString());
+				var buffer = new StringBuilder()
+                    .Append(Method.DeclaringType.Name)
+                    .Append(".")
+                    .Append(Method.Name)
+                    .Append("(")
+                    .Append("callback method: ")
+                    .Append(callback.Method.DeclaringType.Name)
+                    .Append(".")
+                    .Append(callback.Method.Name)
+                    .Append(");");
+
+				return CreateErrorMessage(buffer.ToString());
 			}
 		}
 
@@ -110,7 +119,7 @@ namespace Rhino.Mocks.Expectations
 		/// </summary>
 		public override bool Equals(object obj)
 		{
-			CallbackExpectation other = obj as CallbackExpectation;
+			var other = obj as CallbackExpectation;
 			if (other == null)
 				return false;
             return Method.Equals(other.Method) && callback.Equals(other.callback);

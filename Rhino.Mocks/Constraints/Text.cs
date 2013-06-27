@@ -31,22 +31,11 @@ using Rhino.Mocks.Constraints;
 
 namespace Rhino.Mocks.Constraints
 {
-	/*
-	 * class: Text
-	 * 
-	 * Contraints to deal with text and strings
-	 * 
-	 */ 
-	/// <summary>
-	/// Central location for all text related constraints
-	/// </summary>
+    /// <summary>
+    /// Provides access to common constraints for strings
+    /// </summary>
 	public static class Text
 	{
-		/*
-		 * Method: StartsWith
-		 * 
-		 * The parameter starts with the specified string
-		 */ 
 		/// <summary>
 		/// Constrain the argument to starts with the specified string
 		/// </summary>
@@ -55,25 +44,14 @@ namespace Rhino.Mocks.Constraints
 			return new StartsWith(start);
 		}
 
-		/*
-		 * Method: EndsWith
-		 * 
-		 * The parameter ends with the specified string
-		 */ 
-		/// <summary>
+        /// <summary>
 		/// Constrain the argument to end with the specified string
 		/// </summary>
 		public static AbstractConstraint EndsWith(string end)
 		{
 			return new EndsWith(end);
 		}
-
-
-		/*
-		 * Method: Contains
-		 * 
-		 * The parameter contains the specified string
-		 */ 
+        
 		/// <summary>
 		/// Constrain the argument to contain the specified string
 		/// </summary>
@@ -81,12 +59,7 @@ namespace Rhino.Mocks.Constraints
 		{
 			return new Contains(innerString);
 		}
-
-	   /*
-		* Method: Like
-		* 
-		* The parameter must satisfied the specified regular expression.
-		*/ 
+        
 		/// <summary>
 		/// Constrain the argument to validate according to regex pattern
 		/// </summary>

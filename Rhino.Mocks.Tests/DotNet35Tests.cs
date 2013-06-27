@@ -1,95 +1,69 @@
-#if DOTNET35
+using System;
 using Xunit;
+using Rhino.Mocks.Exceptions;
 
 namespace Rhino.Mocks.Tests
 {
-	using System;
-	using Exceptions;
-
-	
 	public class DotNet35Tests
 	{
 		[Fact]
 		public void NaturalSyntaxForCallingMethods()
 		{
-			MockRepository mocks = new MockRepository();
-			IDemo demo = mocks.StrictMock<IDemo>();
-			using (mocks.Record())
-			{
-				Expect.Call(demo.VoidNoArgs);
-			}
+			IDemo demo = MockRepository.GenerateStrictMock<IDemo>();
 
-			using (mocks.Playback())
-			{
-				demo.VoidNoArgs();
-			}
+            demo.Expect(x => x.VoidNoArgs());
+            demo.VoidNoArgs();
+
+            demo.VerifyAllExpectations();
 		}
 
 		[Fact]
 		public void NaturalSyntaxForCallingMethods_WithArguments()
 		{
-			MockRepository mocks = new MockRepository();
-			IDemo demo = mocks.StrictMock<IDemo>();
-			using (mocks.Record())
-			{
-				Expect.Call( () => demo.VoidStringArg("blah") );
-			}
+			IDemo demo = MockRepository.GenerateStrictMock<IDemo>();
 
-			using (mocks.Playback())
-			{
-				demo.VoidStringArg("blah");
-			}
+            demo.Expect(x => x.VoidStringArg("blah"));
+            demo.VoidStringArg("blah");
+
+            demo.VerifyAllExpectations();
 		}
 
 		[Fact]
 		public void NaturalSyntaxForCallingMethods_WithArguments_WhenNotCalled_WouldFailVerification()
 		{
-			MockRepository mocks = new MockRepository();
-			IDemo demo = mocks.StrictMock<IDemo>();
-			using (mocks.Record())
-			{
-				Expect.Call(() => demo.VoidStringArg("blah"));
-			}
+			IDemo demo = MockRepository.GenerateStrictMock<IDemo>();
 
-			Throws.Exception<ExpectationViolationException>("IDemo.VoidStringArg(\"blah\"); Expected #1, Actual #0.",delegate
-			{
-				mocks.VerifyAll();
-			});
+			demo.Expect(x => x.VoidStringArg("blah"));
+			
+            Assert.Throws<ExpectationViolationException>(
+                "IDemo.VoidStringArg(\"blah\"); Expected #1, Actual #0.",
+                () => demo.VerifyAllExpectations());
 		}
 
 		[Fact]
 		public void NaturalSyntaxForCallingMethods_WithArguments_WhenCalledWithDifferentArgument()
 		{
-			MockRepository mocks = new MockRepository();
-			IDemo demo = mocks.StrictMock<IDemo>();
-			using (mocks.Record())
-			{
-				Expect.Call(() => demo.VoidStringArg("blah"));
-			}
-
-			Throws.Exception<ExpectationViolationException>(@"IDemo.VoidStringArg(""arg""); Expected #0, Actual #1.
-IDemo.VoidStringArg(""blah""); Expected #1, Actual #0.",delegate
-			{
-				demo.VoidStringArg("arg");
-			});
+			IDemo demo = MockRepository.GenerateStrictMock<IDemo>();
+			
+            demo.Expect(x => x.VoidStringArg("blah"));
+            
+            Assert.Throws<ExpectationViolationException>(
+                @"IDemo.VoidStringArg(""arg""); Expected #0, Actual #1.
+IDemo.VoidStringArg(""blah""); Expected #1, Actual #0.",
+               () => demo.VoidStringArg("arg"));
 		}
 
 		[Fact]
 		public void CanCallMethodWithParameters_WithoutSpecifyingParameters_WillAcceptAnyParameter()
 		{
-			MockRepository mocks = new MockRepository();
-			IDemo demo = mocks.StrictMock<IDemo>();
-			using (mocks.Record())
-			{
-				Expect.Call(() => demo.VoidStringArg("blah")).IgnoreArguments();
-			}
+			IDemo demo = MockRepository.GenerateStrictMock<IDemo>();
+			
+            demo.Expect(x => x.VoidStringArg("blah"))
+                .IgnoreArguments();
+			
+            demo.VoidStringArg("asd");
 
-
-			using (mocks.Playback())
-			{
-				demo.VoidStringArg("asd");
-			}
+            demo.VerifyAllExpectations();
 		}
 	}
 }
-#endif

@@ -35,10 +35,8 @@ using Rhino.Mocks.Interfaces;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-    
     public class FieldProblem_Matt
     {
-
         public interface IModel
         {
             void Add(string s);
@@ -74,23 +72,22 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void ClearedModelSetsItemsOnView()
         {
-            MockRepository mocks = new MockRepository();
-            IModel model = mocks.StrictMock<IModel>();
-            IView view = mocks.StrictMock<IView>();
-            model.ModelChanged += null;
-            LastCall.IgnoreArguments();
-            IEventRaiser eventRaiser = LastCall.GetEventRaiser();
+            IModel model = MockRepository.GenerateStrictMock<IModel>();
+            IView view = MockRepository.GenerateStrictMock<IView>();
 
-            view.SetList(null);
-            LastCall.IgnoreArguments();
-            mocks.ReplayAll();
+            IEventRaiser eventRaiser = model
+                .Expect(x => x.ModelChanged += null)
+                .IgnoreArguments()
+                .GetEventRaiser();
+
+            view.Expect(x => x.SetList(null))
+                .IgnoreArguments();
 
             Presenter subject = new Presenter(view, model);
-
             eventRaiser.Raise(this, EventArgs.Empty);
 
-            mocks.VerifyAll();
+            model.VerifyAllExpectations();
+            view.VerifyAllExpectations();
         }
-
     }
 }

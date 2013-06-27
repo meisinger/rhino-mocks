@@ -1,42 +1,34 @@
+
+using Xunit;
+
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	using Xunit;
-
-	
 	public class SetupResultAndIgnoreArguments
 	{
 		[Fact]
 		public void CanUseSetupResultAndIgnoreArguments_WhenUsingUnorderedBlock()
 		{
-			MockRepository mocks = new MockRepository();
-			IFetcher fetcher = mocks.DynamicMock<IFetcher>();
+            IFetcher fetcher = MockRepository.GenerateDynamicMock<IFetcher>();
 
-			using (mocks.Unordered())
-			{
-				SetupResult.For(fetcher.GetUsersWithCriteriaLike(null)).IgnoreArguments().Return(
-					new Student[] {new Student(), new Student()});
-			}
-
-			mocks.ReplayAll();
+            fetcher.Expect(x => x.GetUsersWithCriteriaLike(null))
+                .IgnoreArguments()
+                .Return(new Student[] { new Student(), new Student() });
 
 			Assert.Equal(2, fetcher.GetUsersWithCriteriaLike("foo").Length);
+            fetcher.VerifyAllExpectations();
 		}
 
 		[Fact]
 		public void CanUseSetupResultAndIgnoreArguments_WhenUsingOrderedBlock()
 		{
-			MockRepository mocks = new MockRepository();
-			IFetcher fetcher = mocks.DynamicMock<IFetcher>();
+			IFetcher fetcher = MockRepository.GenerateDynamicMock<IFetcher>();
 
-			using (mocks.Ordered())
-			{
-				SetupResult.For(fetcher.GetUsersWithCriteriaLike(null)).IgnoreArguments().Return(
-					new Student[] { new Student(), new Student() });
-			}
-
-			mocks.ReplayAll();
+            fetcher.Expect(x => x.GetUsersWithCriteriaLike(null))
+                .IgnoreArguments()
+                .Return(new Student[] { new Student(), new Student() });
 
 			Assert.Equal(2, fetcher.GetUsersWithCriteriaLike("foo").Length);
+            fetcher.VerifyAllExpectations();
 		}
 	}
 

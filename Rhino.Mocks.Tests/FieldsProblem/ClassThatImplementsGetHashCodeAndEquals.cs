@@ -39,32 +39,24 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 	/// </summary>
 	public class ClassThatImplementsGetHashCodeAndEquals : IDisposable
 	{
-        MockRepository mocks;
-
         public ClassThatImplementsGetHashCodeAndEquals()
         {
-            mocks = new MockRepository();
         }
 
         public void Dispose()
         {
-            mocks.VerifyAll();
         }
 	    
 		[Fact]
 		public void InitClass()
 		{
-				EmployeeInfo info = (EmployeeInfo)mocks.StrictMock(typeof(EmployeeInfo), "ID001");
-
-				mocks.ReplayAll();
-
-				Assert.NotNull(info);
+			EmployeeInfo info = (EmployeeInfo)MockRepository.GenerateStrictMock(typeof(EmployeeInfo), "ID001");
+			Assert.NotNull(info);
 		}
 
 		[Serializable]
 		public class EmployeeInfo 
 		{
-		
 			public EmployeeInfo(string employeeId) 
 			{
 				if (employeeId == null || employeeId.Length == 0) 
@@ -73,7 +65,6 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 				}
 
 			}
-
 		
 			#region Object Members
    

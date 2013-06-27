@@ -1,4 +1,3 @@
-#if DOTNET35
 using System;
 using System.Collections;
 using System.Linq;
@@ -31,30 +30,31 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanUseRecursiveMocksSimpler()
         {
-            var mockService = MockRepository.GenerateMock<IMyService>();
+            var repository = MockRepository.GenerateMock<IMyService>();
 
-            mockService.Expect(x => x.Identity.Name).Return("foo");
+            repository.Expect(x => x.Identity.Name)
+                .Return("foo");
 
-            Assert.Equal("foo", mockService.Identity.Name);
+            Assert.Equal("foo", repository.Identity.Name);
         }
 
-		[Fact(Skip = "Not supported right now as per Oren")]
+		[Fact]
         public void CanUseRecursiveMocksSimplerAlternateSyntax()
         {
-            var mockService = MockRepository.GenerateMock<IMyService>();
+            var repository = MockRepository.GenerateMock<IMyService>();
 
-            Expect.Call(mockService.Identity.Name).Return("foo");
-
-            Assert.Equal("foo", mockService.Identity.Name);
+            repository.Expect(x => x.Identity.Name)
+                .Return("foo");
+            
+            Assert.Equal("foo", repository.Identity.Name);
         }
 
 		[Fact(Skip = "Not supported in replay mode")]
         public void WillGetSameInstanceOfRecursedMockForGenerateMockStatic()
         {
-            var mock = MockRepository.GenerateMock<IMyService>();
-
-            IIdentity i1 = mock.Identity;
-            IIdentity i2 = mock.Identity;
+            var repository = MockRepository.GenerateMock<IMyService>();
+            IIdentity i1 = repository.Identity;
+            IIdentity i2 = repository.Identity;
 
             Assert.Same(i1, i2);
             Assert.NotNull(i1);
@@ -65,26 +65,22 @@ namespace Rhino.Mocks.Tests
         {
             RhinoMocks.Logger = new TraceWriterExpectationLogger(true, true, true);
 
-            MockRepository mocks = new MockRepository();
-            var mock = mocks.DynamicMock<IMyService>();
-            mocks.Replay(mock);
-
-            IIdentity i1 = mock.Identity;
-            IIdentity i2 = mock.Identity;
+            var repository = MockRepository.GenerateMock<IMyService>();
+            IIdentity i1 = repository.Identity;
+            IIdentity i2 = repository.Identity;
 
             Assert.Same(i1, i2);
             Assert.NotNull(i1);
         }
 
-        [Fact]
+        [Fact(Skip = "Test No Longer Valid")]
         public void WillGetSameInstanceOfRecursedMockWhenNotInReplayMode()
         {
             RhinoMocks.Logger = new TraceWriterExpectationLogger(true,true,true);
 
-            var mock = new MockRepository().DynamicMock<IMyService>();
-
-            IIdentity i1 = mock.Identity;
-            IIdentity i2 = mock.Identity;
+            var repository = MockRepository.GenerateDynamicMock<IMyService>();
+            IIdentity i1 = repository.Identity;
+            IIdentity i2 = repository.Identity;
 
             Assert.Same(i1, i2);
             Assert.NotNull(i1);
@@ -99,6 +95,7 @@ namespace Rhino.Mocks.Tests
         {
             IList List();
         }
+
         public class Customer
         {
             public string Name { get; set; }
@@ -116,4 +113,3 @@ namespace Rhino.Mocks.Tests
         }
     }
 }
-#endif

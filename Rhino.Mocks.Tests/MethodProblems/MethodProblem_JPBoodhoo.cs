@@ -24,7 +24,6 @@ namespace Rhino.Mocks.Tests.MethodProblems
             }
         }
 
-        
         public class when_stubbing_a_call_to_a_method_that_matches_the_naming_prefix_for_an_event_but_is_not_an_event
         {
             InterfaceWithAMethodThatHasANameThatShouldNotBeRecognizedAsAnEvent dependency;

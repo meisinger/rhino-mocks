@@ -1,34 +1,25 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Xunit;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	using Xunit;
-
-	
 	public class FieldProblem_Mithresh
 	{
 		[Fact]
 		public void TestOutMethod()
 		{
+            int intTest = 0;
 
-			MockRepository mocks = new MockRepository();
+			ITest mockProxy = MockRepository.GenerateStrictMock<ITest>();
 
-			ITest mockProxy = mocks.StrictMock<ITest>();
+            mockProxy.Expect(x => x.Addnumber(out intTest))
+                .OutRef(4);
 
-			int intTest = 0;
+			mockProxy.Addnumber(out intTest);
 
-			using (mocks.Record())
-			{
-				Expect.Call(delegate { mockProxy.Addnumber(out intTest);  }).OutRef(4);
-			}
-			using(mocks.Playback())
-			{
-				mockProxy.Addnumber(out intTest);
-				Assert.Equal(4, intTest);
-			}
-
+			Assert.Equal(4, intTest);
 		}
 
 		public interface ITest

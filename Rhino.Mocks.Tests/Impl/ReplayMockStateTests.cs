@@ -38,7 +38,6 @@ using Castle.DynamicProxy;
 
 namespace Rhino.Mocks.Tests.Impl
 {
-	
 	public class ReplayMockStateTests
 	{
 		private static MockRepository mocks;
@@ -134,40 +133,36 @@ namespace Rhino.Mocks.Tests.Impl
 			}
 		}
 
-		[Fact]
-		public void VerifyReportsAllMissingExpectationWhenCalledOnOrdered()
-		{
-			using (mocks.Ordered())
-			{
-				record.LastExpectation.ReturnValue = true;
-				MethodInfo method = CreateMethodInfo();
-                record.MethodCall(new FakeInvocation(method), method, "r");
-				record.LastExpectation.ReturnValue = true;
-                record.MethodCall(new FakeInvocation(method), method, "y");
-				record.LastExpectation.ReturnValue = true;
-				record.LastExpectation.Expected = new Range(2, 2);
-			}
-			ReplayMockState replay = new ReplayMockState(record);
-			try
-			{
-				replay.Verify();
-			}
-			catch (Exception e)
-			{
-				string message = "String.StartsWith(\"2\"); Expected #1, Actual #0.\r\n" +
-					"String.StartsWith(\"r\"); Expected #1, Actual #0.\r\n" +
-					"String.StartsWith(\"y\"); Expected #2, Actual #0.";
-				Assert.Equal(message, e.Message);
-			}
-		}
-
-		#region Implementation
+        //[Fact]
+        //public void VerifyReportsAllMissingExpectationWhenCalledOnOrdered()
+        //{
+        //    using (mocks.Ordered())
+        //    {
+        //        record.LastExpectation.ReturnValue = true;
+        //        MethodInfo method = CreateMethodInfo();
+        //        record.MethodCall(new FakeInvocation(method), method, "r");
+        //        record.LastExpectation.ReturnValue = true;
+        //        record.MethodCall(new FakeInvocation(method), method, "y");
+        //        record.LastExpectation.ReturnValue = true;
+        //        record.LastExpectation.Expected = new Range(2, 2);
+        //    }
+        //    ReplayMockState replay = new ReplayMockState(record);
+        //    try
+        //    {
+        //        replay.Verify();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        string message = "String.StartsWith(\"2\"); Expected #1, Actual #0.\r\n" +
+        //            "String.StartsWith(\"r\"); Expected #1, Actual #0.\r\n" +
+        //            "String.StartsWith(\"y\"); Expected #2, Actual #0.";
+        //        Assert.Equal(message, e.Message);
+        //    }
+        //}
 
 		private static MethodInfo CreateMethodInfo()
 		{
 			return MethodCallTests.GetMethodInfo("StartsWith", "");
 		}
-
-		#endregion
 	}
 }

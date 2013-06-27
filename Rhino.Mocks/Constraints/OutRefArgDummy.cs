@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Rhino.Mocks.Constraints
 {
-	/// <summary>
-	/// Provides a dummy field to pass as out or ref argument.
-	/// </summary>
-	/// <typeparam name="T"></typeparam>
+    /// <summary>
+    /// Provides a dummy field to pass as out or ref argument
+    /// </summary>
+    /// <typeparam name="T">The type of the argument</typeparam>
 	public class OutRefArgDummy<T>
 	{
 		/// <summary>

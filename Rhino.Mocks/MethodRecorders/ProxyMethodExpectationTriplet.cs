@@ -41,27 +41,11 @@ namespace Rhino.Mocks.MethodRecorders
 	/// </summary>
 	public class ProxyMethodExpectationTriplet
 	{
-		private object proxy;
-		private MethodInfo method;
+		private readonly object proxy;
+		private readonly MethodInfo method;
 		private IExpectation expectation;
 		
-		/// <summary>
-		/// Creates a new <see cref="ProxyMethodExpectationTriplet"/> instance.
-		/// </summary>
-		/// <param name="proxy">Proxy.</param>
-		/// <param name="method">Method.</param>
-		/// <param name="expectation">Expectation.</param>
-		public ProxyMethodExpectationTriplet(object proxy, MethodInfo method, IExpectation expectation)
-		{
-			Validate.IsNotNull(proxy, "proxy");
-			Validate.IsNotNull(method, "method");
-			Validate.IsNotNull(expectation, "expectation");
-			this.proxy = proxy;
-			this.method = method;
-			this.expectation = expectation;
-		}
-
-		/// <summary>
+        /// <summary>
 		/// Gets the proxy.
 		/// </summary>
 		/// <value></value>
@@ -89,6 +73,23 @@ namespace Rhino.Mocks.MethodRecorders
 			set { expectation = value; }
 		}
 
+		/// <summary>
+		/// Creates a new <see cref="ProxyMethodExpectationTriplet"/> instance.
+		/// </summary>
+		/// <param name="proxy">Proxy.</param>
+		/// <param name="method">Method.</param>
+		/// <param name="expectation">Expectation.</param>
+		public ProxyMethodExpectationTriplet(object proxy, MethodInfo method, IExpectation expectation)
+		{
+			Validate.IsNotNull(proxy, "proxy");
+			Validate.IsNotNull(method, "method");
+			Validate.IsNotNull(expectation, "expectation");
+			this.proxy = proxy;
+			this.method = method;
+			this.expectation = expectation;
+		}
+
+		
 		/// <summary>
 		/// Determines if the object equal to this instance
 		/// </summary>

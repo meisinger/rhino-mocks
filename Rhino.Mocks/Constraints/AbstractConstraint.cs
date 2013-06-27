@@ -29,9 +29,9 @@
 
 namespace Rhino.Mocks.Constraints
 {
-	/// <summary>
-	/// Interface for constraints
-	/// </summary>
+    /// <summary>
+    /// Abstract class for constraints
+    /// </summary>
 	public abstract class AbstractConstraint
 	{
 		/// <summary>
@@ -46,7 +46,7 @@ namespace Rhino.Mocks.Constraints
 		public abstract string Message { get; }
 
 		/// <summary>
-		/// And operator for constraints
+		/// Operator overload of "And"
 		/// </summary>
 		public static AbstractConstraint operator &(AbstractConstraint c1, AbstractConstraint c2)
 		{
@@ -54,7 +54,7 @@ namespace Rhino.Mocks.Constraints
 		}
 
 		/// <summary>
-		/// Not operator for constraints
+		/// Operator overload of "Not"
 		/// </summary>
 		public static AbstractConstraint operator !(AbstractConstraint c1)
 		{
@@ -63,7 +63,7 @@ namespace Rhino.Mocks.Constraints
 
 
 		/// <summary>
-		/// Or operator for constraints
+		/// Operator overload of "Or"
 		/// </summary>
 		public static AbstractConstraint operator |(AbstractConstraint c1, AbstractConstraint c2)
 		{
@@ -71,19 +71,15 @@ namespace Rhino.Mocks.Constraints
 		}
 
 		/// <summary>
-		/// Allow overriding of || or &amp;&amp;
+		/// Operator overload of || or &amp;&amp;
 		/// </summary>
-		/// <param name="c"></param>
-		/// <returns></returns>
 		public static bool operator false(AbstractConstraint c)
 		{
 			return false;
 		}
 		/// <summary>
-		/// Allow overriding of || or &amp;&amp;
+        /// Operator overload of || or &amp;&amp;
 		/// </summary>
-		/// <param name="c"></param>
-		/// <returns></returns>
 		public static bool operator true(AbstractConstraint c)
 		{
 			return false;

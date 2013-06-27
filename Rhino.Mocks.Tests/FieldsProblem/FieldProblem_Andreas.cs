@@ -26,36 +26,31 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion
 
-
 using Xunit;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-
-	
 	public class FieldProblem_Andreas
 	{
 		[Fact]
 		public void BackToRecordAll_EraseAllRecordedExpectations()
 		{
-			MockRepository repository = new MockRepository();
-			TestedClass mockObject = (TestedClass)repository.StrictMock(typeof(TestedClass));
+			TestedClass mockObject = (TestedClass)MockRepository.GenerateStrictMock(typeof(TestedClass));
 
+            mockObject.Expect(x => x.AnyMethod());
+            mockObject.BackToRecord(BackToRecordOptions.All);
+            mockObject.Expect(x => x.AnyMethod());
+            mockObject.Replay();
+			
 			mockObject.AnyMethod();
-			repository.BackToRecordAll();
-			mockObject.AnyMethod();
-
-			repository.ReplayAll();
-			mockObject.AnyMethod();
-			repository.VerifyAll();
-
+            mockObject.VerifyAllExpectations();
 		}
 
 		[Fact]
 		public void CanCallBackToRecordAllWhenRepositoryIsEmpty()
 		{
-			MockRepository mocks = new MockRepository();
-			mocks.BackToRecordAll();
+            TestedClass mockObject = (TestedClass)MockRepository.GenerateStrictMock(typeof(TestedClass));
+            mockObject.BackToRecord(BackToRecordOptions.All);
 		}
 	}
 
@@ -63,7 +58,6 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 	{
 		public virtual void AnyMethod()
 		{
-
 		}
 	}
 }

@@ -34,8 +34,7 @@ using Rhino.Mocks.Exceptions;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-    
-	public class FieldProblem_Entropy
+    public class FieldProblem_Entropy
 	{
 		public interface IMyObject
 		{
@@ -47,89 +46,67 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void NestedOrderedAndAtLeastOnce()
 		{
-			MockRepository mocks = new MockRepository();
-			IMyObject myObject = mocks.StrictMock(typeof(IMyObject)) as IMyObject;
+			IMyObject myObject = MockRepository.GenerateStrictMock(typeof(IMyObject)) as IMyObject;
 
-			using (mocks.Ordered())
-			{
-				using (mocks.Ordered()) // <-- Works if removed. Unordered does not work too.
-				{
-					Expect.Call(myObject.SomeProperty).Return(null).Repeat.AtLeastOnce();
-				}
-				myObject.DoSomething();
-			}
+			myObject.Expect(x => x.SomeProperty)
+                .Return(null)
+                .Repeat.AtLeastOnce();
 
-			mocks.ReplayAll();
+            myObject.Expect(x => x.DoSomething());
 
 			Assert.Null(myObject.SomeProperty);
 			Assert.Null(myObject.SomeProperty);
 			Assert.Null(myObject.SomeProperty);
 			myObject.DoSomething();
 
-			mocks.VerifyAll();
+            myObject.VerifyAllExpectations();
 		}
-
-
+        
 		[Fact]
 		public void ShouldFailInNestedOrderringIfMethodWasNotCalled()
 		{
-			MockRepository mocks = new MockRepository();
-			IMyObject myObject = mocks.StrictMock(typeof(IMyObject)) as IMyObject;
+			IMyObject myObject = MockRepository.GenerateStrictMock(typeof(IMyObject)) as IMyObject;
 
-			using (mocks.Ordered())
-			{
-				using (mocks.Ordered()) 
-				{
-					myObject.DoSomethingElse();
-					LastCall.Repeat.AtLeastOnce();
-				}
-				myObject.DoSomething(); 
-			}
+            myObject.Expect(x => x.DoSomethingElse())
+                .Repeat.AtLeastOnce();
 
-			mocks.ReplayAll();
+            myObject.Expect(x => x.DoSomething());
+
 			myObject.DoSomethingElse();
 			Assert.Throws<ExpectationViolationException>(
 				"IMyObject.DoSomething(); Expected #1, Actual #0.",
-				() => mocks.VerifyAll());
+				() => myObject.VerifyAllExpectations());
 		}
 
 		[Fact]
 		public void NestedInorderedAndAtLeastOnce()
 		{
-			MockRepository mocks = new MockRepository();
-			IMyObject myObject = mocks.StrictMock(typeof(IMyObject)) as IMyObject;
+			IMyObject myObject = MockRepository.GenerateStrictMock(typeof(IMyObject)) as IMyObject;
 
-			using (mocks.Ordered())
-			{
-				using (mocks.Unordered()) // <-- Works only if ordered
-				{
-					Expect.Call(myObject.SomeProperty).Return(null).Repeat.AtLeastOnce();
-				}
-				myObject.DoSomething();
-			}
+            myObject.Expect(x => x.SomeProperty)
+                .Return(null)
+                .Repeat.AtLeastOnce();
 
-			mocks.ReplayAll();
-
+            myObject.Expect(x => x.DoSomething());
+			
 			Assert.Null(myObject.SomeProperty);
 			Assert.Null(myObject.SomeProperty);
 			Assert.Null(myObject.SomeProperty);
 			myObject.DoSomething();
-			mocks.VerifyAll();
+
+            myObject.VerifyAllExpectations();
 		}
 
 		[Fact]
 		public void UnorderedAndAtLeastOnce_CallingAnExtraMethod()
 		{
-			MockRepository mocks = new MockRepository();
-			IMyObject myObject = mocks.StrictMock(typeof(IMyObject)) as IMyObject;
+			IMyObject myObject = MockRepository.GenerateStrictMock(typeof(IMyObject)) as IMyObject;
 
-			using (mocks.Unordered())
-			{
-				Expect.Call(myObject.SomeProperty).Return(null).Repeat.AtLeastOnce();
-			}
-			myObject.DoSomethingElse();
+            myObject.Expect(x => x.SomeProperty)
+                .Return(null)
+                .Repeat.AtLeastOnce();
 
-			mocks.ReplayAll();
+            myObject.Expect(x => x.DoSomethingElse());
 
 			Assert.Null(myObject.SomeProperty);
 			Assert.Null(myObject.SomeProperty);
@@ -143,16 +120,13 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void OrderedAndAtLeastOnce_CallingAnExtraMethod()
 		{
-			MockRepository mocks = new MockRepository();
-			IMyObject myObject = mocks.StrictMock(typeof(IMyObject)) as IMyObject;
+			IMyObject myObject = MockRepository.GenerateStrictMock(typeof(IMyObject)) as IMyObject;
 
-			using (mocks.Ordered())
-			{
-				Expect.Call(myObject.SomeProperty).Return(null).Repeat.AtLeastOnce();
-			}
-			myObject.DoSomethingElse();
+            myObject.Expect(x => x.SomeProperty)
+                .Return(null)
+                .Repeat.AtLeastOnce();
 
-			mocks.ReplayAll();
+            myObject.Expect(x => x.DoSomethingElse());
 
 			Assert.Null(myObject.SomeProperty);
 			Assert.Null(myObject.SomeProperty);
@@ -162,6 +136,5 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 				@"IMyObject.DoSomething(); Expected #0, Actual #1.",
 				() => myObject.DoSomething());
 		}
-
 	}
 }

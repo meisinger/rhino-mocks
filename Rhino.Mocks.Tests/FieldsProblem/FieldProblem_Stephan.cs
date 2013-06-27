@@ -2,12 +2,10 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 using Rhino.Mocks;
+using Rhino.Mocks.Exceptions;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	using Exceptions;
-
-	
 	public class FieldProblem_Stefan
 	{
 		// This test fixture relates to ploblems when ignoring arguments on generic method calls when the type is a struct (aka value type).
@@ -19,32 +17,20 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		public void ShouldIgnoreArgumentsOnGenericCallWhenTypeIsStruct()
 		{
 			// setup
-			MockRepository mocks = new MockRepository();
-			ISomeService m_SomeServiceMock = mocks.StrictMock<ISomeService>();
+			ISomeService m_SomeServiceMock = MockRepository.GenerateStrictMock<ISomeService>();
 			SomeClient sut = new SomeClient(m_SomeServiceMock);
 
-			using (mocks.Ordered())
-			{
-				Expect.Call(delegate
-				{
-					m_SomeServiceMock.DoSomething<string>(null, null);
-				});
-				LastCall.IgnoreArguments();
+            m_SomeServiceMock.Expect(x => x.DoSomething<string>(null, null))
+                .IgnoreArguments();
 
-				Expect.Call(delegate
-				{
-					m_SomeServiceMock.DoSomething<DateTime>(null, default(DateTime));  // can't use null here, because it's a value type!
-				});
-				LastCall.IgnoreArguments();
-
-			}
-			mocks.ReplayAll();
-
-			// test
+            m_SomeServiceMock.Expect(x => x.DoSomething<DateTime>(null, default(DateTime)))
+                .IgnoreArguments();
+            
+            // test
 			sut.DoSomething();
 
 			// verification
-			mocks.VerifyAll();
+            m_SomeServiceMock.VerifyAllExpectations();
 
 			// cleanup
 			m_SomeServiceMock = null;
@@ -54,11 +40,11 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void UnexpectedCallToGenericMethod()
 		{
-			MockRepository mocks = new MockRepository();
-			ISomeService m_SomeServiceMock = mocks.StrictMock<ISomeService>();
-			m_SomeServiceMock.DoSomething<string>(null, "foo");
-			mocks.ReplayAll();
-			Assert.Throws<ExpectationViolationException>(
+			ISomeService m_SomeServiceMock = MockRepository.GenerateStrictMock<ISomeService>();
+
+            m_SomeServiceMock.Expect(x => x.DoSomething<string>(null, "foo"));
+
+            Assert.Throws<ExpectationViolationException>(
 				@"ISomeService.DoSomething<System.Int32>(null, 5); Expected #0, Actual #1.
 ISomeService.DoSomething<System.String>(null, ""foo""); Expected #1, Actual #0.",
 				() => m_SomeServiceMock.DoSomething<int>(null, 5));
@@ -67,20 +53,17 @@ ISomeService.DoSomething<System.String>(null, ""foo""); Expected #1, Actual #0."
 		[Fact]
 		public void IgnoreArgumentsAfterDo()
 		{
-			MockRepository mocks = new MockRepository();
-			IDemo demo = mocks.DynamicMock<IDemo>();
-			bool didDo = false;
-			demo.VoidNoArgs();
-			LastCall
-                .Do(SetToTrue(out didDo))
-				.IgnoreArguments();
+            bool didDo = false;
 
-			mocks.ReplayAll();
-
+			IDemo demo = MockRepository.GenerateDynamicMock<IDemo>();
+            demo.Expect(x => x.VoidNoArgs())
+                .IgnoreArguments()
+                .Do(SetToTrue(out didDo));
+			
 			demo.VoidNoArgs();
 			Assert.True(didDo, "Do has not been executed!");
 
-			mocks.VerifyAll();
+            demo.VerifyAllExpectations();
 		}
 		
 		private delegate void PlaceHolder();

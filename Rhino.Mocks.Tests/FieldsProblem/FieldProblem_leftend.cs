@@ -5,48 +5,45 @@ using Rhino.Mocks.Interfaces;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	
 	public class FieldProblem_leftend : IDisposable
 	{
-		private MockRepository mocks;
 		private IAddAlbumPresenter viewMock;
 		private IAlbum albumMock;
 		private IEventRaiser saveRaiser;
 
 		public FieldProblem_leftend()
 		{
-			mocks = new MockRepository();
-			viewMock =
-				(IAddAlbumPresenter) mocks.DynamicMock(typeof (IAddAlbumPresenter));
-			albumMock = mocks.StrictMock<IAlbum>();
+            viewMock = (IAddAlbumPresenter)MockRepository.GenerateDynamicMock(typeof(IAddAlbumPresenter));
+            albumMock = MockRepository.GenerateStrictMock<IAlbum>();
 
-			viewMock.Save += null;
-			LastCall.IgnoreArguments().Constraints(Is.NotNull());
-			saveRaiser = LastCall.GetEventRaiser();
+            saveRaiser = viewMock.Expect(x => x.Save += null)
+                .IgnoreArguments()
+                .Constraints(Is.NotNull())
+                .GetEventRaiser();
 		}
 
 		public void Dispose()
 		{
-			mocks.VerifyAll();
+            viewMock.VerifyAllExpectations();
+            albumMock.VerifyAllExpectations();
 		}
 
 		[Fact]
 		public void VerifyAttachesToViewEvents()
 		{
-			mocks.ReplayAll();
 			new AddAlbumPresenter(viewMock);
 		}
 
 		[Fact]
 		public void SaveEventShouldSetViewPropertiesCorrectly()
 		{
-			Expect.Call(viewMock.AlbumToSave).Return(albumMock);
-			albumMock.Save();//create expectation
-			viewMock.ProcessSaveComplete();//create expectation
-			mocks.ReplayAll();
+            viewMock.Expect(x => x.AlbumToSave)
+                .Return(albumMock);
 
-			AddAlbumPresenter presenter = new
-				AddAlbumPresenter(viewMock);
+            albumMock.Expect(x => x.Save());
+            viewMock.Expect(x => x.ProcessSaveComplete());
+
+			AddAlbumPresenter presenter = new AddAlbumPresenter(viewMock);
 			saveRaiser.Raise(null, null);
 		}
 

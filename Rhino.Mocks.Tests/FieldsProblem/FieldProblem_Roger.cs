@@ -5,14 +5,13 @@ using Xunit;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	
 	public class FieldProblem_Roger
 	{
 		[Fact]
 		public void VerifyMockCanBeSetupWhenExternalInterfaceUsingInnerClassWithInternalScope()
 		{
-			MockRepository mocks = new MockRepository();
-			ISomeInterface<InnerClass> target = mocks.StrictMock<ISomeInterface<InnerClass>>();
+			ISomeInterface<InnerClass> target = MockRepository
+                .GenerateStrictMock<ISomeInterface<InnerClass>>();
 		}
 	}
 
@@ -20,6 +19,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 	{
 	}
 
-	public interface ISomeInterface<T> { }
-
+	public interface ISomeInterface<T>
+    { 
+    }
 }

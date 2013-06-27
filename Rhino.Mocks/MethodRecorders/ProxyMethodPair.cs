@@ -43,23 +43,10 @@ namespace Rhino.Mocks.MethodRecorders
 	/// </summary>
 	public class ProxyMethodPair
 	{
-		private object proxy;
-		private MethodInfo method;
+		private readonly object proxy;
+		private readonly MethodInfo method;
 
-		/// <summary>
-		/// Creates a new <see cref="ProxyMethodPair"/> instance.
-		/// </summary>
-		/// <param name="proxy">Proxy.</param>
-		/// <param name="method">Method.</param>
-		public ProxyMethodPair(object proxy, MethodInfo method)
-		{
-			Validate.IsNotNull(proxy, "proxy");
-			Validate.IsNotNull(method, "method");
-			this.proxy = proxy;
-			this.method = method;
-		}
-
-		/// <summary>
+        /// <summary>
 		/// Gets the proxy.
 		/// </summary>
 		/// <value></value>
@@ -78,6 +65,20 @@ namespace Rhino.Mocks.MethodRecorders
 		}
 
 		/// <summary>
+		/// Creates a new <see cref="ProxyMethodPair"/> instance.
+		/// </summary>
+		/// <param name="proxy">Proxy.</param>
+		/// <param name="method">Method.</param>
+		public ProxyMethodPair(object proxy, MethodInfo method)
+		{
+			Validate.IsNotNull(proxy, "proxy");
+			Validate.IsNotNull(method, "method");
+
+			this.proxy = proxy;
+			this.method = method;
+		}
+
+		/// <summary>
 		/// Determines whatever obj equals to this instance.
 		/// ProxyMethodPairs are equal when they point to the same /instance/ of
 		/// an object, and to the same method.
@@ -89,9 +90,8 @@ namespace Rhino.Mocks.MethodRecorders
 			ProxyMethodPair other = obj as ProxyMethodPair;
 			if (other == null)
 				return false;
-            return MockedObjectsEquality.Instance.Compare(other.proxy, proxy) == 0 && 
-				other.method == method;
 
+            return MockedObjectsEquality.Instance.Compare(other.proxy, proxy) == 0 && other.method == method;
 		}
 
 		/// <summary>

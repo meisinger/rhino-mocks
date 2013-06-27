@@ -47,50 +47,53 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void ShouldBeAbleToMockGenericMethod()
 		{
-			ILookupMapper<int> mapper = m_mockery.StrictMock<ILookupMapper<int>>();
-			List<Foo<int>> retval = new List<Foo<int>>();
+            List<Foo<int>> retval = new List<Foo<int>>();
 			retval.Add(new Foo<int>());
-			Expect.Call(mapper.FindAllFoo()).Return(retval);
-			m_mockery.ReplayAll();
+
+            ILookupMapper<int> mapper = MockRepository.GenerateStrictMock<ILookupMapper<int>>();
+            mapper.Expect(x => x.FindAllFoo())
+                .Return(retval);
+			
 			IList<Foo<int>> listOfFoo = mapper.FindAllFoo();
-			m_mockery.VerifyAll();
+            mapper.VerifyAllExpectations();
 		}
 
 		[Fact]
 		public void ShouldBeAbleToMockGenericMethod2()
 		{
-			ILookupMapper<int> mapper = m_mockery.StrictMock<ILookupMapper<int>>();
-			Foo<int> retval = new Foo<int>();
-			Expect.Call(mapper.FindOneFoo()).Return(retval);
-			m_mockery.ReplayAll();
+            Foo<int> retval = new Foo<int>();
+
+            ILookupMapper<int> mapper = MockRepository.GenerateStrictMock<ILookupMapper<int>>();
+            mapper.Expect(x => x.FindOneFoo())
+                .Return(retval);
+
 			Foo<int> oneFoo = mapper.FindOneFoo();
-			m_mockery.VerifyAll();
+            mapper.VerifyAllExpectations();
 		}
 
 		[Fact]
 		public void CanMockMethodsReturnIntPtr()
 		{
-			IFooWithIntPtr mock = m_mockery.StrictMock<IFooWithIntPtr>();
-			using(m_mockery.Record())
-			{
-				Expect.Call(mock.Buffer(15)).Return(IntPtr.Zero);
-			}
+            IFooWithIntPtr mock = MockRepository.GenerateStrictMock<IFooWithIntPtr>();
 
-			using(m_mockery.Playback())
-			{
-				IntPtr buffer = mock.Buffer(15);
-				Assert.Equal(IntPtr.Zero, buffer);
-			}
+            mock.Expect(x => x.Buffer(15))
+                .Return(IntPtr.Zero);
+
+            IntPtr buffer = mock.Buffer(15);
+			Assert.Equal(IntPtr.Zero, buffer);
 		}
 
-		[Fact]
+		[Fact(Skip = "Test No Longer Valid")]
 		public void ShouldGetValidErrorWhenGenericTypeMismatchOccurs()
 		{
-			ILookupMapper<int> mapper = m_mockery.StrictMock<ILookupMapper<int>>();
-			Foo<string> retval = new Foo<string>();
-			Assert.Throws<InvalidOperationException>(
-				"Type 'Rhino.Mocks.Tests.FieldsProblem.Foo`1[[System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]' doesn't match the return type 'Rhino.Mocks.Tests.FieldsProblem.Foo`1[System.Int32]' for method 'ILookupMapper`1.FindOneFoo();'",
-				() => Expect.Call<object>(mapper.FindOneFoo()).Return(retval));
+            //Foo<string> retval = new Foo<string>();
+
+            //ILookupMapper<int> mapper = MockRepository.GenerateStrictMock<ILookupMapper<int>>();
+            			
+            //Assert.Throws<InvalidOperationException>(
+            //    "Type 'Rhino.Mocks.Tests.FieldsProblem.Foo`1[[System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]' doesn't match the return type 'Rhino.Mocks.Tests.FieldsProblem.Foo`1[System.Int32]' for method 'ILookupMapper`1.FindOneFoo();'",
+            //    () => mapper.Expect(x => x.FindOneFoo())
+            //            .Return(retval));
 		}
 	}
 

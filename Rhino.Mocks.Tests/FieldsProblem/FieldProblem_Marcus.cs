@@ -32,19 +32,14 @@ using Xunit;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-    
     public class FieldProblem_ByMarcus : IDisposable
     {
-        MockRepository mocks;
-
-		public  FieldProblem_ByMarcus()
+        public  FieldProblem_ByMarcus()
         {
-            mocks = new MockRepository();
         }
 
         public void Dispose()
         {
-            mocks.VerifyAll();
         }
 
         [Fact]
@@ -56,10 +51,9 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void ConstructorThatThrowsInMock()
         {
-
             try
             {
-                ClassWithThrowingCtor c = mocks.StrictMock(typeof(ClassWithThrowingCtor)) as ClassWithThrowingCtor;
+                ClassWithThrowingCtor c = MockRepository.GenerateStrictMock(typeof(ClassWithThrowingCtor)) as ClassWithThrowingCtor;
                 Assert.NotNull(c);
                 Assert.False(true, "Exception expected");
             }
@@ -68,7 +62,6 @@ namespace Rhino.Mocks.Tests.FieldsProblem
                 string expectedExceptionStartsWith = @"Exception in constructor: System.Exception: I'm a ctor that throws";
                 string actualExceptionStartString = e.Message.Substring(0,expectedExceptionStartsWith.Length);
                 Assert.Equal(expectedExceptionStartsWith, actualExceptionStartString);
-
             }
         }
 
@@ -79,6 +72,5 @@ namespace Rhino.Mocks.Tests.FieldsProblem
                 throw new Exception("I'm a ctor that throws");
             }
         }
-
     }
 }

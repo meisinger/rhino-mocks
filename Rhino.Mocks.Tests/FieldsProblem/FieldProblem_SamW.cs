@@ -5,20 +5,18 @@ using Xunit;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-    
     public class FieldProblem_SamW
     {
         [Fact]
         public void UsingArrayAndOutParam()
         {
-            MockRepository mockRepository = new MockRepository();
-            ITest test = mockRepository.StrictMock<ITest>();
             string b;
-            test.ArrayWithOut(new string[] { "data" }, out b);
 
-            LastCall.Return("SuccessWithOut1").OutRef("SuccessWithOut2");
+            ITest test = MockRepository.GenerateStrictMock<ITest>();
+            test.Expect(x => x.ArrayWithOut(new string[] { "data" }, out b))
+                .OutRef("SuccessWithOut2")
+                .Return("SuccessWithOut1");
 
-            mockRepository.ReplayAll();
             Console.WriteLine(test.ArrayWithOut(new string[] { "data" }, out b));
             Console.WriteLine(b);
         }
@@ -28,7 +26,5 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         {
             string ArrayWithOut(string[] a, out string b);
         }
-
-
     }
 }

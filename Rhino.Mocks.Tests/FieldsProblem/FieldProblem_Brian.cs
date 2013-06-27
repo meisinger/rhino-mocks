@@ -40,23 +40,26 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void SetExpectationOnNullableValue()
 		{
-			MockRepository mocks = new MockRepository();
-			IFoo foo = mocks.StrictMock<IFoo>();
+			IFoo foo = MockRepository.GenerateStrictMock<IFoo>();
 
 			int? id = 2;
 
-			Expect.Call(foo.Id).Return(id).Repeat.Twice();
-			Expect.Call(foo.Id).Return(null);
-			Expect.Call(foo.Id).Return(1);
+            foo.Expect(x => x.Id)
+                .Return(id)
+                .Repeat.Twice();
 
-			mocks.ReplayAll();
+            foo.Expect(x => x.Id)
+                .Return(null);
+
+            foo.Expect(x => x.Id)
+                .Return(1);
 
 			Assert.True(foo.Id.HasValue);
 			Assert.Equal(2, foo.Id.Value);
 			Assert.False(foo.Id.HasValue);
 			Assert.Equal(1, foo.Id.Value);
 
-			mocks.VerifyAll();
+            foo.VerifyAllExpectations();
 		}
 
 		[Fact]
@@ -68,20 +71,18 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 			string testMethod = testClass.TestMethod();
 			string testProperty = testClass.TestProperty;
 
-			MockRepository mockRepository = new MockRepository();
+			TestClass mockTestClass = MockRepository.GenerateStrictMock<TestClass>();
 
-			TestClass mockTestClass = mockRepository.StrictMock<TestClass>();
+            mockTestClass.Expect(x => x.TestMethod())
+                .Return("MockTestMethod");
 
-			Expect.Call(mockTestClass.TestMethod()).Return("MockTestMethod");
-			Expect.Call(mockTestClass.TestProperty).Return("MockTestProperty");
-
-			mockRepository.ReplayAll();
+            mockTestClass.Expect(x => x.TestProperty)
+                .Return("MockTestProperty");
 
 			Assert.Equal("MockTestMethod", mockTestClass.TestMethod());
 			Assert.Equal("MockTestProperty", mockTestClass.TestProperty);
 
-			mockRepository.VerifyAll();
-
+            mockTestClass.VerifyAllExpectations();
 		}
 
 		public interface IFoo

@@ -69,34 +69,36 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void TryingToGetEventRaiserFromNonEvenTrhows()
 		{
-			MockRepository mocks = new MockRepository();
-			IDemo demo = mocks.StrictMock<IDemo>();
-			demo.EnumNoArgs();
-			Assert.Throws<InvalidOperationException>(
-				"The last method call EnumNoArgs was not an event add / remove method",
-				() => LastCall.GetEventRaiser());
+			IDemo demo = MockRepository.GenerateStrictMock<IDemo>();
+
+            Assert.Throws<InvalidOperationException>(
+                "The last method call EnumNoArgs was not an event add / remove method",
+                () => demo.Expect(x => x.EnumNoArgs())
+                        .GetEventRaiser());
 		}
 
 		[Fact]
 		public void UsingCallOriginalWithSetter()
 		{
-			MockRepository mocks = new MockRepository();
-			WithParameters withParameters = mocks.StrictMock<WithParameters>(1);
-			withParameters.Int = 5;
-			LastCall.PropertyBehavior();
-			mocks.ReplayAll();
+
+            WithParameters withParameters = MockRepository.GenerateStrictMock<WithParameters>(1);
+
+            withParameters.Expect(x => x.Int = 5)
+                .PropertyBehavior();
+
 			withParameters.Int = 12;
 			withParameters.Int = 15;
 			Assert.Equal(15, withParameters.Int);
-			mocks.VerifyAll();
+
+            withParameters.VerifyAllExpectations();
 		}
 
 		[Fact]
 		public void MockObjCanHandleGetEventSubscribersCallsWithoutEventsRegistered()
 		{
-			MockRepository mocks = new MockRepository();
-			WithParameters withParameters = mocks.StrictMock<WithParameters>(1);
+			WithParameters withParameters = MockRepository.GenerateStrictMock<WithParameters>(1);
 			IMockedObject mocked = (IMockedObject) withParameters;
+
 			Delegate eventSubscribers = mocked.GetEventSubscribers("ff");
 			Assert.Null(eventSubscribers);
 		}
@@ -140,27 +142,30 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void WillGetPartialRecordFromPartialRecord()
 		{
-			MockRepository mocks = new MockRepository();
-			IDemo demo = mocks.StrictMock<IDemo>();
-			IMockState mockState = new RecordPartialMockState((IMockedObject)demo, mocks).BackToRecord();
+			IDemo demo = MockRepository.GenerateStrictMock<IDemo>();
+            IMockState mockState = new RecordPartialMockState((IMockedObject)demo, demo.GetMockRepository())
+                .BackToRecord();
+
 			Assert.Equal(typeof(RecordPartialMockState), mockState.GetType());
 		}
 
 		[Fact]
 		public void WillGetPartialRecordFromPartialReplay()
 		{
-			MockRepository mocks = new MockRepository();
-			IDemo demo = mocks.StrictMock<IDemo>();
-			IMockState mockState = new ReplayPartialMockState(new RecordPartialMockState((IMockedObject)demo, mocks)).BackToRecord();
+			IDemo demo = MockRepository.GenerateStrictMock<IDemo>();
+			IMockState mockState = new ReplayPartialMockState(new RecordPartialMockState((IMockedObject)demo, demo.GetMockRepository()))
+                .BackToRecord();
+
 			Assert.Equal(typeof(RecordPartialMockState), mockState.GetType());
 		}
 
 		[Fact]
 		public void WillGetDynamicRecordFromDynamicReplay()
 		{
-			MockRepository mocks = new MockRepository();
-			IDemo demo = mocks.StrictMock<IDemo>();
-			IMockState mockState = new ReplayDynamicMockState(new RecordDynamicMockState((IMockedObject)demo, mocks)).BackToRecord();
+			IDemo demo = MockRepository.GenerateStrictMock<IDemo>();
+			IMockState mockState = new ReplayDynamicMockState(new RecordDynamicMockState((IMockedObject)demo, demo.GetMockRepository()))
+                .BackToRecord();
+
 			Assert.Equal(typeof(RecordDynamicMockState), mockState.GetType());
 		}
 

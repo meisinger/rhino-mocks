@@ -32,7 +32,7 @@ using System.Text;
 using Xunit;
 using Rhino.Mocks.Exceptions;
 using Rhino.Mocks.Interfaces;
-using Rhino.Mocks.Tests.FieldsProblem;
+//using Rhino.Mocks.Tests.FieldsProblem;
 
 namespace Rhino.Mocks.Tests
 {

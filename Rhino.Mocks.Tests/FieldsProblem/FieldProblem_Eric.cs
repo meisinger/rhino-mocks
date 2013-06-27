@@ -25,12 +25,13 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion
+
+using System;
+using Xunit;
+using Rhino.Mocks.Constraints;
+
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	using System;
-	using Xunit;
-	using Rhino.Mocks.Constraints;
-
 	public class ClassWithFinalizer
 	{
 		~ClassWithFinalizer()
@@ -38,74 +39,56 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 			Console.WriteLine(5);
 		}
 	}
-
-	
+    
 	public class FieldProblem_Eric
 	{
 		[Fact]
 		public void MockAClassWithFinalizer()
 		{
-			MockRepository mocks = new MockRepository();
-			ClassWithFinalizer withFinalizer = (ClassWithFinalizer) mocks.StrictMock(typeof (ClassWithFinalizer));
-			mocks.ReplayAll();
-			mocks.VerifyAll(); //move it to verify state
+			ClassWithFinalizer withFinalizer = (ClassWithFinalizer)MockRepository.GenerateStrictMock(typeof(ClassWithFinalizer));
+
+            withFinalizer.VerifyAllExpectations();
 			withFinalizer = null; // abandon the variable, will make it avialable for GC.
+
 			GC.WaitForPendingFinalizers();
 		}
 
-		#region Nested type: Class1Test
-
-		
 		public class Class1Test
 		{
 			[Fact]
 			public void ThisWorks()
 			{
-				MockRepository mockery = new MockRepository();
-				IFoo mockFoo = mockery.StrictMock<IFoo>();
+                IFoo mockFoo = MockRepository.GenerateStrictMock<IFoo>();
+
 				int junk = 3;
-				using (mockery.Record())
-				{
-					Expect.Call(mockFoo.foo(ref junk)).
-						IgnoreArguments().
-						Constraints(Is.Anything()).
-						OutRef(3).
-						Repeat.Once().
-						Return(true);
-				}
-				using (mockery.Playback())
-				{
-					ClassUnderTest cut = new ClassUnderTest();
-					Assert.Equal(3, cut.doit(mockFoo));
-				}
+                mockFoo.Expect(x => x.foo(ref junk))
+                    .IgnoreArguments()
+                    .Constraints(Is.Anything())
+                    .OutRef(3)
+                    .Repeat.Once()
+                    .Return(true);
+
+                ClassUnderTest cut = new ClassUnderTest();
+                Assert.Equal(3, cut.doit(mockFoo));
 			}
 
 			[Fact]
 			public void ThisDoesnt()
 			{
-				MockRepository mockery = new MockRepository();
-				IFoo mockFoo = mockery.StrictMock<IFoo>();
+				IFoo mockFoo = MockRepository.GenerateStrictMock<IFoo>();
+
 				int junk = 3;
-				using (mockery.Record())
-				{
-					Expect.Call(mockFoo.foo(ref junk)).
-						IgnoreArguments().
-						OutRef(3).
-						Constraints(Is.Anything()).
-						Repeat.Once().
-						Return(true);
-				}
-				using (mockery.Playback())
-				{
-					ClassUnderTest cut = new ClassUnderTest();
-					Assert.Equal(3, cut.doit(mockFoo));
-				}
+                mockFoo.Expect(x => x.foo(ref junk))
+                    .IgnoreArguments()
+                    .OutRef(3)
+                    .Constraints(Is.Anything())
+                    .Repeat.Once()
+                    .Return(true);
+
+                ClassUnderTest cut = new ClassUnderTest();
+                Assert.Equal(3, cut.doit(mockFoo));
 			}
 		}
-
-		#endregion
-
-		#region Nested type: ClassUnderTest
 
 		public class ClassUnderTest
 		{
@@ -119,15 +102,9 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 			}
 		}
 
-		#endregion
-
-		#region Nested type: IFoo
-
 		public interface IFoo
 		{
 			bool foo(ref int fooSquared);
 		}
-
-		#endregion
 	}
 }

@@ -110,20 +110,20 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanMockVoidMethod()
         {
-            MockRepository mocks = new MockRepository();
-            TestClass t = (TestClass)mocks.StrictMock(typeof(TestClass));
+            TestClass t = MockRepository.GenerateStrictMockWithRemoting<TestClass>();
+            //TestClass t = (TestClass)MockRepository.GenerateStrictMock(typeof(TestClass));
+
+            t.Expect(x => x.Method());
+            
             t.Method();
-            mocks.ReplayAll();
-            t.Method();
-            mocks.VerifyAll();
+            t.VerifyAllExpectations();
         }
 
         [Fact]
         public void ThrowOnUnexpectedVoidMethod()
         {
-            MockRepository mocks = new MockRepository();
-			TestClass t = (TestClass)mocks.StrictMock(typeof(TestClass));
-            mocks.ReplayAll();
+            TestClass t = MockRepository.GenerateStrictMockWithRemoting<TestClass>();
+            //TestClass t = (TestClass)MockRepository.GenerateStrictMock(typeof(TestClass));
             
         	Assert.Throws<ExpectationViolationException>(
         		"TestClass.Method(); Expected #0, Actual #1.",
@@ -133,43 +133,51 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanMockMethodReturningInt()
         {
-            MockRepository mocks = new MockRepository();
-			TestClass t = (TestClass)mocks.StrictMock(typeof(TestClass));
-            Expect.Call(t.MethodReturningInt()).Return(42);
-            mocks.ReplayAll();
+            TestClass t = MockRepository.GenerateStrictMockWithRemoting<TestClass>();
+            //TestClass t = (TestClass)MockRepository.GenerateStrictMock(typeof(TestClass));
+
+            t.Expect(x => x.MethodReturningInt())
+                .Return(42);
+
             Assert.Equal(42, t.MethodReturningInt());
-            mocks.VerifyAll();
+            t.VerifyAllExpectations();
         }
 
         [Fact]
         public void CanMockMethodReturningString()
         {
-            MockRepository mocks = new MockRepository();
-			TestClass t = (TestClass)mocks.StrictMock(typeof(TestClass));
-            Expect.Call(t.MethodReturningString()).Return("foo");
-            mocks.ReplayAll();
+            TestClass t = MockRepository.GenerateStrictMockWithRemoting<TestClass>();
+            //TestClass t = (TestClass)MockRepository.GenerateStrictMock(typeof(TestClass));
+
+            t.Expect(x => x.MethodReturningString())
+                .Return("foo");
+
             Assert.Equal("foo", t.MethodReturningString());
-            mocks.VerifyAll();
+            t.VerifyAllExpectations();
         }
 
         [Fact]
         public void CanMockMethodGettingParameters()
         {
-            MockRepository mocks = new MockRepository();
-			TestClass t = (TestClass)mocks.StrictMock(typeof(TestClass));
-            Expect.Call(t.MethodGettingParameters(42, "foo")).Return("bar");
-            mocks.ReplayAll();
+            TestClass t = MockRepository.GenerateStrictMockWithRemoting<TestClass>();
+            //TestClass t = (TestClass)MockRepository.GenerateStrictMock(typeof(TestClass));
+
+            t.Expect(x => x.MethodGettingParameters(42, "foo"))
+                .Return("bar");
+
             Assert.Equal("bar", t.MethodGettingParameters(42, "foo"));
-            mocks.VerifyAll();
+            t.VerifyAllExpectations();
         }
 
         [Fact]
         public void CanRejectIncorrectParameters()
         {
-            MockRepository mocks = new MockRepository();
-			TestClass t = (TestClass)mocks.StrictMock(typeof(TestClass));
-            Expect.Call(t.MethodGettingParameters(42, "foo")).Return("bar");
-            mocks.ReplayAll();
+            TestClass t = MockRepository.GenerateStrictMockWithRemoting<TestClass>();
+            //TestClass t = (TestClass)MockRepository.GenerateStrictMock(typeof(TestClass));
+
+            t.Expect(x => x.MethodGettingParameters(42, "foo"))
+                .Return("bar");
+
             Assert.Throws<ExpectationViolationException>(
         		"TestClass.MethodGettingParameters(19, \"foo\"); Expected #0, Actual #1.\r\nTestClass.MethodGettingParameters(42, \"foo\"); Expected #1, Actual #0.",
 				() => t.MethodGettingParameters(19, "foo"));
@@ -178,32 +186,36 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanMockPropertyGet()
         {
-            MockRepository mocks = new MockRepository();
-			TestClass t = (TestClass)mocks.StrictMock(typeof(TestClass));
-            Expect.Call(t.StringProperty).Return("foo");
-            mocks.ReplayAll();
+            TestClass t = MockRepository.GenerateStrictMockWithRemoting<TestClass>();
+            //TestClass t = (TestClass)MockRepository.GenerateStrictMock(typeof(TestClass));
+
+            t.Expect(x => x.StringProperty)
+                .Return("foo");
+
             Assert.Equal("foo", t.StringProperty);
-            mocks.VerifyAll();
+            t.VerifyAllExpectations();
         }
 
         [Fact]
         public void CanMockPropertySet()
         {
-            MockRepository mocks = new MockRepository();
-			TestClass t = (TestClass)mocks.StrictMock(typeof(TestClass));
+            TestClass t = MockRepository.GenerateStrictMockWithRemoting<TestClass>();
+            //TestClass t = (TestClass)MockRepository.GenerateStrictMock(typeof(TestClass));
+
+            t.Expect(x => x.StringProperty = "foo");
+
             t.StringProperty = "foo";
-            mocks.ReplayAll();
-            t.StringProperty = "foo";
-            mocks.VerifyAll();
+            t.VerifyAllExpectations();
         }
 
         [Fact]
         public void CanRejectIncorrectPropertySet()
         {
-            MockRepository mocks = new MockRepository();
-            TestClass t = (TestClass)mocks.StrictMock(typeof(TestClass));
-            t.StringProperty = "foo";
-            mocks.ReplayAll();
+            TestClass t = MockRepository.GenerateStrictMockWithRemoting<TestClass>();
+            //TestClass t = (TestClass)MockRepository.GenerateStrictMock(typeof(TestClass));
+
+            t.Expect(x => x.StringProperty = "foo");
+
             Assert.Throws<ExpectationViolationException>(
         		"TestClass.set_StringProperty(\"bar\"); Expected #0, Actual #1.\r\nTestClass.set_StringProperty(\"foo\"); Expected #1, Actual #0.",
 				() => t.StringProperty = "bar");
@@ -212,32 +224,38 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanMockGenericClass()
         {
-            MockRepository mocks = new MockRepository();
-            GenericTestClass<string> t = (GenericTestClass<string>)mocks.StrictMock(typeof(GenericTestClass<string>));
-            Expect.Call(t.Method("foo")).Return(42);
-            mocks.ReplayAll();
+            //GenericTestClass<string> t = (GenericTestClass<string>)MockRepository
+            //    .GenerateStrictMock(typeof(GenericTestClass<string>));
+            GenericTestClass<string> t = MockRepository.GenerateStrictMockWithRemoting<GenericTestClass<string>>();
+
+            t.Expect(x => x.Method("foo"))
+                .Return(42);
+
             Assert.Equal(42, t.Method("foo"));
-            mocks.VerifyAll();
+            t.VerifyAllExpectations();
         }
 
         [Fact]
         public void CanMockGenericMethod()
         {
-            MockRepository mocks = new MockRepository();
-            TestClass t = (TestClass)mocks.StrictMock(typeof(TestClass));
-            Expect.Call(t.GenericMethod<string>("foo")).Return(42);
-            mocks.ReplayAll();
+            TestClass t = MockRepository.GenerateStrictMockWithRemoting<TestClass>();
+            //TestClass t = (TestClass)MockRepository.GenerateStrictMock(typeof(TestClass));
+
+            t.Expect(x => x.GenericMethod<string>("foo"))
+                .Return(42);
+
             Assert.Equal(42, t.GenericMethod<string>("foo"));
-            mocks.VerifyAll();
+            t.VerifyAllExpectations();
         }
 
 		[Fact]
 		public void CanMockGenericMethod_WillErrorOnWrongType()
 		{
-			MockRepository mocks = new MockRepository();
-			TestClass t = (TestClass)mocks.StrictMock(typeof(TestClass));
-			Expect.Call(t.GenericMethod<string>("foo")).Return(42);
-			mocks.ReplayAll();
+            TestClass t = MockRepository.GenerateStrictMockWithRemoting<TestClass>();
+            //TestClass t = (TestClass)MockRepository.GenerateStrictMock(typeof(TestClass));
+
+            t.Expect(x => x.GenericMethod<string>("foo"))
+                .Return(42);
 			
 			Assert.Throws<ExpectationViolationException>(
 				@"TestClass.GenericMethod<System.Int32>(""foo""); Expected #1, Actual #1.
@@ -248,68 +266,76 @@ TestClass.GenericMethod<System.String>(""foo""); Expected #1, Actual #0.",
         [Fact]
         public void CanMockGenericMethodReturningGenericType()
         {
-            MockRepository mocks = new MockRepository();
-            TestClass t = (TestClass)mocks.StrictMock(typeof(TestClass));
-            Expect.Call(t.GenericMethodReturningGenericType<string>("foo")).Return("bar");
-            mocks.ReplayAll();
+            TestClass t = MockRepository.GenerateStrictMockWithRemoting<TestClass>();
+            //TestClass t = (TestClass)MockRepository.GenerateStrictMock(typeof(TestClass));
+
+            t.Expect(x => x.GenericMethodReturningGenericType<string>("foo"))
+                .Return("bar");
+
             Assert.Equal("bar", t.GenericMethodReturningGenericType<string>("foo"));
-            mocks.VerifyAll();
+            t.VerifyAllExpectations();
         }
 
         [Fact]
         public void CanMockGenericMethodWithGenericParam()
         {
-            MockRepository mocks = new MockRepository();
-            TestClass t = (TestClass)mocks.StrictMock(typeof(TestClass));
-            Expect.Call(t.GenericMethodWithGenericParam<string>("foo")).Return("bar");
-            mocks.ReplayAll();
+            TestClass t = MockRepository.GenerateStrictMockWithRemoting<TestClass>();
+            //TestClass t = (TestClass)MockRepository.GenerateStrictMock(typeof(TestClass));
+
+            t.Expect(x => x.GenericMethodWithGenericParam<string>("foo"))
+                .Return("bar");
+
             Assert.Equal("bar", t.GenericMethodWithGenericParam("foo"));
-            mocks.VerifyAll();
+            t.VerifyAllExpectations();
         }
 
         [Fact]
         public void CanMockGenericMethodInGenericClass()
         {
-            MockRepository mocks = new MockRepository();
-            GenericTestClass<string> t = mocks.StrictMock<GenericTestClass<string>>();
-            Expect.Call(t.GenericMethod<int>("foo")).Return(42);
-            mocks.ReplayAll();
+            GenericTestClass<string> t = MockRepository.GenerateStrictMock<GenericTestClass<string>>();
+
+            t.Expect(x => x.GenericMethod<int>("foo"))
+                .Return(42);
+
             Assert.Equal(42, t.GenericMethod<int>("foo"));
-            mocks.VerifyAll();
+            t.VerifyAllExpectations();
         }
 
 		[Fact]
 		public void CanMockAppDomain()
 		{
-			MockRepository mocks = new MockRepository();
-			AppDomain appDomain = mocks.StrictMock<AppDomain>();
-			Expect.Call(appDomain.BaseDirectory).Return("/home/user/ayende");
-			mocks.ReplayAll();
+			AppDomain appDomain = MockRepository.GenerateStrictMock<AppDomain>();
+
+            appDomain.Expect(x => x.BaseDirectory)
+                .Return("/home/user/ayende");
+			
 			Assert.Equal(appDomain.BaseDirectory, "/home/user/ayende" );
-			mocks.VerifyAll();
+            appDomain.VerifyAllExpectations();
 		}
 
 		[Fact]
     	public void NotCallingExpectedMethodWillCauseVerificationError()
     	{
-			MockRepository mocks = new MockRepository();
-			AppDomain appDomain = mocks.StrictMock<AppDomain>();
-			Expect.Call(appDomain.BaseDirectory).Return("/home/user/ayende");
-			mocks.ReplayAll();
-			Assert.Throws<ExpectationViolationException>(@"AppDomain.get_BaseDirectory(); Expected #1, Actual #0.",
-			                                             () => mocks.VerifyAll());
+			AppDomain appDomain = MockRepository.GenerateStrictMock<AppDomain>();
+
+            appDomain.Expect(x => x.BaseDirectory)
+                .Return("/home/user/ayende");
+
+            Assert.Throws<ExpectationViolationException>(
+                @"AppDomain.get_BaseDirectory(); Expected #1, Actual #0.",
+                () => appDomain.VerifyAllExpectations());
     	}
 
         [Fact]
         public void CanMockMethodAcceptingTestClass()
         {
-            MockRepository mocks = new MockRepository();
-            TestClass t1 = mocks.StrictMock<TestClass>();
-            TestClass t2 = mocks.StrictMock<TestClass>();
+            TestClass t1 = MockRepository.GenerateStrictMock<TestClass>();
+            TestClass t2 = MockRepository.GenerateStrictMock<TestClass>();
+
+            t1.Expect(x => x.MethodAcceptingTestClass(t2));
+
             t1.MethodAcceptingTestClass(t2);
-            mocks.ReplayAll();
-            t1.MethodAcceptingTestClass(t2);
-            mocks.VerifyAll();
+            t1.VerifyAllExpectations();
         }
 
         [Fact]
@@ -322,27 +348,26 @@ TestClass.GenericMethod<System.String>(""foo""); Expected #1, Actual #0.",
             try
             {
 
-                MockRepository mocks = new MockRepository();
-                TestClass t1 = mocks.StrictMock<TestClass>();
-                TestClass t2 = mocks.StrictMock<TestClass>();
-                TestClass t3 = mocks.StrictMock<TestClass>();
+                TestClass t1 = MockRepository.GenerateStrictMock<TestClass>();
+                TestClass t2 = MockRepository.GenerateStrictMock<TestClass>();
+                TestClass t3 = MockRepository.GenerateStrictMock<TestClass>();
+                
                 t2Text = t2.ToString();
                 t3Text = t3.ToString();
 
-                t1.MethodAcceptingTestClass(t2);
-                mocks.ReplayAll();
+                t1.Expect(x => x.MethodAcceptingTestClass(t2));
+
                 t1.MethodAcceptingTestClass(t3);
-                mocks.VerifyAll();
+                t1.VerifyAllExpectations();
 
                 Assert.False(true, "Expected ExpectationViolationException");
             }
             catch (ExpectationViolationException ex)
             {
                 string msg =
-                    String.Format("TestClass.MethodAcceptingTestClass({0}); Expected #0, Actual #1.\r\n" +
+                    string.Format("TestClass.MethodAcceptingTestClass({0}); Expected #0, Actual #1.\r\n" +
                                   "TestClass.MethodAcceptingTestClass({1}); Expected #1, Actual #0.",
-                                  t3Text,
-                                  t2Text);
+                                  t3Text, t2Text);
 
                 Assert.Equal(msg, ex.Message);
             }
@@ -351,24 +376,22 @@ TestClass.GenericMethod<System.String>(""foo""); Expected #1, Actual #0.",
         [Fact]
         public void StrictMockGetTypeReturnsMockedType()
         {
-            MockRepository mocks = new MockRepository();
-            TestClass t = mocks.StrictMock<TestClass>();
+            TestClass t = MockRepository.GenerateStrictMock<TestClass>();
             Assert.Same(typeof(TestClass), t.GetType());
         }
 
         [Fact]
         public void StrictMockGetHashCodeWorks()
         {
-            MockRepository mocks = new MockRepository();
-            TestClass t = mocks.StrictMock<TestClass>();
+            TestClass t = MockRepository.GenerateStrictMock<TestClass>();
             t.GetHashCode();
         }
 
         [Fact]
         public void StrictMockToStringReturnsDescription()
         {
-            MockRepository mocks = new MockRepository();
-            TestClass t = mocks.StrictMock<TestClass>();
+            TestClass t = MockRepository.GenerateStrictMock<TestClass>();
+
             int hashCode = t.GetHashCode();
             string toString = t.ToString();
             Assert.Equal(String.Format("RemotingMock_{0}<TestClass>", hashCode), toString);
@@ -377,8 +400,7 @@ TestClass.GenericMethod<System.String>(""foo""); Expected #1, Actual #0.",
         [Fact]
         public void StrictMockEquality()
         {
-            MockRepository mocks = new MockRepository();
-            TestClass t = mocks.StrictMock<TestClass>();
+            TestClass t = MockRepository.GenerateStrictMock<TestClass>();
 
             Assert.False(t.Equals(null));
             Assert.False(t.Equals(42));

@@ -35,7 +35,6 @@ using Rhino.Mocks.Exceptions;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	
 	public class FieldProblem_JohnOpincar
 	{
 		public interface IDaSchedulerView
@@ -43,24 +42,20 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 			DateTime DateOf { set; }
 		}
 
-
 		[Fact]
 		public void CanGetExpectationExceptionFromPropertySetter()
 		{
 		    Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-			MockRepository m_mocks;
-			IDaSchedulerView m_view;
-			m_mocks = new MockRepository();
-			m_view = (IDaSchedulerView)
-			m_mocks.StrictMock(typeof(IDaSchedulerView));
+			
+            IDaSchedulerView m_view = (IDaSchedulerView)MockRepository.GenerateStrictMock(typeof(IDaSchedulerView));
 //			DaSchedulerPresenter presenter = new DaSchedulerPresenter(m_view, new TestScheduleLoader(0)); 
-			m_view.DateOf = new DateTime(2006,8,8); 
-			//LastCall.IgnoreArguments(); 
-			m_mocks.ReplayAll(); 
+
+            m_view.Expect(x => x.DateOf = new DateTime(2006, 8, 8));
+			
 			//presenter.Initialize(); 
-			Assert.Throws<ExpectationViolationException>(
-				"IDaSchedulerView.set_DateOf(08/08/2006 00:00:00); Expected #1, Actual #0.",
-				() => m_mocks.VerifyAll());
+            Assert.Throws<ExpectationViolationException>(
+                "IDaSchedulerView.set_DateOf(08/08/2006 00:00:00); Expected #1, Actual #0.",
+                () => m_view.VerifyAllExpectations());
 		}
 	}
 }

@@ -26,90 +26,102 @@
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endregion
 
+using System;
+using Xunit;
+
 namespace Rhino.Mocks.Tests
 {
-	using System;
-	using Xunit;
-
-
 	public class ExpectTests : IDisposable
 	{
-		private MockRepository mocks;
 		private IDemo demo;
 
 		public ExpectTests()
 		{
-			mocks = new MockRepository();
-			demo = mocks.StrictMock(typeof(IDemo)) as IDemo;
+			demo = MockRepository.GenerateStrictMock(typeof(IDemo)) as IDemo;
 		}
 
 		public void Dispose()
 		{
-			mocks.VerifyAll();
+            demo.VerifyAllExpectations();
 		}
 
 		[Fact]
 		public void CanExpect()
 		{
-			Expect.On(demo).Call(demo.Prop).Return("Ayende");
-			mocks.ReplayAll();
+            demo.Expect(x => x.Prop)
+                .Return("Ayende");
+
 			Assert.Equal("Ayende", demo.Prop);
 		}
 
 		[Fact]
 		public void PassNonMock()
 		{
-			try
-			{
-				Assert.Throws<InvalidOperationException>("The object 'System.Object' is not a mocked object.",
-														 () => Expect.On(new object()));
-			}
-			finally
-			{
-				mocks.ReplayAll(); //for the tear down
-			}
-
+            Assert.Throws<InvalidOperationException>(
+                "The object 'System.Object' is not a mocked object.",
+                () => Expect.On(new object()));
 		}
 
 		[Fact]
 		public void CanUseAnonymousDelegatesToCallVoidMethods()
 		{
-			Expect.Call(delegate { demo.VoidNoArgs(); }).Throw(new ArgumentNullException());
-			mocks.ReplayAll();
+            demo.Expect(x => x.VoidNoArgs())
+                .Throw(new ArgumentNullException());
+
 			Assert.Throws<ArgumentNullException>(demo.VoidNoArgs);
 		}
 
 		[Fact]
 		public void CanUseAnonymousDelegatesToCallVoidMethods_WithoutAnonymousDelegate()
 		{
-			Expect.Call(demo.VoidNoArgs).Throw(new ArgumentNullException());
-			mocks.ReplayAll();
+            demo.Expect(x => x.VoidNoArgs())
+                .Throw(new ArgumentNullException());
+
 			Assert.Throws<ArgumentNullException>(demo.VoidNoArgs);
 		}
+
+        [Fact]
+        public void Can_Swap_Expect_In_And_Out_With_AAA_Syntax()
+        {
+            var mock = MockRepository.GenerateMock<IDemo>();
+
+            mock.BackToRecord();
+            Expect.Call(mock.ReturnIntNoArgs())
+                .Return(2);
+
+            mock.Replay();
+
+            var value = mock.ReturnIntNoArgs();
+
+            Assert.Equal(2, value);
+            mock.VerifyAllExpectations();
+        }
 
 		[Fact]
 		public void ExpectCallNormal()
 		{
-			Expect.Call(demo.Prop).Return("ayende");
-			mocks.ReplayAll();
+            demo.Expect(x => x.Prop)
+                .Return("ayende");
+			
 			Assert.Equal("ayende", demo.Prop);
 		}
 
 		[Fact]
 		public void ExpectWhenNoCallMade()
 		{
-			Assert.Throws<InvalidOperationException>(
-				"The object is not a mock object that belong to this repository.",
-				() => Expect.Call<object>(null));
-			mocks.Replay(demo); //for the tear down
+            Assert.Throws<InvalidOperationException>(
+                "The object is not a mock object that belong to this repository.",
+                () => Expect.Call<object>(null));
 		}
 
 		[Fact]
 		public void ExpectOnReplay()
 		{
-			Expect.Call(demo.Prop).Return("ayende");
-			mocks.ReplayAll();
-			Assert.Equal("ayende", demo.Prop);
+            demo.Expect(x => x.Prop)
+                .Return("ayende");
+			
+            Assert.Equal("ayende", demo.Prop);
+
 			Assert.Throws<InvalidOperationException>(
 				"Invalid call, the last call has been used or no call has been made (make sure that you are calling a virtual (C#) / Overridable (VB) method).",
 				() => Expect.Call<object>(null));

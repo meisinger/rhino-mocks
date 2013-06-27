@@ -1,6 +1,5 @@
-#if DOTNET35
-using Xunit;
 
+using Xunit;
 
 namespace Rhino.Mocks.Tests
 {
@@ -51,4 +50,3 @@ namespace Rhino.Mocks.Tests
 
 	}
 }
-#endif

@@ -1,3 +1,4 @@
+
 namespace Rhino.Mocks.Tests
 {
 	using System;

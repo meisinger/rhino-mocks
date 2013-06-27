@@ -32,40 +32,32 @@ using Rhino.Mocks.Constraints;
 
 namespace Rhino.Mocks.Constraints
 {
-	/*
-	 * class: List
-	 * 
-	 * Constraints for dealing with lists.
-	 * 
-	 */ 
-	/// <summary>
-	/// Central location for constraints about lists and collections
-	/// </summary>
+    /// <summary>
+    /// Provides access to common constraints concerning lists and collections
+    /// </summary>
 	public static class List
 	{
-
-		/*
-		 * Method: IsIn
-		 * 
-		 * Determines whether the specified obj is in the parameter.
-		 * The parameter must be IEnumerable.
-		 */ 
 		/// <summary>
 		/// Determines whether the specified obj is in the parameter.
 		/// The parameter must be IEnumerable.
 		/// </summary>
-		/// <param name="obj">Obj.</param>
+		/// <param name="item">Obj.</param>
 		/// <returns></returns>
-		public static AbstractConstraint IsIn(object obj)
+		public static AbstractConstraint IsIn(object item)
 		{
-			return new IsIn(obj);
+			return new IsIn(item);
 		}
 
-		/*
-		 * Method: OneOf
-		 * 
-		 * Determines whatever the parameter is in the collection.
-		 */ 
+        ///<summary>
+        /// Determines that all elements of the specified collection are in the the parameter collection 
+        ///</summary>
+        ///<param name="collection">The collection to compare against</param>
+        ///<returns>The constraint which should be applied to the list parameter.</returns>
+        public static AbstractConstraint ContainsAll(IEnumerable collection)
+        {
+            return new ContainsAll(collection);
+        }
+
 		/// <summary>
 		/// Determines whatever the parameter is in the collection.
 		/// </summary>
@@ -74,11 +66,6 @@ namespace Rhino.Mocks.Constraints
 			return new OneOf(collection);
 		}
 
-		/*
-		 * Method Equal
-		 * Determines that the parameter collection is identical to the specified collection
-		 * This is done by iterating the collections and comparing each element.
-		 */ 
 		/// <summary>
 		/// Determines that the parameter collection is identical to the specified collection
 		/// </summary>
@@ -114,20 +101,6 @@ namespace Rhino.Mocks.Constraints
         public static AbstractConstraint Element<T>(T key, AbstractConstraint constraint)
         {
             return new KeyedListElement<T>(key, constraint);
-        }
-
-        /*
-         * Method ContainsAll
-         * Determines that all elements of the specified collection are in the the parameter collection 
-         */
-        ///<summary>
-        /// Determines that all elements of the specified collection are in the the parameter collection 
-        ///</summary>
-        ///<param name="collection">The collection to compare against</param>
-        ///<returns>The constraint which should be applied to the list parameter.</returns>
-        public static AbstractConstraint ContainsAll(IEnumerable collection)
-        {
-            return new ContainsAll(collection);
         }
 	}
 }

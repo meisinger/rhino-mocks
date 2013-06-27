@@ -261,7 +261,6 @@
     <Compile Include="MethodRecorders\UnorderedMethodRecorder.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Mocker.cs" />
     <Compile Include="MockRepository.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -275,17 +274,11 @@
     <Compile Include="Utilities\ReturnValueUtil.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="With.cs" />
     <Compile Include="CompatabilityWith2.0.cs" />
     <Compile Include="__ProtectAttribute.cs" />
     <None Include="..\ayende-open-source.snk">
       <Link>ayende-open-source.snk</Link>
     </None>
-    <None Include="Diagram.cd" />
-    <None Include="Diagrams\Constraints.cd" />
-    <None Include="Diagrams\Expectations.cd" />
-    <None Include="Diagrams\MethodRecorders.cd" />
-    <None Include="Diagrams\MockStates.cd" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />

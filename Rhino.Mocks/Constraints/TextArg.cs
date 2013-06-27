@@ -3,13 +3,15 @@ using System.Text;
 
 namespace Rhino.Mocks.Constraints
 {
-	/// <summary>
-	/// Provides access to the constraintes defined in the class <see cref="Text"/> to be used in context
-	/// with the <see cref="Arg"/> syntax.
-	/// </summary>
+    /// <summary>
+    /// Provides access to the constraints defined in <see cref="Text"/>
+    /// to be used in context with the <see cref="Arg"/> syntax
+    /// </summary>
 	public class TextArg
 	{
-		internal TextArg() { ;}
+		internal TextArg() 
+        {
+        }
 
 		/// <summary>
 		/// Constrain the argument to starts with the specified string
@@ -49,13 +51,13 @@ namespace Rhino.Mocks.Constraints
 		}
 
 		/// <summary>
-		/// Throws NotSupportedException. Don't use Equals to define constraints. Use Equal instead.
+		/// Throws InvalidOperationException. Use Equal instead.
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <returns></returns>
 		public override bool Equals(object obj)
 		{
-			throw new InvalidOperationException("Don't use Equals() to define constraints, use Equal() instead");
+            throw new InvalidOperationException("\"Equals\" is not supported for constraints. Use \"Equal\" instead.");
 		}
 
 		/* implement GetHashCode to avoid compiler warning */

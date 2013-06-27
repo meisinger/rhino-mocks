@@ -36,16 +36,16 @@ using Rhino.Mocks.Interfaces;
 
 namespace Rhino.Mocks.Utilities
 {
-	/// <summary>
-	/// Utility class for working with method calls.
-	/// </summary>
+    /// <summary>
+    /// Utility class for dealing with methods
+    /// </summary>
 	public static class MethodCallUtil
 	{
 		/// <summary>
 		/// Delegate to format the argument for the string representation of
 		/// the method call.
 		/// </summary>
-		public delegate string FormatArgumnet(Array args, int i);
+		public delegate string FormatArgumnet(Array args, int index);
 
 		/// <summary>
 		/// Return the string representation of a method call and its arguments.
@@ -60,32 +60,38 @@ namespace Rhino.Mocks.Utilities
 			Validate.IsNotNull(format, "format");
 			Validate.IsNotNull(method, "method");
 			Validate.IsNotNull(args, "args");
-			StringBuilder sb = new StringBuilder();
-			sb.Append(method.DeclaringType.Name).Append(".").Append(method.Name);
-			if (invocation != null)
+
+			StringBuilder buffer = new StringBuilder()
+                .Append(method.DeclaringType.Name)
+                .Append(".")
+                .Append(method.Name);
+
+			if (invocation != null && method.IsGenericMethod)
+            {
+                Type[] arguments = invocation.GenericArguments;
+
+                buffer.Append("<");
+                int argumentLength = arguments.Length;
+                for (int i = 0; i < argumentLength; i++)
+                {
+                    buffer.Append(arguments[i]);
+                    if (i < (argumentLength - 1))
+                        buffer.Append(", ");
+                }
+                buffer.Append(">");
+            }
+            
+			buffer.Append("(");
+			int parameterLength = method.GetParameters().Length;
+			for (int i = 0; i < parameterLength; i++)
 			{
-				if (method.IsGenericMethod)
-				{
-					sb.Append("<");
-					foreach (Type genericArgument in invocation.GenericArguments)
-					{
-						sb.Append(genericArgument);
-						sb.Append(", ");
-					}
-					sb.Remove(sb.Length - 2, 2); //remove last ", " 
-					sb.Append(">");
-				}
+				buffer.Append(format(args, i));
+				if (i < parameterLength - 1)
+					buffer.Append(", ");
 			}
-			sb.Append("(");
-			int numberOfParameters = method.GetParameters().Length;
-			for (int i = 0; i < numberOfParameters; i++)
-			{
-				sb.Append(format(args, i));
-				if (i < numberOfParameters - 1)
-					sb.Append(", ");
-			}
-			sb.Append(");");
-			return sb.ToString();
+			buffer.Append(");");
+
+			return buffer.ToString();
 		}
 
 		/// <summary>
@@ -100,45 +106,47 @@ namespace Rhino.Mocks.Utilities
 			return StringPresentation(invocation, new FormatArgumnet(DefaultFormatArgument), method, args);
 		}
 
-		#region Private Methods
-
-		private static string DefaultFormatArgument(Array args, int i)
+		private static string DefaultFormatArgument(Array args, int index)
 		{
-			if (args.Length <= i)
+			if (args.Length <= index)
 				return "missing parameter";
-			object arg = args.GetValue(i);
+
+			object arg = args.GetValue(index);
 			if (arg is Array)
 			{
 				Array arr = (Array) arg;
-				StringBuilder sb = new StringBuilder();
-				sb.Append('[');
+				StringBuilder buffer = new StringBuilder();
+				buffer.Append('[');
 				for (int j = 0; j < arr.Length; j++)
 				{
-					sb.Append(DefaultFormatArgument(arr, j));
+					buffer.Append(DefaultFormatArgument(arr, j));
 					if (j < arr.Length - 1)
-						sb.Append(", ");
+						buffer.Append(", ");
 				}
-				sb.Append("]");
-				return sb.ToString();
+				buffer.Append("]");
+
+				return buffer.ToString();
 			}
+
 			if (arg is string)
-				return "\"" + arg.ToString() + "\"";
+				return string.Format("\"{0}\"", arg);
 			else if (arg == null)
 				return "null";
 			else
 				return MockingSafeToString(arg);
 		}
 
-		// we need to ensure that we won't re-eenterant into the repository
-		// if the parameter is a mock object
+        /// <summary>
+        /// We need to ensure that we won't reentrant into the
+        /// repository if the parameter is a mock object
+        /// </summary>
 		private static string MockingSafeToString(object arg)
 		{
 			IMockedObject mock = arg as IMockedObject;
-			if(mock==null)
+			if (mock == null)
 				return arg.ToString();
+
 			return mock.GetType().BaseType.FullName;
 		}
-
-		#endregion
 	}
 }

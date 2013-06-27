@@ -240,7 +240,8 @@ namespace Rhino.Mocks.Impl
 		/// <returns>IRepeat that defines how many times the method will return this value</returns>
 		public IMethodOptions<T> Return(T objToReturn)
 		{
-			expectation.ReturnValue = objToReturn;
+            expectation.ReturnValue = objToReturn;
+            expectation.AllowTentativeReturn = false;
 			return this;
 		}
 
@@ -506,6 +507,7 @@ namespace Rhino.Mocks.Impl
 			//the method under consideration has a return value;
 			expectation.ExceptionToThrow = new InvalidOperationException("This is a method that should not be called");
 			expectation.RepeatableOption = RepeatableOption.Never;
+            expectation.AllowTentativeReturn = false;
 			repository.Replayer.AddToRepeatableMethods(proxy, expectation.Method, expectation);
 			return this;
 		}

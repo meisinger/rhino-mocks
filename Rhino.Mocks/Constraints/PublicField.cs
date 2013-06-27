@@ -3,23 +3,11 @@ using Rhino.Mocks.Constraints;
 
 namespace Rhino.Mocks.Constraints
 {
-    /*
-     * Class: PublicField
-     * 
-     * Constraints for dealing with object's public fields
-     */
     /// <summary>
-    /// Central location for constraints for object's public fields
-	/// </summary>
+    /// Provides access to common constraints concerning an objects public fields
+    /// </summary>
 	public static class PublicField
 	{
-        /*
-         * Method: Value
-         * 
-         * Determines that the parameter has a public field with the specified value
-         * 
-         */
-
         /// <summary>
 		/// Constrains the parameter to have a public field with the specified value
 		/// </summary>
@@ -64,12 +52,6 @@ namespace Rhino.Mocks.Constraints
             return new PublicFieldConstraint(declaringType, publicFieldName, publicFieldConstraint);
         }
 
-        /*
-         * Method: IsNull
-         * 
-         * Determines that the parameter has a public field with null value
-         * 
-         */
         /// <summary>
         /// Determines whether the parameter has the specified public field and that it is null.
 		/// </summary>
@@ -91,12 +73,6 @@ namespace Rhino.Mocks.Constraints
             return new PublicFieldIs(declaringType, publicFieldName, null);
         }
 
-        /*
-         * Method: IsNotNull
-         * 
-         * Determines that the parameter has a public field with non-null value
-         * 
-         */
         /// <summary>
         /// Determines whether the parameter has the specified public field and that it is not null.
 		/// </summary>

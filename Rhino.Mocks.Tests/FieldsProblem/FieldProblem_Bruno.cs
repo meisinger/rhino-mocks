@@ -38,17 +38,16 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         void SomeMethod();
     }
 
-    
     public class ReproFixture
     {
         [Fact]
         public void TestMethod1()
         {
             ServiceDomain.Enter(new ServiceConfig());
-            MockRepository mocks = new MockRepository();
-            ISomething something = (ISomething)mocks.StrictMock(typeof(ISomething));
-            mocks.ReplayAll();
-            mocks.VerifyAll();
+
+            ISomething something = (ISomething)MockRepository.GenerateStrictMock(typeof(ISomething));
+            something.VerifyAllExpectations();
+
             ContextUtil.SetAbort();
             ServiceDomain.Leave();
         }

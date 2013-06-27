@@ -56,27 +56,26 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
 		}
 	}
-
-
-	
+    
 	public class FieldProblem_Phil
 	{
-
-		[Fact]
+        [Fact]
 		public void VerifyingThatEventWasAttached()
 		{
-			MockRepository mocks = new MockRepository();
-			IWithEvent events = (IWithEvent)mocks.StrictMock(typeof(IWithEvent));
-			events.Load += null; //ugly syntax, I know, but the only way to get this to work
-			IEventRaiser raiser = LastCall.IgnoreArguments().GetEventRaiser();
-			mocks.ReplayAll();
+            IWithEvent events = (IWithEvent)MockRepository.GenerateStrictMock(typeof(IWithEvent));
 
+            IEventRaiser raiser = events
+                .Expect(x => x.Load += null)
+                .IgnoreArguments()
+                .GetEventRaiser();
+			
 			EventConsumer consumerMock = new EventConsumer(events);
-			//Next line invokes Load event.
+			
+            //Next line invokes Load event.
 			raiser.Raise(this, EventArgs.Empty);
-			mocks.VerifyAll();
-
+			
 			Assert.True(consumerMock.OnLoadCalled);
+            events.VerifyAllExpectations();
 		}
 	}
 }

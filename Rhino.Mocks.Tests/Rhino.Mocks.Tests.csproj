@@ -129,65 +129,67 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackToRecord.cs" />
-    <Compile Include="Callbacks\CallbackTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CallOriginalMethodTests.cs" />
-    <Compile Include="ComplexOrderingTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ArgConstraintTests.cs" />
-    <Compile Include="Constraints\ComparableConstraintsTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Constraints\ConstraintTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Constraints\ContraintsErrorConditions.cs">
+    <Compile Include="Callbacks\CallbackTests.cs" />
+    <Compile Include="CallOriginalMethodTests.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Constraints\AllPropertiesMatchConstraintTest.cs" />
-    <Compile Include="Constraints\ListConstraintTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Constraints\ReflectionConstraint.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Constraints\StringConstraintsTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FieldsProblem\FieldProblem_Alex.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_Bill.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_JPBoodhoo.cs" />
-    <Compile Include="MethodProblems\MethodProblem_JPBoodhoo.cs" />
-    <Compile Include="PartialMockTestsAAA.cs" />
-    <Compile Include="MultiMocksWithAAA.cs" />
+    <Compile Include="Constraints\ComparableConstraintsTests.cs" />
+    <Compile Include="Constraints\ConstraintTests.cs" />
+    <Compile Include="Constraints\ContraintsErrorConditions.cs" />
+    <Compile Include="Constraints\ListConstraintTests.cs" />
+    <Compile Include="Constraints\ReflectionConstraint.cs" />
+    <Compile Include="Constraints\StringConstraintsTests.cs" />
     <Compile Include="Coverage.cs" />
     <Compile Include="CustomAttributesOnMocks.cs" />
+    <Compile Include="DoHanlderTests.cs" />
     <Compile Include="DoNotExpectTests.cs" />
+    <Compile Include="DotNet2Tests.cs" />
     <Compile Include="DotNet35Tests.cs" />
+    <Compile Include="DynamicMockTests.cs" />
+    <Compile Include="Expectations\AbstractExpectationTests.cs" />
+    <Compile Include="Expectations\AnyArgsExpectationTests.cs" />
+    <Compile Include="Expectations\ArgsEqualTests.cs" />
+    <Compile Include="Expectations\CallbackExpectationTests.cs" />
+    <Compile Include="Expectations\ConstraintExpectationTests.cs" />
+    <Compile Include="ExpectTests.cs" />
     <Compile Include="ExtendingRhinoMocks.cs" />
     <Compile Include="ExtendingRhinoMocks2.cs" />
+    <Compile Include="FieldsProblem\ClassThatImplementsGetHashCodeAndEquals.cs" />
     <Compile Include="FieldsProblem\FieldProblem_ Sean.cs" />
     <Compile Include="FieldsProblem\FieldProblem_75_MockingExpcetion.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Adam.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Aharon.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="FieldsProblem\FieldProblem_Alex.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Alexey.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Andreas.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Andrew.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Andy.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Avi.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_AviOrdering.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_BackToMockWithRepeatableMethods.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_BackToRecordWithDynamicMocks.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Benjamin.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Bill.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Blaz.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Brian.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Bruce.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Bruno.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Chad.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Chompers.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Christian.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Daniel.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Dave.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_David.cs" />
     <Compile Include="FieldsProblem\FieldProblem_DavidG.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Derek.cs" />
     <Compile Include="FieldsProblem\FieldProblem_dyowee.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Eduardo.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Entropy.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Eric.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Ernst.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Fabian.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Greg.cs" />
@@ -196,23 +198,33 @@
     <Compile Include="FieldsProblem\FieldProblem_ikriv42.cs" />
     <Compile Include="FieldsProblem\FieldProblem_James.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Jeffrey.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_Jodran.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Joe.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_JohanIndexProp.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_JohnOpincar.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Joshua.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_JPBoodhoo.cs" />
     <Compile Include="FieldsProblem\FieldProblem_JudahG.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Keith.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Kevin.cs" />
     <Compile Include="FieldsProblem\FieldProblem_KevinM.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Kuchia.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Kythorn.cs" />
     <Compile Include="FieldsProblem\FieldProblem_LAFAY.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Lee.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_leftend.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Liang.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Libardo.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Lopez.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Luke.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Mads.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_leftend.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Marcus.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Mark.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_MarkHildreth.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Matt.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Maurice.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Michael.cs" />
     <Compile Include="FieldsProblem\FieldProblem_MichaelC.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_MichaelR.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Mike.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Mithresh.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Naraga.cs" />
@@ -221,31 +233,13 @@
     <Compile Include="FieldsProblem\FieldProblem_oblomov.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Oliver.cs" />
     <Compile Include="FieldsProblem\FieldProblem_OrenEl.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Owen.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Phil.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Rabashani.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Raju.cs" />
     <Compile Include="FieldsProblem\FieldProblem_RepeatsWithGenerate.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Rob.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Robert.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_Kevin.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_Liang.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_Luke.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_MichaelR.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_Owen.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_Avi.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_BackToMockWithRepeatableMethods.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_BackToRecordWithDynamicMocks.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_Blaz.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_Brian.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_Bruce.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_Daniel.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_David.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_Entropy.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_Eric.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_JohanIndexProp.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_JohnOpincar.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_Matt.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_Michael.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_Phil.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Roger.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Ross.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Roy.cs" />
@@ -253,6 +247,7 @@
     <Compile Include="FieldsProblem\FieldProblem_SamW.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Sander.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Shane.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_SpookyET.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Stephan.cs" />
     <Compile Include="FieldsProblem\FieldProblem_StevenS.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Thierry.cs" />
@@ -262,149 +257,60 @@
     <Compile Include="FieldsProblem\FieldProblem_Wendy.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Will.cs" />
     <Compile Include="FieldsProblem\FieldsProblem_Royston.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_MarkHildreth.cs" />
     <Compile Include="FieldsProblem\GenericMethodWithOutDecimalParameterTest.cs" />
+    <Compile Include="FieldsProblem\InterfaceInheritance.cs" />
     <Compile Include="FieldsProblem\SetupResultAndIgnoreArguments.cs" />
+    <Compile Include="FieldsProblem\UsingEvents.cs" />
     <Compile Include="GenericMethods.cs" />
-    <Compile Include="MockingDelegatesTests.cs" />
-    <Compile Include="DoHanlderTests.cs" />
-    <Compile Include="DotNet2Tests.cs" />
-    <Compile Include="DynamicMockTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Expectations\AbstractExpectationTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Expectations\AnyArgsExpectationTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Expectations\ArgsEqualTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Expectations\CallbackExpectationTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Expectations\ConstraintExpectationTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ExpectTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FieldsProblem\ClassThatImplementsGetHashCodeAndEquals.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FieldsProblem\FieldProblem_AviOrdering.cs" />
-    <Compile Include="FieldsProblem\FieldProblem_Bruno.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FieldsProblem\FieldProblem_Marcus.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FieldsProblem\FieldProblem_SpookyET.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FieldsProblem\InterfaceInheritance.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FieldsProblem\UsingEvents.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="HandlingProperties.cs" />
-    <Compile Include="IDemo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Impl\MockedObjectsComparerTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Impl\RangeTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Impl\RecordMockStateTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Impl\ReplayMockStateTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Impl\ValidateTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Impl\VerifiedMockStateTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IndexerTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IntegrationTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="LastCallTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MethodRecorders\IMethodRecorderTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MethodRecorders\MethodRecorderBaseTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MethodRecorders\OrderedMethodRecorderTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MethodRecorders\ProxyMethodExpectationTripletTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MethodRecorders\ProxyMethodPairTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MethodRecorders\RecorderChangerTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MethodRecorders\UnorderedMethodRecorderTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="IDemo.cs" />
+    <Compile Include="Impl\MockedObjectsComparerTests.cs" />
+    <Compile Include="Impl\RangeTests.cs" />
+    <Compile Include="Impl\RecordMockStateTests.cs" />
+    <Compile Include="Impl\ReplayMockStateTests.cs" />
+    <Compile Include="Impl\ValidateTests.cs" />
+    <Compile Include="Impl\VerifiedMockStateTests.cs" />
+    <Compile Include="IndexerTests.cs" />
+    <Compile Include="IntegrationTests.cs" />
+    <Compile Include="MethodProblems\MethodProblem_JPBoodhoo.cs" />
+    <Compile Include="MethodRecorders\IMethodRecorderTests.cs" />
+    <Compile Include="MethodRecorders\MethodRecorderBaseTests.cs" />
+    <Compile Include="MethodRecorders\OrderedMethodRecorderTests.cs" />
+    <Compile Include="MethodRecorders\ProxyMethodExpectationTripletTests.cs" />
+    <Compile Include="MethodRecorders\ProxyMethodPairTests.cs" />
+    <Compile Include="MethodRecorders\RecorderChangerTests.cs" />
+    <Compile Include="MethodRecorders\UnorderedMethodRecorderTests.cs" />
     <Compile Include="MockingAbstractClass.cs" />
-    <Compile Include="MockingClassesTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="MockingClassesTests.cs" />
+    <Compile Include="MockingDelegatesTests.cs" />
     <Compile Include="MockingGenericInterfaces.cs" />
-    <Compile Include="MockRepositoryTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="MockRepositoryTests.cs" />
     <Compile Include="MockWithRefAndOutParams.cs" />
     <Compile Include="MultiMocks.cs" />
-    <Compile Include="OrderTest.cs" />
+    <Compile Include="MultiMocksWithAAA.cs" />
     <Compile Include="PartialMockTests.cs" />
+    <Compile Include="PartialMockTestsAAA.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertySetterFixture.cs" />
     <Compile Include="RecordingMocks.cs" />
     <Compile Include="RecursiveMocks.cs" />
-    <Compile Include="RemotingMockTests.cs" />
-    <Compile Include="RecordReplaySyntax\RecordPlaybackTests.cs" />
     <Compile Include="RefOutParameters.cs" />
+    <Compile Include="RemotingMockTests.cs" />
     <Compile Include="Remoting\ContextSwitcher.cs" />
     <Compile Include="Remoting\ContextSwitchTests.cs" />
     <Compile Include="Remoting\IDemo.cs" />
     <Compile Include="Remoting\RemotableDemoClass.cs" />
-    <Compile Include="RhinoMockTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SetupResultTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="RhinoMockTests.cs" />
+    <Compile Include="SetupResultTests.cs" />
     <Compile Include="StubAllTest.cs" />
     <Compile Include="StubTest.cs" />
     <Compile Include="TestInfo.cs" />
-    <Compile Include="Throws.cs" />
     <Compile Include="TraceWriterWithStackTraceExpectationWriterFixture.cs" />
+    <Compile Include="UsingComObject.cs" />
+    <Compile Include="Utilities\MethodCallTests.cs" />
+    <Compile Include="Utilities\ReturnValueUtilTests.cs" />
     <Compile Include="VerifyTests.cs" />
     <Compile Include="WhenCalledTests.cs" />
-    <Compile Include="WithTestFixture.cs" />
-    <Compile Include="UsingComObject.cs" />
-    <Compile Include="Utilities\MethodCallTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Utilities\ReturnValueUtilTests.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rhino.Mocks.Tests.Model\Rhino.Mocks.Tests.Model.csproj">

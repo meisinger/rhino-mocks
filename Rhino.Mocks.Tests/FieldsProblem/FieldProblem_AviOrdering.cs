@@ -33,10 +33,8 @@ using Xunit;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-    
     public class FieldProblem_AviOrdering
     {
-
         public interface ISumbition
         {
             long UserID { get; set; }
@@ -71,41 +69,37 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
                 submition.Save();
             }
-
         }
 
         [Fact]
         public void SubmitDataToDB()
         {
             //Setup a mock view and ISumbition
-            MockRepository mocks = new MockRepository();
-            IView myMockView = (IView) mocks.DynamicMock(typeof (IView));
-            ISumbition myMockSubmition = (ISumbition) mocks.DynamicMock(typeof (ISumbition));
+            IView myMockView = (IView)MockRepository.GenerateDynamicMock(typeof(IView));
+            ISumbition myMockSubmition = (ISumbition)MockRepository.GenerateDynamicMock(typeof(ISumbition));
 
             //Record expectations
-            SetupResult.For(myMockView.UserID).Return(3105596L);
-            SetupResult.For(myMockView.Name).Return("Someone");
-            SetupResult.For(myMockView.Address).Return("Somewhere");
+            myMockView.Expect(x => x.UserID)
+                .Return(3105596L);
 
-            using (mocks.Ordered())
-            {
-                using (mocks.Unordered())
-                {
-                    myMockSubmition.Name = "Someone";
-                    myMockSubmition.Address = "Somewhere";
-                    myMockSubmition.UserID = 3105596L;
-                }
-                myMockSubmition.Save();
-            }
-            
-            //setup the present
-            mocks.ReplayAll();
+            myMockView.Expect(x => x.Name)
+                .Return("Someone");
+
+            myMockView.Expect(x => x.Address)
+                .Return("Somewhere");
+
+            myMockSubmition.Name = "Someone";
+            myMockSubmition.Address = "Somewhere";
+            myMockSubmition.UserID = 3105596L;
+
+            myMockSubmition.Expect(x => x.Save());
+
             
             Presneter myPresenter = new Presneter(myMockView, myMockSubmition);
             myPresenter.Sumbit();
-            
-            mocks.VerifyAll();
+
+            myMockSubmition.VerifyAllExpectations();
+            myMockView.VerifyAllExpectations();
         }
     }
-
 }

@@ -1,11 +1,9 @@
-#if DOTNET35
 using System;
 using System.ComponentModel;
 using Xunit;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-    
     public class FieldProblem_Adam
     {
         public interface IFoo
@@ -13,7 +11,6 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             string Str { get; set; }
             event EventHandler Event;
         }
-
 
         [Fact]
         public void ShouldRaiseEventWhenEverPropIsSet()
@@ -37,4 +34,3 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         }
     }
 }
-#endif

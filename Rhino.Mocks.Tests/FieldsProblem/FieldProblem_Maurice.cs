@@ -5,14 +5,12 @@ using Xunit;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	
 	public class FieldProblem_Maurice
 	{
 		[Fact]
 		public void TwoGenericParametersWithConstraints()
 		{
-			MockRepository mocks = new MockRepository();
-			IDemo2 demo = mocks.StrictMock<IDemo2>();
+            IDemo2 demo = MockRepository.GenerateStrictMock<IDemo2>();
 			Assert.NotNull(demo);
 		}
 	}

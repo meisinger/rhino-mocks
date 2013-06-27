@@ -33,17 +33,14 @@ using Xunit;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-    
     public class FieldProblem_Avi
     {
         [Fact]
         public void CallNonThrowingProtectedCtor()
         {
-            MockRepository mocks = new MockRepository();
-
-            ClassWithThrowingCtor mockClass1 = (ClassWithThrowingCtor)mocks.StrictMock(typeof(ClassWithThrowingCtor), CallOptions.DontCallCtor);
+            ClassWithThrowingCtor mockClass1 = (ClassWithThrowingCtor)MockRepository
+                .GenerateStrictMock(typeof(ClassWithThrowingCtor), CallOptions.DontCallCtor);
         }
-
     }
 
     public enum CallOptions
@@ -70,35 +67,25 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void createDynamicMockOfGeneric()
         {
-            MockRepository mocks = new MockRepository();
-            genericClass<int> mockA =
-                mocks.DynamicMock<genericClass<int>>();
-            mocks.Replay(mockA);
+            genericClass<int> mockA = MockRepository.GenerateDynamicMock<genericClass<int>>();
         }
 
         [Fact]
         public void TestMockOnGenericWithDifferentTypes()
         {
-            MockRepository mocks = new MockRepository();
-            IComparable<int> mock1 = mocks.StrictMock<IComparable<int>>();
-            IComparable<bool> mock2 = mocks.StrictMock<IComparable<bool>>();
+            IComparable<int> mock1 = MockRepository.GenerateStrictMock<IComparable<int>>();
+            IComparable<bool> mock2 = MockRepository.GenerateStrictMock<IComparable<bool>>();
         }
 
         [Fact]
         public void createDynamicMockOfGenericAgain()
         {
-            MockRepository mocks = new MockRepository();
-            genericClass<int> mockA =
-                mocks.DynamicMock<genericClass<int>>();
+            genericClass<int> mockA = MockRepository.GenerateDynamicMock<genericClass<int>>();
         }
-
 
         public class genericClass<T>
         {
             public T Field;
         }
-
     }
-
 }
-

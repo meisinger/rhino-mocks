@@ -5,15 +5,13 @@ using Xunit;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
-	
 	public class FieldProblem_DavidG
 	{
 		[Fact]
 		public void GenericConstrainedMethod()
 		{
-			MockRepository mocks = new MockRepository();
-			IStore1 store1 = mocks.DynamicMock<IStore1>();
-			IStore2 store2 = mocks.DynamicMock<IStore2>();
+			IStore1 store1 = MockRepository.GenerateDynamicMock<IStore1>();
+            IStore2 store2 = MockRepository.GenerateDynamicMock<IStore2>();
 			Assert.NotNull(store2);
 			Assert.NotNull(store1);
 		}
