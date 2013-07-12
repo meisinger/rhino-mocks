@@ -112,18 +112,6 @@ Message: Should be called only once",
 				() => demo.VoidNoArgs());
 		}
 
-		[Fact(Skip = "Test No Longer Valid")]
-		public void LastMockedObjectIsNullAfterDisposingMockRepository()
-		{
-            //MockRepository mocks = new MockRepository();
-            //mocks.ReplayAll();				
-            //mocks.VerifyAll();
-			
-			Assert.Throws<InvalidOperationException>(
-				"Invalid call, the last call has been used or no call has been made (make sure that you are calling a virtual (C#) / Overridable (VB) method).",
-				() => LastCall.IgnoreArguments());
-		}
-
 		[Fact]
 		public void MixOrderedAndUnorderedBehaviour()
 		{
@@ -154,20 +142,6 @@ Message: Should be called only once",
 
             demo.VoidStringArg("ayende");
             demo.VerifyAllExpectations();
-		}
-
-		[Fact(Skip = "Test No Longer Valid")]
-		public void CallingReplayInOrderringThrows()
-		{
-			demo.VoidStringArg("ayende");
-            //Assert.Throws<InvalidOperationException>(
-            //    "Can't start replaying because Ordered or Unordered properties were call and not yet disposed.",
-            //    () => {
-            //        using (mocks.Ordered())
-            //        {
-            //            mocks.Replay(demo);
-            //        }
-            //    });
 		}
 
 		[Fact]

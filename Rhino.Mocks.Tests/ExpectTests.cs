@@ -54,12 +54,12 @@ namespace Rhino.Mocks.Tests
 			Assert.Equal("Ayende", demo.Prop);
 		}
 
-		[Fact]
+		[Fact(Skip = "Test No Longer Valid (Expect removed)")]
 		public void PassNonMock()
 		{
-            Assert.Throws<InvalidOperationException>(
-                "The object 'System.Object' is not a mocked object.",
-                () => Expect.On(new object()));
+            //Assert.Throws<InvalidOperationException>(
+            //    "The object 'System.Object' is not a mocked object.",
+            //    () => Expect.On(new object()));
 		}
 
 		[Fact]
@@ -80,21 +80,21 @@ namespace Rhino.Mocks.Tests
 			Assert.Throws<ArgumentNullException>(demo.VoidNoArgs);
 		}
 
-        [Fact]
+        [Fact(Skip = "Test No Longer Valid (Expect removed)")]
         public void Can_Swap_Expect_In_And_Out_With_AAA_Syntax()
         {
-            var mock = MockRepository.GenerateMock<IDemo>();
+            //var mock = MockRepository.GenerateMock<IDemo>();
 
-            mock.BackToRecord();
-            Expect.Call(mock.ReturnIntNoArgs())
-                .Return(2);
+            //mock.BackToRecord();
+            //Expect.Call(mock.ReturnIntNoArgs())
+            //    .Return(2);
 
-            mock.Replay();
+            //mock.Replay();
 
-            var value = mock.ReturnIntNoArgs();
+            //var value = mock.ReturnIntNoArgs();
 
-            Assert.Equal(2, value);
-            mock.VerifyAllExpectations();
+            //Assert.Equal(2, value);
+            //mock.VerifyAllExpectations();
         }
 
 		[Fact]
@@ -106,25 +106,25 @@ namespace Rhino.Mocks.Tests
 			Assert.Equal("ayende", demo.Prop);
 		}
 
-		[Fact]
+        [Fact(Skip = "Test No Longer Valid (Expect removed)")]
 		public void ExpectWhenNoCallMade()
 		{
-            Assert.Throws<InvalidOperationException>(
-                "The object is not a mock object that belong to this repository.",
-                () => Expect.Call<object>(null));
+            //Assert.Throws<InvalidOperationException>(
+            //    "The object is not a mock object that belong to this repository.",
+            //    () => Expect.Call<object>(null));
 		}
 
-		[Fact]
+        [Fact(Skip = "Test No Longer Valid (Expect removed)")]
 		public void ExpectOnReplay()
 		{
-            demo.Expect(x => x.Prop)
-                .Return("ayende");
+            //demo.Expect(x => x.Prop)
+            //    .Return("ayende");
 			
-            Assert.Equal("ayende", demo.Prop);
+            //Assert.Equal("ayende", demo.Prop);
 
-			Assert.Throws<InvalidOperationException>(
-				"Invalid call, the last call has been used or no call has been made (make sure that you are calling a virtual (C#) / Overridable (VB) method).",
-				() => Expect.Call<object>(null));
+            //Assert.Throws<InvalidOperationException>(
+            //    "Invalid call, the last call has been used or no call has been made (make sure that you are calling a virtual (C#) / Overridable (VB) method).",
+            //    () => Expect.Call<object>(null));
 		}
 	}
 }

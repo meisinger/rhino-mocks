@@ -49,44 +49,7 @@ namespace Rhino.Mocks.Tests
             Assert.Equal("foo", repository.Identity.Name);
         }
 
-		[Fact(Skip = "Not supported in replay mode")]
-        public void WillGetSameInstanceOfRecursedMockForGenerateMockStatic()
-        {
-            var repository = MockRepository.GenerateMock<IMyService>();
-            IIdentity i1 = repository.Identity;
-            IIdentity i2 = repository.Identity;
-
-            Assert.Same(i1, i2);
-            Assert.NotNull(i1);
-        }
-
-		[Fact(Skip = "Not supported in replay mode")]
-        public void WillGetSameInstanceOfRecursedMockInReplayMode()
-        {
-            RhinoMocks.Logger = new TraceWriterExpectationLogger(true, true, true);
-
-            var repository = MockRepository.GenerateMock<IMyService>();
-            IIdentity i1 = repository.Identity;
-            IIdentity i2 = repository.Identity;
-
-            Assert.Same(i1, i2);
-            Assert.NotNull(i1);
-        }
-
-        [Fact(Skip = "Test No Longer Valid")]
-        public void WillGetSameInstanceOfRecursedMockWhenNotInReplayMode()
-        {
-            RhinoMocks.Logger = new TraceWriterExpectationLogger(true,true,true);
-
-            var repository = MockRepository.GenerateDynamicMock<IMyService>();
-            IIdentity i1 = repository.Identity;
-            IIdentity i2 = repository.Identity;
-
-            Assert.Same(i1, i2);
-            Assert.NotNull(i1);
-        }
-
-        public interface ISession
+		public interface ISession
         {
             ICriteria CreateCriteria(Type type);
         }

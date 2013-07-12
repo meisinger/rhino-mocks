@@ -80,56 +80,6 @@ namespace Rhino.Mocks.Tests
 				() => demo.VerifyAllExpectations());
 		}
 
-		[Fact(Skip = "Test No Longer Valid")]
-		public void CallingReplayOnNonMockThrows()
-		{
-            //MockRepository mocks = new MockRepository();
-            //Assert.Throws<ObjectNotMockFromThisRepositoryException>(
-            //    "The object is not a mock object that belong to this repository.",
-            //    () => mocks.Replay(new object()));
-		}
-
-		[Fact(Skip = "Test No Longer Valid")]
-		public void CallingVerifyOnNonMockThrows()
-		{
-            //MockRepository mocks = new MockRepository();
-            //Assert.Throws<ObjectNotMockFromThisRepositoryException>(
-            //    "The object is not a mock object that belong to this repository.",
-            //    () => mocks.Verify(new object()));
-		}
-
-		[Fact(Skip = "Test No Longer Valid")]
-		public void TryingToReplayMockMoreThanOnceThrows()
-		{
-            //mocks.Replay(demo);
-            //Assert.Throws<InvalidOperationException>(
-            //    "This action is invalid when the mock object is in replay state.",
-            //    () => mocks.Replay(demo));
-		}
-
-		[Fact(Skip = "Test No Longer Valid")]
-		public void CallingReplayAndThenReplayAll()
-		{
-            //mocks.Replay(demo);
-            //mocks.ReplayAll();
-		}
-
-		[Fact(Skip = "Test No Longer Valid")]
-		public void CallingVerifyAndThenVerifyAll()
-		{
-            //mocks.ReplayAll();
-            //mocks.Verify(demo);
-            //mocks.VerifyAll();
-		}
-
-		[Fact(Skip = "Test No Longer Valid")]
-        public void CallingVerifyWithoutReplayFirstCauseException()
-		{
-            //Assert.Throws<InvalidOperationException>(
-            //    "This action is invalid when the mock object {Rhino.Mocks.Tests.IDemo} is in record state.",
-            //    () => mocks.Verify(demo));
-		}
-
 		[Fact]
 		public void UsingVerifiedObjectThrows()
 		{
@@ -140,42 +90,14 @@ namespace Rhino.Mocks.Tests
 				() => demo.ReturnIntNoArgs());
 		}
 
-
-		[Fact(Skip = "Test No Longer Valid")]
-		public void CallingLastMethodOptionsOnReplay()
-		{
-            //demo.VoidNoArgs();
-            //mocks.Replay(demo);
-            //Assert.Throws<InvalidOperationException>(
-            //    "This action is invalid when the mock object is in replay state.",
-            //    () => LastCall.On(demo));
-		}
-
-		[Fact(Skip = "Test No Longer Valid")]
-		public void NotClosingMethodBeforeReplaying()
-		{
-            //demo.StringArgString("");
-            //Assert.Throws<InvalidOperationException>(
-            //    "Previous method 'IDemo.StringArgString(\"\");' requires a return value or an exception to throw.",
-            //    () => mocks.Replay(demo));
-		}
-
 		[Fact]
 		public void GetmocksFromProxy()
 		{
 			IMockedObject mockedObj = demo as IMockedObject;
 			Assert.NotNull(mockedObj);
-			MockRepository MockRepository = mockedObj.Repository;
-			Assert.NotNull(MockRepository);
-            //Assert.Same(mocks, MockRepository);
-		}
 
-		[Fact(Skip = "Test No Longer Valid (LastCall removed)")]
-		public void CallingLastCallWithoutHavingLastCallThrows()
-		{
-			Assert.Throws<InvalidOperationException>(
-				"There is no matching last call on this object. Are you sure that the last call was a virtual or interface method call?",
-				() => LastCall.On(demo));
+			MockRepository repository = mockedObj.Repository;
+			Assert.NotNull(repository);
 		}
 
 		[Fact]
@@ -250,43 +172,11 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void CallingSecondMethodWithoutSetupRequiredInfoOnFirstOne()
 		{
-            //demo.ReturnIntNoArgs();
-            //Assert.Throws<InvalidOperationException>(
-            //    "Previous method 'IDemo.ReturnIntNoArgs();' requires a return value or an exception to throw.",
-            //    () => demo.ReturnIntNoArgs());
-
             demo.Expect(x => x.ReturnIntNoArgs());
 
             Assert.Throws<InvalidOperationException>(
                 "Previous method 'IDemo.ReturnIntNoArgs();' requires a return value or an exception to throw.",
                 () => demo.ReturnIntNoArgs());
-		}
-
-		[Fact(Skip = "Test No Longer Valid")]
-		public void TryingToSetUnrelatedTypeAsReturnValueThrows()
-		{
-            //demo.ReturnIntNoArgs();
-            //Assert.Throws<InvalidOperationException>(
-            //    "Type 'System.DateTime' doesn't match the return type 'System.Int32' for method 'IDemo.ReturnIntNoArgs();'",
-            //    () => LastCall.On(demo).Return(new DateTime()));
-		}
-
-        [Fact(Skip = "Test No Longer Valid")]
-		public void ReturnNullForValueType()
-		{
-            //demo.ReturnIntNoArgs();
-            //Assert.Throws<InvalidOperationException>(
-            //    "Type 'null' doesn't match the return type 'System.Int32' for method 'IDemo.ReturnIntNoArgs();'",
-            //    () => LastCall.On(demo).Return(null));
-		}
-
-        [Fact(Skip = "Test No Longer Valid")]
-		public void ReturnValueForVoidMethod()
-		{
-            //demo.VoidNoArgs();
-            //Assert.Throws<InvalidOperationException>(
-            //    "Type 'System.Int32' doesn't match the return type 'System.Void' for method 'IDemo.VoidNoArgs();'",
-            //    () => LastCall.On(demo).Return(3));
 		}
 
 		[Fact]
@@ -313,48 +203,7 @@ namespace Rhino.Mocks.Tests
 			Assert.Equal(d, DemoEnum.Demo);
 		}
 
-        [Fact(Skip = "Test No Longer Valid")]
-		public void SetReturnValueAndExceptionThrows()
-		{
-            //demo.EnumNoArgs();
-            //LastCall.On(demo).Throw(new Exception());
-            //Assert.Throws<InvalidOperationException>(
-            //    "Can set only a single return value or exception to throw or delegate to execute on the same method call.",
-            //    () => LastCall.On(demo).Return(DemoEnum.Demo));
-		}
-
-        [Fact(Skip = "Test No Longer Valid")]
-		public void SetExceptionAndThenThrows()
-		{
-            //demo.EnumNoArgs();
-            //LastCall.On(demo).Throw(new Exception());
-            //Assert.Throws<InvalidOperationException>(
-            //    "Can set only a single return value or exception to throw or delegate to execute on the same method call.",
-            //    () => LastCall.On(demo).Return(DemoEnum.Demo));
-		}
-
-        [Fact(Skip = "Test No Longer Valid")]
-		public void SetTwoReturnValues()
-		{
-            //demo.EnumNoArgs();
-            //LastCall.On(demo).Return(DemoEnum.Demo);
-            //Assert.Throws<InvalidOperationException>(
-            //    "Can set only a single return value or exception to throw or delegate to execute on the same method call.",
-            //    () => LastCall.On(demo).Return(DemoEnum.Demo));
-		}
-
-        [Fact(Skip = "Test No Longer Valid")]
-		public void SetTwoExceptions()
-		{
-            //demo.EnumNoArgs();
-            //LastCall.On(demo).Throw(new Exception());
-            //Assert.Throws<InvalidOperationException>(
-            //    "Can set only a single return value or exception to throw or delegate to execute on the same method call.",
-            //    () => LastCall.On(demo).Throw(new Exception()));
-
-		}
-
-		[Fact]
+        [Fact]
 		public void ExpectMethodOnce()
 		{
             demo.Expect(x => x.EnumNoArgs())
@@ -559,30 +408,6 @@ namespace Rhino.Mocks.Tests
             {
 				Assert.Contains("Can not instantiate proxy of class: System.Object.", argEx.Message);
             }
-		}
-
-		[Fact(Skip = "Test No Longer Valid")]
-		public void IsInReplayModeThrowsWhenPassedNull()
-		{
-            //Assert.Throws<ArgumentNullException>(() => mocks.IsInReplayMode(null));
-		}
-
-		[Fact(Skip = "Test No Longer Valid")]
-		public void IsInReplayModeThrowsWhenPassedNonMock()
-		{
-            //Assert.Throws<ArgumentException>(() => mocks.IsInReplayMode(new object()));
-		}
-
-		[Fact(Skip = "Test No Longer Valid")]
-		public void IsInReplayModeReturnsTrueWhenMockInReplay()
-		{
-            //Assert.True(mocks.IsInReplayMode(demo));
-		}
-
-		[Fact(Skip = "Test No Longer Valid")]
-		public void IsInReplayModeReturnsFalseWhenMockInRecord()
-		{
-            //Assert.False(mocks.IsInReplayMode(demo));
 		}
 
         [Fact]

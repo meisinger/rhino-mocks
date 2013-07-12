@@ -36,17 +36,7 @@ namespace Rhino.Mocks.Tests
 {
 	public class RecordingMocks
 	{
-        [Fact(Skip = "Test No Longer Valid")]
-        public void CanGetMockRepositoryForMock()
-        {
-            var repository = MockRepository.GenerateStrictMock<IFoo54>();
-            //MockRepository repository = new MockRepository();
-            //var foo = repository.StrictMock<IFoo54>();
-            //Assert.Same(repository, foo.GetMockRepository());
-        }
-
-		[Fact(Skip = "Test No Longer Valid")]
-		public void CanResetStubAndReuseIt()
+        public void CanResetStubAndReuseIt()
 		{
 			var repository = MockRepository.GenerateStub<IFoo54>();
 
@@ -59,8 +49,7 @@ namespace Rhino.Mocks.Tests
 			repository.BackToRecord();
             repository.Stub(x => x.bar())
                 .Return("closed");
-
-            //repository.Replay();
+            repository.Replay();
 
 			// several calls to 'foo.bar()
 			Assert.Equal(repository.bar(), "closed");

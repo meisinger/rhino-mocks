@@ -114,7 +114,7 @@ namespace Rhino.Mocks
 		/// <param name="mock">The mock.</param>
 		/// <param name="action">The action.</param>
 		/// <returns></returns>
-        public static IMethodOptions<R> Expect<T, R>(this T mock, Function<T, R> action)
+        public static IMethodOptions<R> Expect<T, R>(this T mock, Func<T, R> action)
 			where T : class
 		{
 			if (mock == null)
@@ -166,7 +166,7 @@ namespace Rhino.Mocks
 		/// <param name="mock">The mock.</param>
 		/// <param name="action">The action.</param>
 		/// <returns></returns>
-        public static IMethodOptions<R> Stub<T, R>(this T mock, Function<T, R> action)
+        public static IMethodOptions<R> Stub<T, R>(this T mock, Func<T, R> action)
 			where T : class
 		{
 			return Expect(mock, action).

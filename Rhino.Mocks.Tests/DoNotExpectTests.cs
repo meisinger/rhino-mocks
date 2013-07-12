@@ -146,10 +146,10 @@ namespace Rhino.Mocks.Tests
                 () => demo.StringArgString("Ayende"));
         }
 
-        [Fact]
+        [Fact(Skip = "Test No Longer Valid (DoNoExpect removed)")]
         public void ThrowWhenCallIsNull()
         {
-        	Assert.Throws<ArgumentNullException>(() => DoNotExpect.Call(null));
+            //Assert.Throws<ArgumentNullException>(() => DoNotExpect.Call(null));
         }
 
         [Fact]

@@ -45,7 +45,7 @@ namespace Rhino.Mocks
 	/// a specified object.
 	/// If the method has a return value, it's recommended to use Expect
 	/// </summary>
-	public static class LastCall
+	internal static class LastCall
 	{
 		/*
 		 * Method: On
@@ -65,7 +65,7 @@ namespace Rhino.Mocks
 		/// </summary>
 		/// <param name="mockedInstance">The mocked object</param>
 		/// <returns>Interface that allows to set options for the last method call on this object</returns>
-		public static IMethodOptions<object> On(object mockedInstance)
+		internal static IMethodOptions<object> On(object mockedInstance)
 		{
 			IMockedObject mockedObj = MockRepository.GetMockedObject(mockedInstance);
 			return mockedObj.Repository.LastMethodCall<object>(mockedInstance);
@@ -101,7 +101,7 @@ namespace Rhino.Mocks
 		/// </summary>
 		/// <param name="objToReturn">The object the method will return</param>
 		/// <returns>IRepeat that defines how many times the method will return this value</returns>
-		public static IMethodOptions<T> Return<T>(T objToReturn)
+		internal static IMethodOptions<T> Return<T>(T objToReturn)
 		{
 			return GetOptions<T>().Return(objToReturn);
 		}
@@ -111,7 +111,7 @@ namespace Rhino.Mocks
 		/// </summary>
 		/// <param name="objToReturn">The object the method will return</param>
 		/// <returns>IRepeat that defines how many times the method will return this value</returns>
-		public static IMethodOptions<object> Return(object objToReturn)
+		internal static IMethodOptions<object> Return(object objToReturn)
 		{
 			return GetOptions<object>().Return(objToReturn);
 		}
@@ -128,7 +128,7 @@ namespace Rhino.Mocks
 		/// Throws the specified exception when the method is called.
 		/// </summary>
 		/// <param name="exception">Exception to throw</param>
-		public static IMethodOptions<object> Throw(Exception exception)
+		internal static IMethodOptions<object> Throw(Exception exception)
 		{
 			return GetOptions<object>().Throw(exception);
 		}
@@ -146,7 +146,7 @@ namespace Rhino.Mocks
 		/// Ignores the arguments for this method. Any argument will be matched
 		/// againt this method.
 		/// </summary>
-		public static IMethodOptions<object> IgnoreArguments()
+		internal static IMethodOptions<object> IgnoreArguments()
 		{
 			return GetOptions<object>().IgnoreArguments();
 		}
@@ -163,7 +163,7 @@ namespace Rhino.Mocks
 		/// <summary>
 		/// Better syntax to define repeats. 
 		/// </summary>
-		public static IRepeat<object> Repeat
+		internal static IRepeat<object> Repeat
 		{
 			get { return GetOptions<object>().Repeat; }
 		}
@@ -180,7 +180,7 @@ namespace Rhino.Mocks
 		/// <summary>
 		/// Add constraints for the method's arguments.
 		/// </summary>
-		public static IMethodOptions<object> Constraints(params AbstractConstraint[] constraints)
+		internal static IMethodOptions<object> Constraints(params AbstractConstraint[] constraints)
 		{
 			return GetOptions<object>().Constraints(constraints);
 		}
@@ -204,7 +204,7 @@ namespace Rhino.Mocks
 		/// <summary>
 		/// Set a callback method for the last call
 		/// </summary>
-		public static IMethodOptions<object> Callback(Delegate callback)
+		internal static IMethodOptions<object> Callback(Delegate callback)
 		{
 			return GetOptions<object>().Callback(callback);
 		}
@@ -212,7 +212,7 @@ namespace Rhino.Mocks
 		/// <summary>
 		/// Set a callback method for the last call
 		/// </summary>
-		public static IMethodOptions<object> Callback(Delegates.Function<bool> callback)
+		internal static IMethodOptions<object> Callback(Func<bool> callback)
 		{
 			return Callback((Delegate)callback);
 		}
@@ -220,7 +220,7 @@ namespace Rhino.Mocks
 		/// <summary>
 		/// Set a callback method for the last call
 		/// </summary>
-		public static IMethodOptions<object> Callback<TArg0>(Delegates.Function<bool, TArg0> callback)
+        internal static IMethodOptions<object> Callback<TArg0>(Func<TArg0, bool> callback)
 		{
 			return Callback((Delegate)callback);
 		}
@@ -228,7 +228,7 @@ namespace Rhino.Mocks
 		/// <summary>
 		/// Set a callback method for the last call
 		/// </summary>
-		public static IMethodOptions<object> Callback<TArg0, TArg1>(Delegates.Function<bool, TArg0, TArg1> callback)
+        internal static IMethodOptions<object> Callback<TArg0, TArg1>(Func<TArg0, TArg1, bool> callback)
 		{
 			return Callback((Delegate)callback);
 		}
@@ -236,7 +236,7 @@ namespace Rhino.Mocks
 		/// <summary>
 		/// Set a callback method for the last call
 		/// </summary>
-		public static IMethodOptions<object> Callback<TArg0, TArg1, TArg2>(Delegates.Function<bool, TArg0, TArg1, TArg2> callback)
+        internal static IMethodOptions<object> Callback<TArg0, TArg1, TArg2>(Func<TArg0, TArg1, TArg2, bool> callback)
 		{
 			return Callback((Delegate)callback);
 		}
@@ -244,62 +244,7 @@ namespace Rhino.Mocks
 		/// <summary>
 		/// Set a callback method for the last call
 		/// </summary>
-		public static IMethodOptions<object> Callback<TArg0, TArg1, TArg2, TArg3>(
-			Delegates.Function<bool, TArg0, TArg1, TArg2, TArg3> callback)
-		{
-			return Callback((Delegate)callback);
-		}
-
-		/// <summary>
-		/// Set a callback method for the last call
-		/// </summary>
-		public static IMethodOptions<object> Callback<TArg0, TArg1, TArg2, TArg3, TArg4>(
-			Delegates.Function<bool, TArg0, TArg1, TArg2, TArg3, TArg4> callback)
-		{
-			return Callback((Delegate)callback);
-		}
-
-		/// <summary>
-		/// Set a callback method for the last call
-		/// </summary>
-		public static IMethodOptions<object> Callback<TArg0, TArg1, TArg2, TArg3, TArg4, TArg5>(
-			Delegates.Function<bool, TArg0, TArg1, TArg2, TArg3, TArg4, TArg5> callback)
-		{
-			return Callback((Delegate)callback);
-		}
-
-		/// <summary>
-		/// Set a callback method for the last call
-		/// </summary>
-		public static IMethodOptions<object> Callback<TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(
-			Delegates.Function<bool, TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6> callback)
-		{
-			return Callback((Delegate)callback);
-		}
-
-		/// <summary>
-		/// Set a callback method for the last call
-		/// </summary>
-		public static IMethodOptions<object> Callback<TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(
-			Delegates.Function<bool, TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7> callback)
-		{
-			return Callback((Delegate)callback);
-		}
-
-		/// <summary>
-		/// Set a callback method for the last call
-		/// </summary>
-		public static IMethodOptions<object> Callback<TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(
-			Delegates.Function<bool, TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8> callback)
-		{
-			return Callback((Delegate)callback);
-		}
-
-		/// <summary>
-		/// Set a callback method for the last call
-		/// </summary>
-		public static IMethodOptions<object> Callback<TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(
-			Delegates.Function<bool, TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9> callback)
+        internal static IMethodOptions<object> Callback<TArg0, TArg1, TArg2, TArg3>(Func<TArg0, TArg1, TArg2, TArg3, bool> callback)
 		{
 			return Callback((Delegate)callback);
 		}
@@ -308,7 +253,7 @@ namespace Rhino.Mocks
 		/// Call the original method on the class, bypassing the mocking layers, for the last call.
 		/// </summary>
 		[Obsolete("Use CallOriginalMethod(OriginalCallOptions options) overload to explicitly specify the call options")]
-		public static void CallOriginalMethod()
+        internal static void CallOriginalMethod()
 		{
 			GetOptions<object>().CallOriginalMethod();
 		}
@@ -317,30 +262,16 @@ namespace Rhino.Mocks
 		/// <summary>
 		/// Call the original method on the class, optionally bypassing the mocking layers, for the last call.
 		/// </summary>
-		public static IMethodOptions<object> CallOriginalMethod(OriginalCallOptions options)
+        internal static IMethodOptions<object> CallOriginalMethod(OriginalCallOptions options)
 		{
 			return GetOptions<object>().CallOriginalMethod(options);
 		}
 
-		/*
-		 * Method: Do
-		 * 
-		 * Set an action to run when the expectation is matched.
-		 * 
-		 * Important:
-		 * The action's delegate *must* have the same signature as the last methdo call, and its return
-		 * value must be assignable to the last method call return value.
-		 * 
-		 * Note:
-		 * This method is only called once, after the method call was match to the expectation.
-		 * 
-		 * 
-		 */
 		/// <summary>
 		/// Set a delegate to be called when the expectation is matched.
 		/// The delegate return value will be returned from the expectation.
 		/// </summary>
-		public static IMethodOptions<object> Do(Delegate action)
+        internal static IMethodOptions<object> Do(Delegate action)
 		{
 			return GetOptions<object>().Do(action);
 		}
@@ -348,7 +279,7 @@ namespace Rhino.Mocks
 		/// <summary>
 		/// Gets an interface that will raise the last event when called.
 		/// </summary>
-		public static IEventRaiser GetEventRaiser()
+        internal static IEventRaiser GetEventRaiser()
 		{
 			return GetOptions<object>().GetEventRaiser();
 		}
@@ -357,7 +288,7 @@ namespace Rhino.Mocks
 		/// Set the parameter values for out and ref parameters.
 		/// This is done using zero based indexing, and _ignoring_ any non out/ref parameter.
 		/// </summary>
-		public static IMethodOptions<object> OutRef(params object[] parameters)
+        internal static IMethodOptions<object> OutRef(params object[] parameters)
 		{
 			return GetOptions<object>().OutRef(parameters);
 		}
@@ -366,24 +297,16 @@ namespace Rhino.Mocks
 		/// Documentation message for the expectation
 		/// </summary>
 		/// <param name="documentationMessage">Message</param>
-		public static IMethodOptions<object> Message(string documentationMessage)
+        internal static IMethodOptions<object> Message(string documentationMessage)
 		{
 			return GetOptions<object>().Message(documentationMessage);
 		}
 
-		/* Method: PropertyBehavior
-         * 
-         * Use the property as a normal property, so you can use it to save/load values
-         * without having to specify expectations for it.
-         * 
-         * Note:
-         * This can be called only when the last call is a getter or setter.
-         */
 		/// <summary>
 		/// Use the property as a simple property, getting/setting the values without
 		/// causing mock expectations.
 		/// </summary>
-		public static IMethodOptions<object> PropertyBehavior()
+        internal static IMethodOptions<object> PropertyBehavior()
 		{
 			return GetOptions<object>().PropertyBehavior();
 		}

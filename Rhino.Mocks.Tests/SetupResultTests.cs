@@ -67,12 +67,12 @@ namespace Rhino.Mocks.Tests
             demo.VerifyAllExpectations();
 		}
 
-		[Fact]
+        [Fact(Skip = "Test No Longer Valid (SetupResult removed)")]
 		public void SetupResultForNoCall()
 		{
-			Assert.Throws<InvalidOperationException>(
-				"Invalid call, the last call has been used or no call has been made (make sure that you are calling a virtual (C#) / Overridable (VB) method).",
-				() => SetupResult.For<object>(null));
+            //Assert.Throws<InvalidOperationException>(
+            //    "Invalid call, the last call has been used or no call has been made (make sure that you are calling a virtual (C#) / Overridable (VB) method).",
+            //    () => SetupResult.For<object>(null));
 		}
 
 		[Fact]
@@ -125,18 +125,6 @@ namespace Rhino.Mocks.Tests
 			demo.VoidNoArgs();
 
             demo.VerifyAllExpectations();
-		}
-
-		[Fact(Skip = "Test No Longer Fails")]
-		public void SetupResultForTheSameMethodTwiceCauseExcetion()
-		{
-            demo.Expect(x => x.Prop)
-                .Return("Ayende");
-
-            Assert.Throws<InvalidOperationException>(
-                "The result for IDemo.get_Prop(); has already been setup.",
-                () => demo.Expect(x => x.Prop)
-                    .Return("Ayende"));
 		}
 
 		[Fact]

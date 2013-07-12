@@ -61,14 +61,6 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void SayHelloWorld()
         {
-            //INameSource nameSource = (INameSource)mocks.StrictMock(typeof(INameSource));
-            //Expect.Call(nameSource.CreateName(null,null)).IgnoreArguments().
-            //        Do(new NameSourceDelegate(Formal));
-            //mocks.ReplayAll();
-            //string expected = "Hi, my name is Ayende Rahien";
-            //string actual = new Speaker("Ayende", "Rahien", nameSource).Introduce();
-            //Assert.Equal(expected, actual);
-
             INameSource nameSource = (INameSource)MockRepository.GenerateStrictMock(typeof(INameSource));
 
             nameSource.Expect(x => x.CreateName(null, null))
@@ -118,18 +110,14 @@ namespace Rhino.Mocks.Tests
                     .Do(new IntDelegate(IntMethod)));
         }
 
-        [Fact(Skip = "Test No Longer Fails")]
+        [Fact]
         public void CanOnlySpecifyOnce()
         {
-            //Assert.Throws<InvalidOperationException>(
-            //    "Can set only a single return value or exception to throw or delegate to execute on the same method call.",
-            //    () => Expect.Call(demo.EnumNoArgs()).Do(new GetDay(ThrowDay)).Return(DayOfWeek.Saturday));
-
             Assert.Throws<InvalidOperationException>(
                 "Can set only a single return value or exception to throw or delegate to execute on the same method call.",
                 () => demo.Expect(x => x.EnumNoArgs())
-                    .Do(new GetDay(ThrowDay))
-                    .Return(DayOfWeek.Saturday));
+                    .Return(DayOfWeek.Saturday)
+                    .Do(new GetDay(ThrowDay)));
         }
 
         private DayOfWeek GetSunday()

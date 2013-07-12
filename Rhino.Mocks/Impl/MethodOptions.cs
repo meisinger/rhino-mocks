@@ -118,7 +118,7 @@ namespace Rhino.Mocks.Impl
 		/// <summary>
 		/// Set a callback method for the last call
 		/// </summary>
-		public IMethodOptions<T> Callback(Delegates.Function<bool> callback)
+		public IMethodOptions<T> Callback(Func<bool> callback)
 		{
 			return Callback((Delegate) callback);
 		}
@@ -126,90 +126,34 @@ namespace Rhino.Mocks.Impl
 		/// <summary>
 		/// Set a callback method for the last call
 		/// </summary>
-		public IMethodOptions<T> Callback<TArg0>(Delegates.Function<bool, TArg0> callback)
+		public IMethodOptions<T> Callback<TArg0>(Func<TArg0, bool> callback)
 		{
-			return Callback( (Delegate) callback);
+            return Callback((Delegate)callback);
 		}
 
 		/// <summary>
 		/// Set a callback method for the last call
 		/// </summary>
-		public IMethodOptions<T> Callback<TArg0, TArg1>(Delegates.Function<bool, TArg0, TArg1> callback)
+		public IMethodOptions<T> Callback<TArg0, TArg1>(Func<TArg0, TArg1, bool> callback)
 		{
-			return Callback( (Delegate) callback);
+            return Callback((Delegate)callback);
 		}
 
 		/// <summary>
 		/// Set a callback method for the last call
 		/// </summary>
-		public IMethodOptions<T> Callback<TArg0, TArg1, TArg2>(Delegates.Function<bool, TArg0, TArg1, TArg2> callback)
+		public IMethodOptions<T> Callback<TArg0, TArg1, TArg2>(Func<TArg0, TArg1, TArg2, bool> callback)
 		{
-			return Callback( (Delegate) callback);
+            return Callback((Delegate)callback);
 		}
 
 		/// <summary>
 		/// Set a callback method for the last call
 		/// </summary>
-		public IMethodOptions<T> Callback<TArg0, TArg1, TArg2, TArg3>(
-			Delegates.Function<bool, TArg0, TArg1, TArg2, TArg3> callback)
+		public IMethodOptions<T> Callback<TArg0, TArg1, TArg2, TArg3>(Func<TArg0, TArg1, TArg2, TArg3, bool> callback)
 		{
-			return Callback( (Delegate) callback);
+            return Callback((Delegate)callback);
 		}
-
-		/// <summary>
-		/// Set a callback method for the last call
-		/// </summary>
-		public IMethodOptions<T> Callback<TArg0, TArg1, TArg2, TArg3, TArg4>(
-			Delegates.Function<bool, TArg0, TArg1, TArg2, TArg3, TArg4> callback)
-		{
-			return Callback( (Delegate) callback);
-		}
-
-		/// <summary>
-		/// Set a callback method for the last call
-		/// </summary>
-		public IMethodOptions<T> Callback<TArg0, TArg1, TArg2, TArg3, TArg4, TArg5>(
-			Delegates.Function<bool, TArg0, TArg1, TArg2, TArg3, TArg4, TArg5> callback)
-		{
-			return Callback( (Delegate) callback);
-		}
-
-		/// <summary>
-		/// Set a callback method for the last call
-		/// </summary>
-		public IMethodOptions<T> Callback<TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(
-			Delegates.Function<bool, TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6> callback)
-		{
-			return Callback( (Delegate) callback);
-		}
-
-		/// <summary>
-		/// Set a callback method for the last call
-		/// </summary>
-		public IMethodOptions<T> Callback<TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(
-			Delegates.Function<bool, TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7> callback)
-		{
-			return Callback( (Delegate) callback);
-		}
-
-		/// <summary>
-		/// Set a callback method for the last call
-		/// </summary>
-		public IMethodOptions<T> Callback<TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(
-			Delegates.Function<bool, TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8> callback)
-		{
-			return Callback( (Delegate) callback);
-		}
-
-		/// <summary>
-		/// Set a callback method for the last call
-		/// </summary>
-		public IMethodOptions<T> Callback<TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(
-			Delegates.Function<bool, TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9> callback)
-		{
-			return Callback( (Delegate) callback);
-		}
-
 
 		/// <summary>
 		/// Set a delegate to be called when the expectation is matched.

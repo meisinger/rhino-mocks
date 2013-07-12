@@ -82,19 +82,6 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             IntPtr buffer = mock.Buffer(15);
 			Assert.Equal(IntPtr.Zero, buffer);
 		}
-
-		[Fact(Skip = "Test No Longer Valid")]
-		public void ShouldGetValidErrorWhenGenericTypeMismatchOccurs()
-		{
-            //Foo<string> retval = new Foo<string>();
-
-            //ILookupMapper<int> mapper = MockRepository.GenerateStrictMock<ILookupMapper<int>>();
-            			
-            //Assert.Throws<InvalidOperationException>(
-            //    "Type 'Rhino.Mocks.Tests.FieldsProblem.Foo`1[[System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]' doesn't match the return type 'Rhino.Mocks.Tests.FieldsProblem.Foo`1[System.Int32]' for method 'ILookupMapper`1.FindOneFoo();'",
-            //    () => mapper.Expect(x => x.FindOneFoo())
-            //            .Return(retval));
-		}
 	}
 
 	public interface ILookupMapper<T>

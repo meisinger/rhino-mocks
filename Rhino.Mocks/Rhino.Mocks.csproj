@@ -98,15 +98,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Constraints\TextArg.cs" />
-    <Compile Include="Delegates.cs" />
-    <Compile Include="DoNotExpect.cs" />
     <Compile Include="Exceptions\ExpectationViolationException.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Exceptions\ObjectNotMockFromThisRepositoryException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Expect.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Expectations\AbstractExpectation.cs">
@@ -265,16 +260,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RhinoMocks.cs" />
-    <Compile Include="SetupResult.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Utilities\MethodCallUtil.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Utilities\ReturnValueUtil.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompatabilityWith2.0.cs" />
     <Compile Include="__ProtectAttribute.cs" />
     <None Include="..\ayende-open-source.snk">
       <Link>ayende-open-source.snk</Link>

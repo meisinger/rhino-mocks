@@ -35,25 +35,12 @@ using System.Reflection;
 
 namespace Rhino.Mocks.Interfaces
 {
-	/*
-	 * Interface: IMethodOptions
-	 * 
-	 * Allows to define what would happen when a method is called.
-	 * 
-	 */
-
 	/// <summary>
 	/// Allows to define what would happen when a method 
 	/// is called.
 	/// </summary>
 	public interface IMethodOptions<T>
 	{
-		/*
-		 * Method: Return
-		 * 
-		 * Sets the return value when the method is called.
-		 */
-
 		/// <summary>
 		/// Set the return value for the method.
 		/// </summary>
@@ -67,24 +54,11 @@ namespace Rhino.Mocks.Interfaces
         /// <returns>IRepeat that defines how many times the method will return this value</returns>
         IMethodOptions<T> TentativeReturn();
 
-		/*
-		 * Method: Throw
-		 * 
-		 * Throws the specified exception when the method is called.
-		 */
-
 		/// <summary>
 		/// Throws the specified exception when the method is called.
 		/// </summary>
 		/// <param name="exception">Exception to throw</param>
 		IMethodOptions<T> Throw(Exception exception);
-
-		/*
-		 * Method: IgnoreArguments
-		 * 
-		 * Ignores the arguments for this method. Any arguments are considered fine for this
-		 * method.
-		 */
 
 		/// <summary>
 		/// Ignores the arguments for this method. Any argument will be matched
@@ -92,44 +66,15 @@ namespace Rhino.Mocks.Interfaces
 		/// </summary>
 		IMethodOptions<T> IgnoreArguments();
 
-		/*
-		 * Property: Repeat
-		 * 
-		 * Allows to get the <Interfaces.IRepeat> instance that would allow to 
-		 * set the expected number of times that this method will occur.
-		 */
-
 		/// <summary>
 		/// Better syntax to define repeats. 
 		/// </summary>
 		IRepeat<T> Repeat { get; }
 
-		/*
-		 * Method: Constraints
-		 * 
-		 * Sets the contraints on this method parameters.
-		 * The number of the constraints *must* be equal to the number of method arguments.
-		 */
-
 		/// <summary>
 		/// Add constraints for the method's arguments.
 		/// </summary>
 		IMethodOptions<T> Constraints(params AbstractConstraint[] constraints);
-
-		/*
-		 * Method: Callback
-		 * 
-		 * Sets a callback delegate to be called when this method is called.
-		 * 
-		 * Important:
-		 * The callback *must* have the same signature as the last method call but its return value
-		 * *must* be a boolean.
-		 * The callback will be called with the same parameters as the method and the method will
-		 * be accepted if the delegate return a positive value.
-		 * Note:
-		 * The callback may be called several times
-		 * 
-		 */
 
 		/// <summary>
 		/// Set a callback method for the last call
@@ -140,83 +85,31 @@ namespace Rhino.Mocks.Interfaces
 		/// Set a delegate to be called when the expectation is matched.
 		/// The delegate return value will be returned from the expectation.
 		/// </summary>
-		IMethodOptions<T> Callback(Delegates.Function<bool> callback);
+		IMethodOptions<T> Callback(Func<bool> callback);
 
 		/// <summary>
 		/// Set a delegate to be called when the expectation is matched.
 		/// The delegate return value will be returned from the expectation.
 		/// </summary>
-		IMethodOptions<T> Callback<TArg0>(Delegates.Function<bool, TArg0> callback);
+		IMethodOptions<T> Callback<TArg0>(Func<TArg0, bool> callback);
 
 		/// <summary>
 		/// Set a delegate to be called when the expectation is matched.
 		/// The delegate return value will be returned from the expectation.
 		/// </summary>
-		IMethodOptions<T> Callback<TArg0, TArg1>(Delegates.Function<bool, TArg0, TArg1> callback);
+		IMethodOptions<T> Callback<TArg0, TArg1>(Func<TArg0, TArg1, bool> callback);
 
 		/// <summary>
 		/// Set a delegate to be called when the expectation is matched.
 		/// The delegate return value will be returned from the expectation.
 		/// </summary>
-		IMethodOptions<T> Callback<TArg0, TArg1, TArg2>(Delegates.Function<bool, TArg0, TArg1, TArg2> callback);
+		IMethodOptions<T> Callback<TArg0, TArg1, TArg2>(Func<TArg0, TArg1, TArg2, bool> callback);
 
 		/// <summary>
 		/// Set a delegate to be called when the expectation is matched.
 		/// The delegate return value will be returned from the expectation.
 		/// </summary>
-		IMethodOptions<T> Callback<TArg0, TArg1, TArg2, TArg3>(Delegates.Function<bool, TArg0, TArg1, TArg2, TArg3> callback);
-
-		/// <summary>
-		/// Set a delegate to be called when the expectation is matched.
-		/// The delegate return value will be returned from the expectation.
-		/// </summary>
-		IMethodOptions<T> Callback<TArg0, TArg1, TArg2, TArg3, TArg4>(Delegates.Function<bool, TArg0, TArg1, TArg2, TArg3, TArg4> callback);
-
-		/// <summary>
-		/// Set a delegate to be called when the expectation is matched.
-		/// The delegate return value will be returned from the expectation.
-		/// </summary>
-		IMethodOptions<T> Callback<TArg0, TArg1, TArg2, TArg3, TArg4, TArg5>(Delegates.Function<bool, TArg0, TArg1, TArg2, TArg3, TArg4, TArg5> callback);
-
-		/// <summary>
-		/// Set a delegate to be called when the expectation is matched.
-		/// The delegate return value will be returned from the expectation.
-		/// </summary>
-		IMethodOptions<T> Callback<TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6>(Delegates.Function<bool, TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6> callback);
-
-		/// <summary>
-		/// Set a delegate to be called when the expectation is matched.
-		/// The delegate return value will be returned from the expectation.
-		/// </summary>
-		IMethodOptions<T> Callback<TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7>(Delegates.Function<bool, TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7> callback);
-
-		/// <summary>
-		/// Set a delegate to be called when the expectation is matched.
-		/// The delegate return value will be returned from the expectation.
-		/// </summary>
-		IMethodOptions<T> Callback<TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8>(Delegates.Function<bool, TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8> callback);
-
-		/// <summary>
-		/// Set a delegate to be called when the expectation is matched.
-		/// The delegate return value will be returned from the expectation.
-		/// </summary>
-		IMethodOptions<T> Callback<TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9>(Delegates.Function<bool, TArg0, TArg1, TArg2, TArg3, TArg4, TArg5, TArg6, TArg7, TArg8, TArg9> callback);
-
-	
-		/*
-         * Method: Do
-         * 
-         * Set an action to run when the expectation is matched.
-         * 
-         * Important:
-         * The action's delegate *must* have the same signature as the last methdo call, and its return
-         * value must be assignable to the last method call return value.
-         * 
-         * Note:
-         * This method is only called once, after the method call was match to the expectation.
-         * 
-         * 
-         */
+        IMethodOptions<T> Callback<TArg0, TArg1, TArg2, TArg3>(Func<TArg0, TArg1, TArg2, TArg3, bool> callback);
 
 		/// <summary>
 		/// Set a delegate to be called when the expectation is matched.
@@ -230,18 +123,6 @@ namespace Rhino.Mocks.Interfaces
 		/// </summary>
 		IMethodOptions<T> WhenCalled(Action<MethodInvocation> action);
 
-		/*
-			 * Method: CallOriginalMethod
-			 * 
-			 * Call the original method on the class, bypassing the mocking layers.
-			 * 
-			 * Important:
-			 * Can only be used on a method that has an implementation. 
-			 * If you try that on an interface method or an abstract method, you'll get an 
-			 * exception.
-			 * 
-			 */
-
 		/// <summary>
 		/// Call the original method on the class, bypassing the mocking layers.
 		/// </summary>
@@ -249,32 +130,11 @@ namespace Rhino.Mocks.Interfaces
 		[Obsolete("Use CallOriginalMethod(OriginalCallOptions options) overload to explicitly specify the call options")]
 		void CallOriginalMethod();
 
-		/*
-		 * Method: CallOriginalMethod
-		 * 
-		 * Call the original method on the class, optionally bypassing the mocking layers.
-		 * 
-		 * Important:
-		 * Can only be used on a method that has an implementation. 
-		 * If you try that on an interface method or an abstract method, you'll get an 
-		 * exception.
-		 * 
-		 */
-
 		/// <summary>
 		/// Call the original method on the class, optionally bypassing the mocking layers.
 		/// </summary>
 		/// <returns></returns>
 		IMethodOptions<T> CallOriginalMethod(OriginalCallOptions options);
-
-		/* Method: PropertyBehavior
-         * 
-         * Use the property as a normal property, so you can use it to save/load values
-         * without having to specify expectations for it.
-         * 
-         * Note:
-         * This can be called only when the last call is a getter or setter.
-         */
 
 		/// <summary>
 		/// Use the property as a simple property, getting/setting the values without
