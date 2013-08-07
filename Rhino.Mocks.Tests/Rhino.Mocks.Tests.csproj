@@ -141,6 +141,7 @@
     <Compile Include="Constraints\ListConstraintTests.cs" />
     <Compile Include="Constraints\ReflectionConstraint.cs" />
     <Compile Include="Constraints\StringConstraintsTests.cs" />
+    <Compile Include="Core\RepositoryScenarios.cs" />
     <Compile Include="Coverage.cs" />
     <Compile Include="CustomAttributesOnMocks.cs" />
     <Compile Include="DoHanlderTests.cs" />

@@ -69,6 +69,8 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arg.cs" />
@@ -98,6 +100,54 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Constraints\TextArg.cs" />
+    <Compile Include="Core\Arg.cs" />
+    <Compile Include="Core\Constraints\AbstractConstraint.cs" />
+    <Compile Include="Core\Constraints\Anything.cs" />
+    <Compile Include="Core\Constraints\CollectionCount.cs" />
+    <Compile Include="Core\Constraints\CollectionEqual.cs" />
+    <Compile Include="Core\Constraints\Comparison.cs" />
+    <Compile Include="Core\Constraints\Contains.cs" />
+    <Compile Include="Core\Constraints\ContainsAll.cs" />
+    <Compile Include="Core\Constraints\EndsWith.cs" />
+    <Compile Include="Core\Constraints\IsIn.cs" />
+    <Compile Include="Core\Constraints\KeyedListElement.cs" />
+    <Compile Include="Core\Constraints\LambdaConstraint.cs" />
+    <Compile Include="Core\Constraints\Like.cs" />
+    <Compile Include="Core\Constraints\ListElement.cs" />
+    <Compile Include="Core\Constraints\OneOf.cs" />
+    <Compile Include="Core\Constraints\Equal.cs" />
+    <Compile Include="Core\Constraints\OperatorAnd.cs" />
+    <Compile Include="Core\Constraints\OperatorNot.cs" />
+    <Compile Include="Core\Constraints\OperatorOr.cs" />
+    <Compile Include="Core\Constraints\PredicateConstraint.cs" />
+    <Compile Include="Core\Constraints\Same.cs" />
+    <Compile Include="Core\Constraints\StartsWith.cs" />
+    <Compile Include="Core\Constraints\TypeOf.cs" />
+    <Compile Include="Core\Expectations\ExpectationOptions.cs" />
+    <Compile Include="Core\Expectations\RepeatOptions.cs" />
+    <Compile Include="Core\Extensions\RepositoryExtensions.cs" />
+    <Compile Include="Core\Helpers\ArgumentManager.cs" />
+    <Compile Include="Core\Helpers\ByRefDummy.cs" />
+    <Compile Include="Core\Helpers\Is.cs" />
+    <Compile Include="Core\Helpers\IsArg.cs" />
+    <Compile Include="Core\Helpers\List.cs" />
+    <Compile Include="Core\Helpers\ListArg.cs" />
+    <Compile Include="Core\Helpers\MethodFormatter.cs" />
+    <Compile Include="Core\Helpers\Text.cs" />
+    <Compile Include="Core\Helpers\TextArg.cs" />
+    <Compile Include="Core\Interceptors\MockInterceptor.cs" />
+    <Compile Include="Core\Interceptors\ObjectInterceptor.cs" />
+    <Compile Include="Core\Interceptors\ProxyInterceptor.cs" />
+    <Compile Include="Core\Interfaces\IExpectationOptions.cs" />
+    <Compile Include="Core\Interfaces\IMockExpectation.cs" />
+    <Compile Include="Core\Interfaces\IMockExpectationContainer.cs" />
+    <Compile Include="Core\Interfaces\IMockInstance.cs" />
+    <Compile Include="Core\Interfaces\IRepeatOptions.cs" />
+    <Compile Include="Core\MockInstance.cs" />
+    <Compile Include="Core\MockInstanceEquality.cs" />
+    <Compile Include="Core\Repository.cs" />
+    <Compile Include="Core\RepositoryForDelegates.cs" />
+    <Compile Include="Core\RhinoSelector.cs" />
     <Compile Include="Exceptions\ExpectationViolationException.cs">
       <SubType>Code</SubType>
     </Compile>
