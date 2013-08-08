@@ -45,13 +45,14 @@ namespace Rhino.Mocks.Core.Interceptors
             if (container.ExpectationMarked)
             {
                 var expectation = container.GetMarkedExpectation();
-                expectation.StoreMethodCall(method, arguments);
+                expectation.HandleMethodCall(method, arguments);
                 
                 invocation.ReturnValue = IdentifyDefaultValue(type);
                 return;
             }
 
-            invocation.ReturnValue = container.TrackMethodCall(invocation, method, arguments);
+            invocation.ReturnValue = container
+                .HandleMethodCall(invocation, method, arguments);
         }
 
         private object IdentifyDefaultValue(Type type)

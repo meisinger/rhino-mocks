@@ -83,13 +83,18 @@ namespace Rhino.Mocks.Core.Expectations
         public AbstractConstraint[] Arguments { get; set; }
 
         /// <summary>
+        /// Collection of "out" and "ref" arguments
+        /// </summary>
+        public object[] ReturnArguments { get; set; }
+        
+        /// <summary>
         /// Return value for the expectation
         /// </summary>
         public virtual object ReturnValue
         {
             get { return null; }
         }
-
+        
         /// <summary>
         /// constructor
         /// </summary>
@@ -130,19 +135,16 @@ namespace Rhino.Mocks.Core.Expectations
         /// </summary>
         /// <param name="method"></param>
         /// <param name="arguments"></param>
-        public void StoreMethodCall(MethodInfo method, object[] arguments)
+        public void HandleMethodCall(MethodInfo method, object[] arguments)
         {
             Method = method;
 
             if (ArgumentManager.HasBeenUsed)
             {
                 ArgumentManager.ValidateMethodSignature(method);
-
                 Arguments = ArgumentManager.GetConstraints();
-                var passingParameters = ArgumentManager.GetReturnValues();
-
+                ReturnArguments = ArgumentManager.GetReturnValues();
                 ArgumentManager.Clear();
-                
                 return;
             }
 
@@ -167,6 +169,17 @@ namespace Rhino.Mocks.Core.Expectations
         {
             proceedIsForced = true;
             return this;
+        }
+
+        /// <summary>
+        /// Throw exception of the given type when
+        /// the method is called
+        /// </summary>
+        /// <typeparam name="TException"></typeparam>
+        /// <returns>Fluid Interface</returns>
+        IExpectationOptions IExpectationOptions.Throws<TException>()
+        {
+            throw new TException();
         }
     }
 
@@ -267,6 +280,17 @@ namespace Rhino.Mocks.Core.Expectations
         {
             proceedIsForced = true;
             return this;
+        }
+
+        /// <summary>
+        /// Throw exception of the given type when
+        /// the method is called
+        /// </summary>
+        /// <typeparam name="TException"></typeparam>
+        /// <returns>Fluid Interface</returns>
+        IExpectationOptions<T> IExpectationOptions<T>.Throws<TException>()
+        {
+            throw new TException();
         }
     }
 }

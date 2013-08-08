@@ -18,6 +18,15 @@ namespace Rhino.Mocks.Core.Interfaces
         /// </summary>
         /// <returns>Fluid Interface</returns>
         IExpectationOptions CallOriginalMethod();
+
+        /// <summary>
+        /// Throw exception of the given type when
+        /// the method is called
+        /// </summary>
+        /// <typeparam name="TException"></typeparam>
+        /// <returns>Fluid Interface</returns>
+        IExpectationOptions Throws<TException>()
+            where TException : Exception, new();
     }
 
     /// <summary>
@@ -50,5 +59,14 @@ namespace Rhino.Mocks.Core.Interfaces
         /// </summary>
         /// <returns>Fluid Interface</returns>
         IExpectationOptions<T> CallOriginalMethod();
+
+        /// <summary>
+        /// Throw exception of the given type when
+        /// the method is called
+        /// </summary>
+        /// <typeparam name="TException"></typeparam>
+        /// <returns>Fluid Interface</returns>
+        IExpectationOptions<T> Throws<TException>()
+            where TException : Exception, new();
     }
 }

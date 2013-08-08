@@ -44,6 +44,6 @@ namespace Rhino.Mocks.Core.Interfaces
         /// <param name="method"></param>
         /// <param name="arguments"></param>
         /// <returns></returns>
-        object TrackMethodCall(IInvocation invocation, MethodInfo method, object[] arguments);
+        object HandleMethodCall(IInvocation invocation, MethodInfo method, object[] arguments);
     }
 }

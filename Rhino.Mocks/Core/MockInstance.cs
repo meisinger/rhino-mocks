@@ -99,7 +99,7 @@ namespace Rhino.Mocks.Core
         /// <param name="method"></param>
         /// <param name="arguments"></param>
         /// <returns></returns>
-        public object TrackMethodCall(IInvocation invocation, MethodInfo method, object[] arguments)
+        public object HandleMethodCall(IInvocation invocation, MethodInfo method, object[] arguments)
         {
             if (arguments == null)
                 arguments = new object[0];
@@ -118,23 +118,37 @@ namespace Rhino.Mocks.Core
                 }
             }
 
-            if (expectation != null)
+            if (expectation == null)
             {
-                expectation.IncrementActual();
-                if (expectation.ForceProceed)
-                {
-                    invocation.Proceed();
-                    return invocation.ReturnValue;
-                }
+                var returnType = method.ReturnType;
+                if (!returnType.IsValueType || returnType == typeof(void))
+                    return null;
 
-                return expectation.ReturnValue;
+                return Activator.CreateInstance(returnType);
             }
 
-            var returnType = method.ReturnType;
-            if (!returnType.IsValueType || returnType == typeof(void))
-                return null;
+            expectation.IncrementActual();
+            if (expectation.ReturnArguments != null && expectation.ReturnArguments.Any())
+            {
+                var parameters = method.GetParameters();
+                for (int index = 0, returnIndex = 0; index < parameters.Length; index++)
+                {
+                    var parameter = parameters[index];
+                    if (!parameter.IsOut && !parameter.ParameterType.IsByRef)
+                        continue;
 
-            return Activator.CreateInstance(returnType);
+                    arguments[index] = expectation.ReturnArguments[returnIndex];
+                    returnIndex++;
+                }
+            }
+
+            if (expectation.ForceProceed)
+            {
+                invocation.Proceed();
+                return invocation.ReturnValue;
+            }
+
+            return expectation.ReturnValue;
         }
 
         private bool ExpectationMatchesCall(ExpectationOptions item, MethodInfo method, object[] arguments)
