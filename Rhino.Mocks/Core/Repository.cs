@@ -45,16 +45,44 @@ namespace Rhino.Mocks.Core
         }
 
         /// <summary>
-        /// Generate a stub-mock for the given type
+        /// Generates a mock for the given type
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="arguments"></param>
         /// <returns></returns>
-        public static T GenerateStub<T>(params object[] arguments)
+        public static T Mock<T>(params object[] arguments)
             where T : class
         {
             var repository = new Repository();
             return repository.CreateMockObject<T>(arguments);
+        }
+
+        /// <summary>
+        /// Generates a mock for the given type
+        /// allowing additional types to be included
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="extraTypes"></param>
+        /// <returns></returns>
+        public static T Mock<T>(params Type[] extraTypes)
+            where T : class
+        {
+            var repository = new Repository();
+            return repository.CreateMockObject<T>(extraTypes);
+        }
+
+        /// <summary>
+        /// Generates a mock for the given type
+        /// with additional types
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="extraTypes"></param>
+        /// <returns></returns>
+        public static T Mock<T>(Type[] extraTypes, params object[] arguments)
+            where T : class
+        {
+            var repository = new Repository();
+            return repository.CreateMockObject<T>(extraTypes, arguments);
         }
 
         internal T CreateMockObject<T>(params Type[] extraTypes)

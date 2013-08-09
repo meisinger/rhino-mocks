@@ -15,6 +15,7 @@ namespace Rhino.Mocks.Core.Expectations
         private readonly IRepeatOptions repeatOptions;
 
         private bool proceedIsForced;
+        private bool throwsException;
         private int actualCount;
         private int expectedCount;
 
@@ -63,6 +64,15 @@ namespace Rhino.Mocks.Core.Expectations
         }
 
         /// <summary>
+        /// Indicates whether or not an
+        /// exception should be thrown
+        /// </summary>
+        public virtual bool ThrowsException
+        {
+            get { return throwsException; }
+        }
+
+        /// <summary>
         /// Indicates whether or not the
         /// expectation has a return type
         /// </summary>
@@ -81,6 +91,11 @@ namespace Rhino.Mocks.Core.Expectations
         /// expectation
         /// </summary>
         public AbstractConstraint[] Arguments { get; set; }
+
+        /// <summary>
+        /// Expectation to throw if method is called
+        /// </summary>
+        public Exception ExceptionToThrow { get; set; }
 
         /// <summary>
         /// Collection of "out" and "ref" arguments
@@ -170,6 +185,21 @@ namespace Rhino.Mocks.Core.Expectations
             proceedIsForced = true;
             return this;
         }
+        
+        /// <summary>
+        /// Ignores all arguments removing any
+        /// existing argument constraints
+        /// </summary>
+        /// <returns>Fluid Interface</returns>
+        IExpectationOptions IExpectationOptions.IgnoreArguments()
+        {
+            var constraints = new AbstractConstraint[Arguments.Length];
+            for (int index = 0; index < Arguments.Length; index++)
+                constraints[index] = Is.Anything();
+
+            Arguments = constraints;
+            return this;
+        }
 
         /// <summary>
         /// Throw exception of the given type when
@@ -179,7 +209,10 @@ namespace Rhino.Mocks.Core.Expectations
         /// <returns>Fluid Interface</returns>
         IExpectationOptions IExpectationOptions.Throws<TException>()
         {
-            throw new TException();
+            throwsException = true;
+
+            ExceptionToThrow = new TException();
+            return this;
         }
     }
 
@@ -192,6 +225,7 @@ namespace Rhino.Mocks.Core.Expectations
         private readonly IRepeatOptions<T> repeatOptions;
 
         private bool proceedIsForced;
+        private bool throwsException;
         private bool returnValueSet;
         private T returnValue;
 
@@ -210,6 +244,15 @@ namespace Rhino.Mocks.Core.Expectations
         public override bool ForceProceed
         {
             get { return proceedIsForced; }
+        }
+
+        /// <summary>
+        /// Indicates whether or not an
+        /// exception should be thrown
+        /// </summary>
+        public override bool ThrowsException
+        {
+            get { return throwsException; }
         }
 
         /// <summary>
@@ -249,6 +292,31 @@ namespace Rhino.Mocks.Core.Expectations
         }
 
         /// <summary>
+        /// Call original method
+        /// </summary>
+        /// <returns>Fluid Interface</returns>
+        IExpectationOptions<T> IExpectationOptions<T>.CallOriginalMethod()
+        {
+            proceedIsForced = true;
+            return this;
+        }
+
+        /// <summary>
+        /// Ignores all arguments removing any
+        /// existing argument constraints
+        /// </summary>
+        /// <returns>Fluid Interface</returns>
+        IExpectationOptions<T> IExpectationOptions<T>.IgnoreArguments()
+        {
+            var constraints = new AbstractConstraint[Arguments.Length];
+            for (int index = 0; index < Arguments.Length; index++)
+                constraints[index] = Is.Anything();
+
+            Arguments = constraints;
+            return this;
+        }
+
+        /// <summary>
         /// Define the return value of a method call (non-void)
         /// </summary>
         /// <param name="value">Value to return when method is called</param>
@@ -273,16 +341,6 @@ namespace Rhino.Mocks.Core.Expectations
         }
 
         /// <summary>
-        /// Call original method
-        /// </summary>
-        /// <returns>Fluid Interface</returns>
-        IExpectationOptions<T> IExpectationOptions<T>.CallOriginalMethod()
-        {
-            proceedIsForced = true;
-            return this;
-        }
-
-        /// <summary>
         /// Throw exception of the given type when
         /// the method is called
         /// </summary>
@@ -290,7 +348,10 @@ namespace Rhino.Mocks.Core.Expectations
         /// <returns>Fluid Interface</returns>
         IExpectationOptions<T> IExpectationOptions<T>.Throws<TException>()
         {
-            throw new TException();
+            throwsException = true;
+
+            ExceptionToThrow = new TException();
+            return this;
         }
     }
 }

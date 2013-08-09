@@ -53,7 +53,6 @@ namespace Rhino.Mocks.Core
 
             container = new List<ExpectationOptions>();
             stack = new Stack<ExpectationOptions>();
-
             hashcode = MockInstanceEquality.NextHash;
         }
 
@@ -65,7 +64,6 @@ namespace Rhino.Mocks.Core
         public ExpectationOptions GetMarkedExpectation()
         {
             ExpectationMarked = false;
-
             return stack.Pop();
         }
 
@@ -141,6 +139,9 @@ namespace Rhino.Mocks.Core
                     returnIndex++;
                 }
             }
+
+            if (expectation.ThrowsException)
+                throw expectation.ExceptionToThrow;
 
             if (expectation.ForceProceed)
             {

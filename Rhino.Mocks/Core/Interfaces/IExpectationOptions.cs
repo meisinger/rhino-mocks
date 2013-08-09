@@ -20,6 +20,13 @@ namespace Rhino.Mocks.Core.Interfaces
         IExpectationOptions CallOriginalMethod();
 
         /// <summary>
+        /// Ignores all arguments removing any
+        /// existing argument constraints
+        /// </summary>
+        /// <returns></returns>
+        IExpectationOptions IgnoreArguments();
+
+        /// <summary>
         /// Throw exception of the given type when
         /// the method is called
         /// </summary>
@@ -41,6 +48,19 @@ namespace Rhino.Mocks.Core.Interfaces
         IRepeatOptions<T> Repeat { get; }
 
         /// <summary>
+        /// Call the original method
+        /// </summary>
+        /// <returns>Fluid Interface</returns>
+        IExpectationOptions<T> CallOriginalMethod();
+
+        /// <summary>
+        /// Ignores all arguments removing any
+        /// existing argument constraints
+        /// </summary>
+        /// <returns></returns>
+        IExpectationOptions<T> IgnoreArguments();
+
+        /// <summary>
         /// Define the return value of a method call (non-void)
         /// </summary>
         /// <param name="value">Value to return when method is called</param>
@@ -53,12 +73,6 @@ namespace Rhino.Mocks.Core.Interfaces
         /// <param name="func">Value to return when method is called</param>
         /// <returns>Fluid Interface</returns>
         IExpectationOptions<T> Return(Func<T> func);
-
-        /// <summary>
-        /// Call the original method
-        /// </summary>
-        /// <returns>Fluid Interface</returns>
-        IExpectationOptions<T> CallOriginalMethod();
 
         /// <summary>
         /// Throw exception of the given type when

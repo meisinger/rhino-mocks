@@ -113,7 +113,7 @@ namespace Rhino.Mocks.Core.Extensions
                 throw new InvalidOperationException();
 
             var method = expectation.Method;
-            if (method.IsSpecialName)
+            if (!method.IsSpecialName)
                 throw new InvalidOperationException("ExpectEvent method can only be used against events.");
 
             var methodName = method.Name;
@@ -150,16 +150,22 @@ namespace Rhino.Mocks.Core.Extensions
                 if (expectation.ExpectationMet)
                     continue;
 
-                var message = MethodFormatter.ToString(invocation, expectation.Method, expectation.Arguments,
+                var methodName = MethodFormatter.ToString(invocation, expectation.Method, expectation.Arguments,
                     (x, i) => expectation.Arguments[i].Message);
 
-                buffer.Append(message)
+                buffer.Append(methodName)
                     .AppendFormat(" Expected # {0}, Actual # {1}.", expectation.ExpectedCount, expectation.ActualCount)
                     .AppendLine();
             }
-            buffer.Remove(buffer.Length - 2, 2);
 
-            throw new Exception(buffer.ToString());
+            if (buffer.Length == 0)
+                return;
+
+            var message = buffer
+                .Remove(buffer.Length - 2, 2)
+                .ToString();
+
+            throw new Exception(message);
         }
 
         private static IMockExpectationContainer GetExpectationContainer(object instance)
