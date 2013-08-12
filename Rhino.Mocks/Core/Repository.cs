@@ -48,6 +48,18 @@ namespace Rhino.Mocks.Core
         /// Generates a mock for the given type
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T Mock<T>()
+            where T : class
+        {
+            var repository = new Repository();
+            return repository.CreateMockObject<T>(new Type[0], new object[0]);
+        }
+
+        /// <summary>
+        /// Generates a mock for the given type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="arguments"></param>
         /// <returns></returns>
         public static T Mock<T>(params object[] arguments)
@@ -77,6 +89,7 @@ namespace Rhino.Mocks.Core
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="extraTypes"></param>
+        /// <param name="arguments"></param>
         /// <returns></returns>
         public static T Mock<T>(Type[] extraTypes, params object[] arguments)
             where T : class

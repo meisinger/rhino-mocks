@@ -123,6 +123,7 @@
     <Compile Include="Core\Constraints\Same.cs" />
     <Compile Include="Core\Constraints\StartsWith.cs" />
     <Compile Include="Core\Constraints\TypeOf.cs" />
+    <Compile Include="Core\Expectations\Actuals.cs" />
     <Compile Include="Core\Expectations\ExpectationOptions.cs" />
     <Compile Include="Core\Expectations\RepeatOptions.cs" />
     <Compile Include="Core\Extensions\RepositoryExtensions.cs" />

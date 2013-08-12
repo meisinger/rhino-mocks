@@ -13,6 +13,99 @@ namespace Rhino.Mocks.Core.Extensions
     public static class RepositoryExtensions
     {
         /// <summary>
+        /// Asserts the given action was called against the 
+        /// mocked object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="instance"></param>
+        /// <param name="action"></param>
+        public static void WasCalled<T>(this T instance, Action<T> action)
+            where T : class
+        {
+            if (instance == null)
+                throw new ArgumentNullException("instance", "Assertions cannot be made on a null object or instance.");
+
+            var container = GetExpectationContainer(instance);
+            if (container == null)
+                throw new ArgumentOutOfRangeException("instance", "Assertions can only be made on a mocked object or instance.");
+
+            var actuals = container.ListActuals();
+            if (actuals.Length == 0)
+                throw new Exception("Nope");
+
+            var assertion = new ExpectationOptions();
+            container.MarkForAssertion(assertion);
+
+            try
+            {
+                action(instance);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Exception caught while making assertion.", ex);
+            }
+
+            if (container.ExpectationMarked)
+                throw new InvalidOperationException();
+
+            for (int index = 0; index < actuals.Length; index++)
+            {
+                var actual = actuals[index];
+                if (assertion.MatchesCall(actual.Method, actual.Arguments))
+                    return;
+            }
+
+            throw new Exception("Nope");
+        }
+
+        /// <summary>
+        /// Asserts the given action was called against the 
+        /// mocked object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="instance"></param>
+        /// <param name="func"></param>
+        public static void WasCalled<T, TResult>(this T instance, Func<T, TResult> func)
+            where T : class
+        {
+            if (instance == null)
+                throw new ArgumentNullException("instance", "Assertions cannot be made on a null object or instance.");
+
+            var container = GetExpectationContainer(instance);
+            if (container == null)
+                throw new ArgumentOutOfRangeException("instance", "Assertions can only be made on a mocked object or instance.");
+
+            var actuals = container.ListActuals();
+            if (actuals.Length == 0)
+                throw new Exception("Nope");
+
+            var assertion = new ExpectationOptions();
+            container.MarkForAssertion(assertion);
+
+            try
+            {
+                func(instance);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Exception caught while making assertion.", ex);
+            }
+
+            if (container.ExpectationMarked)
+                throw new InvalidOperationException();
+
+            for (int index = 0; index < actuals.Length; index++)
+            {
+                var actual = actuals[index];
+                if (assertion.MatchesCall(actual.Method, actual.Arguments))
+                    return;
+            }
+
+            throw new Exception("Nope");
+        }
+
+        /// <summary>
         /// Set expectation on an object
         /// </summary>
         /// <typeparam name="T"></typeparam>

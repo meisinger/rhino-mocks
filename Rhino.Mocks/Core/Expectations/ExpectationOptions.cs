@@ -175,6 +175,50 @@ namespace Rhino.Mocks.Core.Expectations
 
             Arguments = constraints;
         }
+        
+        /// <summary>
+        /// Checks that the given method and arguments
+        /// match the expectation and argument constraints
+        /// </summary>
+        /// <param name="method"></param>
+        /// <param name="arguments"></param>
+        /// <returns></returns>
+        public bool MatchesCall(MethodInfo method, object[] arguments)
+        {
+            if (!Method.Equals(method))
+                return false;
+
+            return MatchesCallArguments(arguments);
+        }
+
+        /// <summary>
+        /// Checks that the given arguments match the
+        /// argument constraints
+        /// </summary>
+        /// <param name="arguments"></param>
+        /// <returns></returns>
+        public bool MatchesCallArguments(object[] arguments)
+        {
+            if (Arguments == null && arguments == null)
+                return true;
+
+            if (Arguments == null || arguments == null)
+                return false;
+
+            if (Arguments.Length != arguments.Length)
+                return false;
+
+            for (int index = 0; index < Arguments.Length; index++)
+            {
+                var argument = arguments[index];
+                var constraint = Arguments[index];
+
+                if (!constraint.Eval(argument))
+                    return false;
+            }
+
+            return true;
+        }
 
         /// <summary>
         /// Call original method

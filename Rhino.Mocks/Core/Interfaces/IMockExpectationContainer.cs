@@ -24,11 +24,24 @@ namespace Rhino.Mocks.Core.Interfaces
         ExpectationOptions GetMarkedExpectation();
 
         /// <summary>
+        /// Returns actual calls that have
+        /// been made
+        /// </summary>
+        /// <returns></returns>
+        Actuals[] ListActuals();
+
+        /// <summary>
         /// Returns all expectations that have
         /// been set for consideration
         /// </summary>
         /// <returns></returns>
         ExpectationOptions[] ListExpectations();
+
+        /// <summary>
+        /// Set an expectation for consideration
+        /// </summary>
+        /// <param name="expectation"></param>
+        void MarkForAssertion(ExpectationOptions expectation);
 
         /// <summary>
         /// Add an expectation into consideration

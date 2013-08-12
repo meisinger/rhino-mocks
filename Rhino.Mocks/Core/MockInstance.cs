@@ -13,6 +13,7 @@ namespace Rhino.Mocks.Core
     /// </summary>
     public class MockInstance : IMockInstance, IMockExpectationContainer
     {
+        private readonly List<Actuals> actuals;
         private readonly List<ExpectationOptions> container;
         private readonly Stack<ExpectationOptions> stack;
         private readonly Type[] types;
@@ -51,6 +52,7 @@ namespace Rhino.Mocks.Core
         {
             this.types = types;
 
+            actuals = new List<Actuals>();
             container = new List<ExpectationOptions>();
             stack = new Stack<ExpectationOptions>();
             hashcode = MockInstanceEquality.NextHash;
@@ -68,6 +70,16 @@ namespace Rhino.Mocks.Core
         }
 
         /// <summary>
+        /// Returns actual calls that have
+        /// been made
+        /// </summary>
+        /// <returns></returns>
+        public Actuals[] ListActuals()
+        {
+            return actuals.ToArray();
+        }
+
+        /// <summary>
         /// Returns all expectations that have
         /// been set for consideration
         /// </summary>
@@ -75,6 +87,17 @@ namespace Rhino.Mocks.Core
         public ExpectationOptions[] ListExpectations()
         {
             return container.ToArray();
+        }
+
+        /// <summary>
+        /// Set an expectation for consideration
+        /// </summary>
+        /// <param name="expectation"></param>
+        public void MarkForAssertion(ExpectationOptions expectation)
+        {
+            ExpectationMarked = true;
+
+            stack.Push(expectation);
         }
 
         /// <summary>
@@ -102,14 +125,17 @@ namespace Rhino.Mocks.Core
             if (arguments == null)
                 arguments = new object[0];
 
+            var actual = new Actuals(method, arguments);
+            actuals.Add(actual);
+
             ExpectationOptions expectation = null;
             for (int entryIndex = 0; entryIndex < container.Count; entryIndex++)
             {
                 var entry = container[entryIndex];
-                if (entry.ExpectationMet)
+                if (!entry.MatchesCall(method, arguments))
                     continue;
 
-                if (ExpectationMatchesCall(entry, method, arguments))
+                if (!entry.ExpectationMet)
                 {
                     expectation = entry;
                     break;
@@ -118,6 +144,9 @@ namespace Rhino.Mocks.Core
 
             if (expectation == null)
             {
+                // this could be where a strict call
+                // would throw an exception
+
                 var returnType = method.ReturnType;
                 if (!returnType.IsValueType || returnType == typeof(void))
                     return null;
@@ -125,6 +154,8 @@ namespace Rhino.Mocks.Core
                 return Activator.CreateInstance(returnType);
             }
 
+            // should the expectation get the
+            // actual option as well?
             expectation.IncrementActual();
             if (expectation.ReturnArguments != null && expectation.ReturnArguments.Any())
             {
@@ -150,39 +181,6 @@ namespace Rhino.Mocks.Core
             }
 
             return expectation.ReturnValue;
-        }
-
-        private bool ExpectationMatchesCall(ExpectationOptions item, MethodInfo method, object[] arguments)
-        {
-            var itemMethod = item.Method;
-            if (!itemMethod.Equals(method))
-                return false;
-
-            return ExpectationMatchesArguments(item, arguments);
-        }
-
-        private bool ExpectationMatchesArguments(ExpectationOptions item, object[] arguments)
-        {
-            var constraints = item.Arguments;
-            if (constraints == null && arguments == null)
-                return true;
-
-            if (constraints == null || arguments == null)
-                return false;
-
-            if (constraints.Length != arguments.Length)
-                return false;
-
-            for (int index = 0; index < constraints.Length; index++)
-            {
-                var argument = arguments[index];
-                var constraint = constraints[index];
-
-                if (!constraint.Eval(argument))
-                    return false;
-            }
-
-            return true;
         }
     }
 }

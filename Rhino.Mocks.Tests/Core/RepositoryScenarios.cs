@@ -415,6 +415,28 @@ namespace Rhino.Mocks.Tests.Core
         }
 
         [Fact]
+        public void When_Asserting_A_Method_Was_Called_With_Expectation_No_Exception_Is_Thrown_When_Method_Was_Called()
+        {
+            var mock = Repository.Mock<IScenarioObject>();
+            mock.ExpectCall(x => x.StringMethodEcho("mike"))
+                .Return("true");
+
+            var value = mock.StringMethodEcho("mike");
+            Assert.Equal("true", value);
+
+            mock.WasCalled(x => x.StringMethodEcho("mike"));
+        }
+
+        [Fact]
+        public void When_Asserting_A_Method_Was_Called_With_No_Expectation_No_Exception_Is_Thrown_When_Method_Was_Called()
+        {
+            var mock = Repository.Mock<IScenarioObject>();
+            mock.StringMethodEcho("mike");
+
+            mock.WasCalled(x => x.StringMethodEcho("mike"));
+        }
+
+        [Fact]
         public void Expectation_Throws_Exception_When_An_Exception_Is_Set()
         {
             var mock = Repository.Mock<IScenarioObject>();
