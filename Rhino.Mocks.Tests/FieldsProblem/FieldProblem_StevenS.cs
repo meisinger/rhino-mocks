@@ -10,7 +10,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
 		public FieldProblem_StevenS()
 		{
-            myMembershipProvider = MockRepository.GenerateStrictMock<MembershipProvider>();
+            myMembershipProvider = Repository.Partial<MembershipProvider>();
 		}
 
         public void Dispose()

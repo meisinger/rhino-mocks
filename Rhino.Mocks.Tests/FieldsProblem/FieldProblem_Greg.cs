@@ -7,8 +7,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
         public void IgnoreArguments()
         {
-            IFoo myFoo = MockRepository.GenerateStrictMock<IFoo>();
-            IBar<int> myBar = MockRepository.GenerateStrictMock<IBar<int>>();
+            IFoo myFoo = Repository.Mock<IFoo>();
+            IBar<int> myBar = Repository.Mock<IBar<int>>();
 
             myFoo.Expect(x => x.RunBar(myBar))
                 .IgnoreArguments()
@@ -18,7 +18,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             bool success = myExample.ExampleMethod();
             Assert.True(success);
 
-            myFoo.VerifyAllExpectations();
+            myFoo.VerifyExpectations();
         }
     }
 

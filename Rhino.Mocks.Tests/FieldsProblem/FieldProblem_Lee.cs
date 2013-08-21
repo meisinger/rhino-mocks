@@ -11,7 +11,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void IgnoringArgumentsOnGenericMethod()
 		{
-			IHaveGenericMethod mock = MockRepository.GenerateStrictMock<IHaveGenericMethod>();
+            IHaveGenericMethod mock = Repository.Mock<IHaveGenericMethod>();
 
             mock.Expect(x => x.Foo(15))
                 .IgnoreArguments()
@@ -27,12 +27,10 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		{
             List<Guid> results = new List<Guid>();
 
-            IFunkyList<int> list = MockRepository.GenerateDynamicMock<IFunkyList<int>>();
+            IFunkyList<int> list = Repository.Mock<IFunkyList<int>>();
             Assert.NotNull(list);
 
-            list.Expect(x => x.FunkItUp<Guid>(null, null))
-                .IgnoreArguments()
-                .Constraints(Is.Equal("1"), Is.Equal(2))
+            list.Expect(x => x.FunkItUp<Guid>(Arg.Is("1"), Arg.Is(2)))
                 .Return(results);
 			
 			Assert.Same(results, list.FunkItUp<Guid>("1", 2));

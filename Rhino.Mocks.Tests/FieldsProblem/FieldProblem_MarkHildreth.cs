@@ -10,7 +10,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void CanStubMyEntity()
 		{
-			MyEntity stub = MockRepository.GenerateStub<MyEntity>();
+            MyEntity stub = Repository.Partial<MyEntity>();
 			Assert.NotNull(stub);
 		}
 

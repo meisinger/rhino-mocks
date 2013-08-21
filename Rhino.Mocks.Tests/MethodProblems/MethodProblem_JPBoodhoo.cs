@@ -34,7 +34,7 @@ namespace Rhino.Mocks.Tests.MethodProblems
 			public when_stubbing_a_call_to_a_method_that_matches_the_naming_prefix_for_an_event_but_is_not_an_event()
             {
                 item = new object();
-                dependency = MockRepository.GenerateStub<InterfaceWithAMethodThatHasANameThatShouldNotBeRecognizedAsAnEvent>();
+                dependency = Repository.Mock<InterfaceWithAMethodThatHasANameThatShouldNotBeRecognizedAsAnEvent>();
                 system_under_test = new GenericClass(dependency);
                 system_under_test.do_something(item);
             }

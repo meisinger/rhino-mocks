@@ -10,10 +10,9 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         {
             IntPtr parameter;
 
-            IFooWithOutIntPtr mock = MockRepository.GenerateStrictMock<IFooWithOutIntPtr>();
-            mock.Expect(x => x.GetBar(out parameter))
+            IFooWithOutIntPtr mock = Repository.Mock<IFooWithOutIntPtr>();
+            mock.Expect(x => x.GetBar(out Arg<IntPtr>.Out(new IntPtr(3)).Dummy))
                 .IgnoreArguments()
-                .OutRef(new IntPtr(3))
                 .Return(5);
             
             Assert.Equal(5, mock.GetBar(out parameter));

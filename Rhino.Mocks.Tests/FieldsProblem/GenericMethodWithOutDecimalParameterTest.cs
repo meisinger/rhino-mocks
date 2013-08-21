@@ -13,13 +13,12 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void GenericMethodWithOutDecimalParameter()
 		{
-			IMyInterface mock = MockRepository.GenerateStrictMock<IMyInterface>();
+            IMyInterface mock = Repository.Mock<IMyInterface>();
 
 			decimal expectedOutParameter = 1.234M;
             decimal emptyOutParameter;
 
-            mock.Expect(x => x.GenericMethod(out emptyOutParameter))
-                .OutRef(expectedOutParameter);
+            mock.Expect(x => x.GenericMethod(out Arg<decimal>.Out(expectedOutParameter).Dummy));
 
             decimal outParameter;
             mock.GenericMethod(out outParameter);

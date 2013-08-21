@@ -9,14 +9,14 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void Can_mix_assert_was_call_with_verify_all()
 		{
-			var errorHandler = MockRepository.GenerateDynamicMock<IErrorHandler>();
+            var errorHandler = Repository.Mock<IErrorHandler>();
 			
 			var ex = new Exception("Take this");
 			errorHandler.HandleError(ex);
 
 			errorHandler.AssertWasCalled(eh => eh.HandleError(ex));
 
-            errorHandler.VerifyAllExpectations();
+            errorHandler.VerifyExpectations();
 		}
 	}
 

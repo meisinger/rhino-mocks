@@ -40,8 +40,8 @@ namespace Rhino.Mocks.Tests
 
 		public  VerifyTests()
 		{
-			demoParam = MockRepository.GenerateStrictMock(typeof(ConcreteDemo)) as ConcreteDemo;
-			demo = MockRepository.GenerateStrictMock(typeof(IDemo)) as IDemo;
+            demoParam = Repository.Partial<ConcreteDemo>();
+            demo = Repository.Mock<IDemo>();
 		}
 
 		public void Dispose()

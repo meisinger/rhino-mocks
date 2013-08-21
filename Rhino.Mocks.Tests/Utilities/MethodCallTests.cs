@@ -29,8 +29,8 @@
 
 using System;
 using System.Reflection;
+using Rhino.Mocks.Helpers;
 using Xunit;
-using Rhino.Mocks.Utilities;
 
 namespace Rhino.Mocks.Tests.Utilities
 {
@@ -39,18 +39,14 @@ namespace Rhino.Mocks.Tests.Utilities
 		[Fact]
 		public void MethodCallToString()
 		{
-            string actual = MethodCallUtil.StringPresentation(null, 
-                GetMethodInfo("StartsWith", ""), new object[] { "abcd" });
-
-			Assert.Equal("String.StartsWith(\"abcd\");", actual);
+            string actual = MethodFormatter.ToString(null, GetMethodInfo("StartsWith", ""), new object[] { "abcd" });
+            Assert.Equal("String.StartsWith(\"abcd\");", actual);
 		}
 
 		[Fact]
 		public void MethodCallToStringWithSeveralArguments()
 		{
-            string actual = MethodCallUtil
-                .StringPresentation(null, GetMethodInfo("IndexOf", "abcd", 4), new object[] { "abcd", 4 });
-
+            string actual = MethodFormatter.ToString(null, GetMethodInfo("IndexOf", "abcd", 4), new object[] { "abcd", 4 });
 			Assert.Equal("String.IndexOf(\"abcd\", 4);", actual);
 		}
 
@@ -59,7 +55,7 @@ namespace Rhino.Mocks.Tests.Utilities
 		{
             Assert.Throws<ArgumentNullException>(
                 "Value cannot be null.\r\nParameter name: method",
-                () => MethodCallUtil.StringPresentation(null, null, null));
+                () => MethodFormatter.ToString(null, null));
 		}
 
 		[Fact]
@@ -70,7 +66,7 @@ namespace Rhino.Mocks.Tests.Utilities
 
             Assert.Throws<ArgumentNullException>(
                 "Value cannot be null.\r\nParameter name: args",
-                () => MethodCallUtil.StringPresentation(null, method, null));
+                () => MethodFormatter.ToString(null, method, null, null));
 		}
 
 		[Fact]
@@ -81,7 +77,7 @@ namespace Rhino.Mocks.Tests.Utilities
 
             Assert.Equal(
                 "String.StartsWith(missing parameter);", 
-                MethodCallUtil.StringPresentation(null, method, new object[0]));
+                MethodFormatter.ToString(null, method, new object[0]));
 
 		}
 

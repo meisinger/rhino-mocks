@@ -10,7 +10,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		{
 			Assert.Throws<ArgumentNullException>(
                 "You cannot mock a null instance\r\nParameter name: mock", 
-				() => RhinoMocksExtensions.Expect<object>(null, x => x.ToString()));
+				() => RepositoryExtensions.Expect<object>(null, x => x.ToString()));
 		}
 	}
 }

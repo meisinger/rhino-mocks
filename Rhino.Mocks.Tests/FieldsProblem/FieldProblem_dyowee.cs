@@ -11,7 +11,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void MockingRecordSet()
 		{
-			Recordset mock = MockRepository.GenerateStrictMock<ADODB.Recordset>();
+            Recordset mock = Repository.Mock<ADODB.Recordset>();
 			Assert.NotNull(mock);
 
             mock.Expect(x => x.ActiveConnection)

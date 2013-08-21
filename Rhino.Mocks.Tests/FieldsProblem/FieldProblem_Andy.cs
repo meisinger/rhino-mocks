@@ -10,7 +10,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void MockingPropertyUsingBaseKeyword()
 		{
-			SubClass mock = MockRepository.GeneratePartialMock<SubClass>();
+			SubClass mock = Repository.Partial<SubClass>();
 
             mock.Expect(x => x.SubProperty)
                 .Return("Foo")

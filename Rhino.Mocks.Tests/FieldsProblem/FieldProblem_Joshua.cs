@@ -10,7 +10,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         {
             const int theNumberToReturnFromTheServiceOutParameter = 20;
 
-            ServiceBeingCalled service = MockRepository.GenerateStrictMock<ServiceBeingCalled>();
+            ServiceBeingCalled service = Repository.Mock<ServiceBeingCalled>();
 
             int uninitialized;
 
@@ -23,9 +23,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
             // I understand I can do an IgnoreArguments() or Contraints(Is.Equal("key"), Is.Anything()), but I think the framework should take care of that for me
 
-            service.Expect(x => x.PopulateOutParameter("key", out uninitialized))
-                .Return(null)
-                .OutRef(theNumberToReturnFromTheServiceOutParameter);
+            service.Expect(x => x.PopulateOutParameter("key", out Arg<int>.Out(20).Dummy))
+                .Return(null);
 
             ObjectBeingTested testObject = new ObjectBeingTested(service);
             int returnedValue = testObject.MethodUnderTest();

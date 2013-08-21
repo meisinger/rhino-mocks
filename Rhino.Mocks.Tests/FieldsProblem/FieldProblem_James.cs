@@ -37,11 +37,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 	
 	public class FieldProblem_James
 	{
-		private MockRepository m_mockery;
-
 		public FieldProblem_James()
 		{
-			m_mockery = new MockRepository();
 		}
 
 		[Fact]
@@ -50,12 +47,12 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             List<Foo<int>> retval = new List<Foo<int>>();
 			retval.Add(new Foo<int>());
 
-            ILookupMapper<int> mapper = MockRepository.GenerateStrictMock<ILookupMapper<int>>();
+            ILookupMapper<int> mapper = Repository.Mock<ILookupMapper<int>>();
             mapper.Expect(x => x.FindAllFoo())
                 .Return(retval);
 			
 			IList<Foo<int>> listOfFoo = mapper.FindAllFoo();
-            mapper.VerifyAllExpectations();
+            mapper.VerifyExpectations();
 		}
 
 		[Fact]
@@ -63,18 +60,18 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		{
             Foo<int> retval = new Foo<int>();
 
-            ILookupMapper<int> mapper = MockRepository.GenerateStrictMock<ILookupMapper<int>>();
+            ILookupMapper<int> mapper = Repository.Mock<ILookupMapper<int>>();
             mapper.Expect(x => x.FindOneFoo())
                 .Return(retval);
 
 			Foo<int> oneFoo = mapper.FindOneFoo();
-            mapper.VerifyAllExpectations();
+            mapper.VerifyExpectations();
 		}
 
 		[Fact]
 		public void CanMockMethodsReturnIntPtr()
 		{
-            IFooWithIntPtr mock = MockRepository.GenerateStrictMock<IFooWithIntPtr>();
+            IFooWithIntPtr mock = Repository.Mock<IFooWithIntPtr>();
 
             mock.Expect(x => x.Buffer(15))
                 .Return(IntPtr.Zero);

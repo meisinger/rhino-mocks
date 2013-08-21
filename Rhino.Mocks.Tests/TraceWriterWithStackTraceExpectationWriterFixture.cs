@@ -1,7 +1,8 @@
 
 using System.IO;
 using Xunit;
-using Rhino.Mocks.Impl;
+using Rhino.Mocks;
+using Rhino.Mocks.Loggers;
 
 namespace Rhino.Mocks.Tests
 {
@@ -10,14 +11,13 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void WillPrintLogInfoWithStackTrace()
 		{
-			TraceWriterWithStackTraceExpectationWriter expectationWriter = 
-                new TraceWriterWithStackTraceExpectationWriter();
+			TraceWriterWithStackTraceLogger expectationWriter = new TraceWriterWithStackTraceLogger();
 			StringWriter writer = new StringWriter();
 			expectationWriter.AlternativeWriter = writer;
 
 			RhinoMocks.Logger = expectationWriter;
 
-			IDemo mock = MockRepository.GenerateStrictMock<IDemo>();
+			IDemo mock = Repository.Mock<IDemo>();
             mock.Expect(x => x.VoidNoArgs());
 
 			mock.VoidNoArgs();
@@ -25,7 +25,7 @@ namespace Rhino.Mocks.Tests
 			Assert.Contains("WillPrintLogInfoWithStackTrace",
 				writer.GetStringBuilder().ToString());
 
-            mock.VerifyAllExpectations();
+            mock.VerifyExpectations();
 		}
 	}
 }

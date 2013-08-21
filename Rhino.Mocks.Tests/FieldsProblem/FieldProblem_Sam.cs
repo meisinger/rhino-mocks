@@ -9,20 +9,19 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void Test()
 		{
-            SimpleOperations myMock = MockRepository.GenerateStrictMock<SimpleOperations>();
+            SimpleOperations myMock = Repository.Partial<SimpleOperations>();
 
             myMock.Expect(x => x.AddTwoValues(1, 2))
                 .Return(3);
 
 			Assert.Equal(3, myMock.AddTwoValues(1, 2));
-            myMock.VerifyAllExpectations();
+            myMock.VerifyExpectations();
 		}
 
 		[Fact]
 		public void WillRememberExceptionInsideOrderRecorderEvenIfInsideCatchBlock()
 		{
-			IInterfaceWithThreeMethods interfaceWithThreeMethods = MockRepository
-                .GenerateStrictMock<IInterfaceWithThreeMethods>();
+            IInterfaceWithThreeMethods interfaceWithThreeMethods = Repository.Mock<IInterfaceWithThreeMethods>();
 
             interfaceWithThreeMethods.Expect(x => x.A());
             interfaceWithThreeMethods.Expect(x => x.C());
@@ -38,7 +37,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
             Assert.Throws<ExpectationViolationException>(
                 "Unordered method call! The expected call is: 'Ordered: { IInterfaceWithThreeMethods.C(); }' but was: 'IInterfaceWithThreeMethods.B();'",
-                () => interfaceWithThreeMethods.VerifyAllExpectations());
+                () => interfaceWithThreeMethods.VerifyExpectations());
 		}
 	}
 

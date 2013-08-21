@@ -27,68 +27,52 @@
 #endregion
 
 
-using System;
-using Xunit;
-using Rhino.Mocks.Impl;
 using System.Collections;
+using Rhino.Mocks.Constraints;
+using Xunit;
 
 namespace Rhino.Mocks.Tests.Impl
 {
-	
 	public class ValidateTests
 	{
 		[Fact]
-		public void IsNotNullWhenNotNull()
-		{
-			Validate.IsNotNull(new object(), "test");
-		}
-
-		[Fact]
-		public void IsNotNullWhenNullThrows()
-		{
-			Assert.Throws<ArgumentNullException>(
-				"Value cannot be null.\r\nParameter name: test",
-				() => Validate.IsNotNull(null, "test"));
-		}
-
-		[Fact]
 		public void ArgsEqualWhenNoArgs()
 		{
-			Assert.True(Validate.ArgsEqual(new object[0], new object[0]));
+            Assert.True(Equal.CollectionsAreEqual(new object[0], new object[0]));
 		}
 
 		[Fact]
 		public void HandlingArraysWithNull()
 		{
-			Assert.False(Validate.ArgsEqual(new object[] {1, null}, new object[] {1, "43"}));
-			Assert.False(Validate.ArgsEqual(new object[] {1, "43", 5.2f}, new object[] {1, null}));
-			Assert.True(Validate.ArgsEqual(new object[] {null, "43"}, new object[] {null, "43"}));
+            Assert.False(Equal.CollectionsAreEqual(new object[] { 1, null }, new object[] { 1, "43" }));
+            Assert.False(Equal.CollectionsAreEqual(new object[] { 1, "43", 5.2f }, new object[] { 1, null }));
+            Assert.True(Equal.CollectionsAreEqual(new object[] { null, "43" }, new object[] { null, "43" }));
 	
 		}
 
 		[Fact]
 		public void ArgsEqualWithDifferentNumberOfParameters()
 		{
-			Assert.False(Validate.ArgsEqual(new object[] {1, "43", 5.2f}, new object[] {1, "43"}));
+            Assert.False(Equal.CollectionsAreEqual(new object[] { 1, "43", 5.2f }, new object[] { 1, "43" }));
 		}
 
 		[Fact]
 		public void ArgsEqualWhenArgsMatch()
 		{
-			Assert.True(Validate.ArgsEqual(new object[] {1, "43", 5.2f}, new object[] {1, "43", 5.2f}));
+            Assert.True(Equal.CollectionsAreEqual(new object[] { 1, "43", 5.2f }, new object[] { 1, "43", 5.2f }));
 		}
 
 		[Fact]
 		public void ArgsEqualWhenArgsMismatch()
 		{
-			Assert.False(Validate.ArgsEqual(new object[] {1, "43", 5.1f}, new object[] {1, "43", 6.4f}));
+            Assert.False(Equal.CollectionsAreEqual(new object[] { 1, "43", 5.1f }, new object[] { 1, "43", 6.4f }));
 		}
 
 		[Fact]
 		public void ArgsEqualWithArrayReferenceEqual()
 		{
 			object[] arr = new object[3] {"1", 2, 4.5f};
-			Assert.True(Validate.ArgsEqual(new object[] {1, arr}, new object[] {1, arr}));
+            Assert.True(Equal.CollectionsAreEqual(new object[] { 1, arr }, new object[] { 1, arr }));
 		}
 
 		[Fact]
@@ -96,7 +80,7 @@ namespace Rhino.Mocks.Tests.Impl
 		{
 			object[] arr1 = new object[3] {"1", 2, 4.5f},
 				arr2 = new object[3] {"1", 2, 4.5f};
-			Assert.True(Validate.ArgsEqual(new object[] {1, arr2}, new object[] {1, arr1}));
+            Assert.True(Equal.CollectionsAreEqual(new object[] { 1, arr2 }, new object[] { 1, arr1 }));
 		}
 
 		[Fact]
@@ -104,7 +88,7 @@ namespace Rhino.Mocks.Tests.Impl
 		{
 			object[] arr1 = new object[3] {"1", 2, 4.5f},
 				arr2 = new object[3] {"1", 5, 4.5f};
-			Assert.False(Validate.ArgsEqual(new object[] {1, arr1}, new object[] {1, arr2}));
+            Assert.False(Equal.CollectionsAreEqual(new object[] { 1, arr1 }, new object[] { 1, arr2 }));
 
 		}
 
@@ -113,7 +97,7 @@ namespace Rhino.Mocks.Tests.Impl
 		{
 			object[] arr1 = new object[3] {"1", 2, 4.5f},
 				arr2 = new object[2] {"1", 5};
-			Assert.False(Validate.ArgsEqual(new object[] {1, arr1}, new object[] {1, arr2}));
+            Assert.False(Equal.CollectionsAreEqual(new object[] { 1, arr1 }, new object[] { 1, arr2 }));
 		}
 
 		[Fact]
@@ -121,7 +105,7 @@ namespace Rhino.Mocks.Tests.Impl
 		{
 			string[] str1 = new string[] {"", "1", "1234"},
 				str2 = new string[] {"1", "1234", "54321"};
-			Assert.False(Validate.ArgsEqual(str1, str2));
+            Assert.False(Equal.CollectionsAreEqual(str1, str2));
 		}
 
 		[Fact]
@@ -131,7 +115,7 @@ namespace Rhino.Mocks.Tests.Impl
 			queue.Enqueue("1");
 			queue.Enqueue(2);
 			queue.Enqueue(4.5f);
-			Assert.True(Validate.ArgsEqual(new object[] { 1, queue }, new object[] { 1, queue }));
+            Assert.True(Equal.CollectionsAreEqual(new object[] { 1, queue }, new object[] { 1, queue }));
 		}
 
 		[Fact]
@@ -145,7 +129,7 @@ namespace Rhino.Mocks.Tests.Impl
 			queue2.Enqueue("1");
 			queue2.Enqueue(2);
 			queue2.Enqueue(4.5f);
-			Assert.True(Validate.ArgsEqual(new object[] { 1, queue1 }, new object[] { 1, queue2 }));
+            Assert.True(Equal.CollectionsAreEqual(new object[] { 1, queue1 }, new object[] { 1, queue2 }));
 		}
 
 		[Fact]
@@ -159,7 +143,7 @@ namespace Rhino.Mocks.Tests.Impl
 			queue2.Enqueue("1");
 			queue2.Enqueue(5);
 			queue2.Enqueue(4.5f);
-			Assert.False(Validate.ArgsEqual(new object[] { 1, queue1 }, new object[] { 1, queue2 }));
+            Assert.False(Equal.CollectionsAreEqual(new object[] { 1, queue1 }, new object[] { 1, queue2 }));
 		}
 
 		[Fact]
@@ -172,7 +156,7 @@ namespace Rhino.Mocks.Tests.Impl
 			Queue queue2 = new Queue(2);
 			queue2.Enqueue("1");
 			queue2.Enqueue(5);
-			Assert.False(Validate.ArgsEqual(new object[] { 1, queue1 }, new object[] { 1, queue2 }));
+            Assert.False(Equal.CollectionsAreEqual(new object[] { 1, queue1 }, new object[] { 1, queue2 }));
 		}
 	}
 }

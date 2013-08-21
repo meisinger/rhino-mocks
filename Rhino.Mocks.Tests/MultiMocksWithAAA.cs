@@ -46,7 +46,7 @@ namespace Rhino.Mocks.Tests
     [Fact]
     public void CanCreateADynamicMultiMockFromTwoInterfacesGenericAndAssertWasCalled()
     {
-      IDemo demo = MockRepository.GenerateMock<IDemo, IEditableObject>();
+        IDemo demo = Repository.Mock<IDemo, IEditableObject>();
       IEditableObject editable = demo as IEditableObject;
 
       demo.ReturnIntNoArgs();
@@ -407,8 +407,8 @@ namespace Rhino.Mocks.Tests
 
 
       // Configure expectations for object through interface
-      errorInfo.Expect(x => x.Error).Return(null).Repeat.Once();
-      errorInfo.Expect(x => x.Error).Return("error!!!").Repeat.Once();
+      errorInfo.Expect(x => x.Error).Return(null);
+      errorInfo.Expect(x => x.Error).Return("error!!!");
 
       // Ensure that arguments arrived okay
       // Is the format provider correct

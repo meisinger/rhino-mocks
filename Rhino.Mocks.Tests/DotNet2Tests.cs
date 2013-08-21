@@ -39,7 +39,7 @@ namespace Rhino.Mocks.Tests
 
 		public DotNet2Tests()
 		{
-			demo = MockRepository.GenerateDynamicMock<IDotNet2Features>();
+            demo = Repository.Mock<IDotNet2Features>();
 		}
 
         public void Dispose()
@@ -57,7 +57,7 @@ namespace Rhino.Mocks.Tests
         public void CanUseNullAsReturnValueForNullables()
         {
             demo.Expect(x => x.NullableInt(5))
-                .Return(null);
+                .Return((Nullable<int>)null);
 
             Assert.Null(demo.NullableInt(5));
         }
@@ -74,12 +74,12 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void CanStrictMockOnClassWithInternalMethod()
 		{
-			WithInternalMethod withInternalMethod = MockRepository.GenerateStrictMock<WithInternalMethod>();
+            WithInternalMethod withInternalMethod = Repository.Partial<WithInternalMethod>();
 
             withInternalMethod.Expect(x => x.Foo())
-                .Throw(new Exception("foo"));
+                .Throws(new Exception("foo"));
 
-			try
+            try
 			{
 				withInternalMethod.Foo();
 				Assert.False(true, "Should have thrown");

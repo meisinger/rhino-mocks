@@ -7,7 +7,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void PropertiesWillBehaveLikeProperties()
         {
-            TestObject testObject = MockRepository.GenerateStub<TestObject>();
+            TestObject testObject = Repository.Mock<TestObject>();
 
             Assert.Equal(0, testObject.IntProperty);
         }

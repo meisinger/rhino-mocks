@@ -14,7 +14,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void CorrectResultForExpectedWhenUsingTimes()
 		{
-            IView view = MockRepository.GenerateStrictMock<IView>();
+            IView view = Repository.Mock<IView>();
 
             view.Expect(x => x.RedrawDisplay(null))
                 .IgnoreArguments()
@@ -32,11 +32,11 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void CorrectResultForExpectedWhenUsingTimesWithRange()
 		{
-			IView view = MockRepository.GenerateStrictMock<IView>();
+            IView view = Repository.Mock<IView>();
 
             view.Expect(x => x.RedrawDisplay(null))
                 .IgnoreArguments()
-                .Repeat.Times(3, 4);
+                .Repeat.AtMost(4);
 
             Assert.Throws<ExpectationViolationException>(
                 "IView.RedrawDisplay(\"blah\"); Expected #3 - 4, Actual #5.",

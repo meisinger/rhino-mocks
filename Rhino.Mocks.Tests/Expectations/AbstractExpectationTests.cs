@@ -30,13 +30,11 @@
 using System.Reflection;
 using Xunit;
 using Rhino.Mocks.Expectations;
-using Rhino.Mocks.Impl;
 using Rhino.Mocks.Interfaces;
 
 namespace Rhino.Mocks.Tests.Expectations
 {
-
-	public abstract class AbstractExpectationTests
+    public abstract class AbstractExpectationTests
 	{
 		private MethodInfo method = typeof (IDemo).GetMethod("VoidNoArgs");
 

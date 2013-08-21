@@ -13,11 +13,12 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void Will_get_unexpect_error()
 		{
-			var stubConnection = MockRepository.GenerateStub<IDbConnection>();
-			var mockCommand = MockRepository.GenerateMock<IDbCommand>();
+            var stubConnection = Repository.Mock<IDbConnection>();
+            var mockCommand = Repository.Mock<IDbCommand>();
 			mockCommand.Expect(c => c.Connection = stubConnection);
 			mockCommand.Expect(c => c.Connection = null);
-			mockCommand.Stub(c => c.ExecuteNonQuery()).Throw(new TestException());
+			mockCommand.Stub(c => c.ExecuteNonQuery())
+                .Throws<TestException>();
 
 			var executor = new Executor(stubConnection);
 			try

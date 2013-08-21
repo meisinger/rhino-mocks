@@ -8,6 +8,5 @@ using System;
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 [CLSCompliant(false)]
 public class __ProtectAttribute : Attribute
-{
-    
+{    
 }

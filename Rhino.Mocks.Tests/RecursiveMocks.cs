@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Linq;
 using Xunit;
-using Rhino.Mocks.Impl;
 
 namespace Rhino.Mocks.Tests
 {
@@ -12,16 +11,19 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanUseRecursiveMocks()
         {
-            var session = MockRepository.GenerateMock<ISession>();
-            session.Stub(x =>
-                         x.CreateCriteria(typeof (Customer))
-                             .List()
-                ).Return(new[] {new Customer {Id = 1, Name = "ayende"}});
+            var session = Repository.Mock<ISession>();
+            session.Stub(x => x.CreateCriteria(typeof(Customer)).List())
+                .Return(new[] 
+                {
+                    new Customer 
+                    {
+                        Id = 1, 
+                        Name = "ayende"
+                    }
+                });
 
             Customer customer = session.CreateCriteria(typeof (Customer))
-                .List()
-                .Cast<Customer>()
-                .First();
+                .List().Cast<Customer>().First();
 
             Assert.Equal("ayende", customer.Name);
             Assert.Equal(1, customer.Id);
@@ -30,7 +32,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanUseRecursiveMocksSimpler()
         {
-            var repository = MockRepository.GenerateMock<IMyService>();
+            var repository = Repository.Mock<IMyService>();
 
             repository.Expect(x => x.Identity.Name)
                 .Return("foo");
@@ -41,7 +43,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
         public void CanUseRecursiveMocksSimplerAlternateSyntax()
         {
-            var repository = MockRepository.GenerateMock<IMyService>();
+            var repository = Repository.Mock<IMyService>();
 
             repository.Expect(x => x.Identity.Name)
                 .Return("foo");

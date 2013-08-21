@@ -38,7 +38,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void StaticAccessorForStub()
 		{
-			IAnimal animal = MockRepository.GenerateStub<IAnimal>();
+            IAnimal animal = Repository.Mock<IAnimal>();
 			animal.Eyes = 2;
 			Assert.Equal(2, animal.Eyes );
 		}
@@ -46,7 +46,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void StubHasPropertyBehaviorForAllProperties()
 		{
-			IAnimal animal = MockRepository.GenerateStub<IAnimal>();
+            IAnimal animal = Repository.Mock<IAnimal>();
 			animal.Legs = 4;
 			Assert.Equal(4, animal.Legs);
 
@@ -58,37 +58,37 @@ namespace Rhino.Mocks.Tests
 			Assert.Equal("Caucasusian Shepherd", animal.Species);
 		}
 
-		[Fact]
-		public void CanRegisterToEventsAndRaiseThem()
-		{
-			IAnimal animal = MockRepository.GenerateStub<IAnimal>();
+        //[Fact]
+        //public void CanRegisterToEventsAndRaiseThem()
+        //{
+        //    IAnimal animal = MockRepository.GenerateStub<IAnimal>();
 
-            IEventRaiser eventRaiser = animal
-                .Stub(x => x.Hungry += null)
-                .GetEventRaiser();
+        //    IEventRaiser eventRaiser = animal
+        //        .Stub(x => x.Hungry += null)
+        //        .GetEventRaiser();
 
-            //animal.Hungry += null; //Note, no expectation!
-            //IEventRaiser eventRaiser = LastCall.GetEventRaiser();
+        //    //animal.Hungry += null; //Note, no expectation!
+        //    //IEventRaiser eventRaiser = LastCall.GetEventRaiser();
 
-			bool raised = false;
-			animal.Hungry += delegate
-			{
-				raised = true;
-			};
+        //    bool raised = false;
+        //    animal.Hungry += delegate
+        //    {
+        //        raised = true;
+        //    };
 
-			eventRaiser.Raise(animal, EventArgs.Empty);
-			Assert.True(raised);
-		}
+        //    eventRaiser.Raise(animal, EventArgs.Empty);
+        //    Assert.True(raised);
+        //}
 
 		[Fact]
 		public void CallingMethodOnStubsDoesNotCreateExpectations()
 		{
-			IAnimal animal = MockRepository.GenerateStub<IAnimal>();
+            IAnimal animal = Repository.Mock<IAnimal>();
 
             animal.Legs = 4;
             animal.Name = "Rose";
             animal.Species = "Caucasusian Shepherd";
-            animal.Expect(x => x.GetMood());
+            animal.Stub(x => x.GetMood());
 
 			animal.VerifyAllExpectations();
 		}
@@ -96,7 +96,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void DemoLegsProperty()
 		{
-			IAnimal animalStub = MockRepository.GenerateStub<IAnimal>();
+            IAnimal animalStub = Repository.Mock<IAnimal>();
 
 			animalStub.Legs = 0;
 			Assert.Equal(0, animalStub.Legs);
@@ -109,7 +109,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void CanCreateExpectationOnMethod()
 		{
-			IAnimal animal = MockRepository.GenerateStub<IAnimal>();
+            IAnimal animal = Repository.Mock<IAnimal>();
 
             animal.Legs = 4;
             animal.Name = "Rose";

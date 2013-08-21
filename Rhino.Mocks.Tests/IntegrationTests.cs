@@ -88,7 +88,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void UsingPartialMocks()
         {
-            ProcessorBase proc = (ProcessorBase)MockRepository.GeneratePartialMock(typeof(ProcessorBase));
+            ProcessorBase proc = Repository.Partial<ProcessorBase>();
 
             proc.Expect(x => x.Add(1))
                 .Return(1);
@@ -105,43 +105,43 @@ namespace Rhino.Mocks.Tests
             proc.VerifyAllExpectations();
         }
         
-        [Fact]
-        public void ExampleUsingCallbacks()
-        {
-            ISongBird maleBird = (ISongBird)MockRepository.GenerateStrictMock(typeof(ISongBird));
-            ISongBird femaleBird = (ISongBird)MockRepository.GenerateStrictMock(typeof(ISongBird));
+        //[Fact]
+        //public void ExampleUsingCallbacks()
+        //{
+        //    ISongBird maleBird = Repository.Mock<ISongBird>();
+        //    ISongBird femaleBird = Repository.Mock<ISongBird>();
 
-            maleBird.Expect(x => x.MoveToCage(null))
-                .Callback(new CageDelegate(IsSameCage));
+        //    maleBird.Expect(x => x.MoveToCage(null))
+        //        .Callback(new CageDelegate(IsSameCage));
 
-            femaleBird.Expect(x => x.MoveToCage(null))
-                .Callback(new CageDelegate(IsSameCage));
+        //    femaleBird.Expect(x => x.MoveToCage(null))
+        //        .Callback(new CageDelegate(IsSameCage));
 
-            maleBird.Expect(x => x.Eat("seeds", 250));
-            femaleBird.Expect(x => x.Eat("seeds", 250));
+        //    maleBird.Expect(x => x.Eat("seeds", 250));
+        //    femaleBird.Expect(x => x.Eat("seeds", 250));
 
-            maleBird.Expect(x => x.Mate(femaleBird));
-            femaleBird.Expect(x => x.Mate(maleBird));
+        //    maleBird.Expect(x => x.Mate(femaleBird));
+        //    femaleBird.Expect(x => x.Mate(maleBird));
 
-            BirdVeterinary vet = new BirdVeterinary();
-            vet.Mate(maleBird, femaleBird);
+        //    BirdVeterinary vet = new BirdVeterinary();
+        //    vet.Mate(maleBird, femaleBird);
 
-            maleBird.VerifyAllExpectations();
-            femaleBird.VerifyAllExpectations();
-        }
+        //    maleBird.VerifyAllExpectations();
+        //    femaleBird.VerifyAllExpectations();
+        //}
 
         [Fact]
         public void ExampleUsingParameterMatchingAndConstraints()
         {
-            ISongBird bird = (ISongBird)MockRepository.GenerateStrictMock(typeof(ISongBird));
+            ISongBird bird = Repository.Mock<ISongBird>();
 
             bird.Expect(x => x.Eat("seeds", 500));
-            
+
             bird.Expect(x => x.Sing())
                 .Return("Chirp, Chirp");
 
             bird.Expect(x => x.Sing())
-                .Throw(new Exception("No food, no song"));
+                .Throws(new Exception("No food, no song"));
 
             bird.Eat("seeds", 500);
             Assert.Equal("Chirp, Chirp", bird.Sing());
@@ -162,8 +162,8 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void UnorderedExecutionOfOrderedSequence()
         {
-            ISongBird maleBird = (ISongBird)MockRepository.GenerateStrictMock(typeof(ISongBird));
-            ISongBird femaleBird = (ISongBird)MockRepository.GenerateStrictMock(typeof(ISongBird));
+            ISongBird maleBird = Repository.Mock<ISongBird>();
+            ISongBird femaleBird = Repository.Mock<ISongBird>();
 
             maleBird.Expect(x => x.Eat("seeds", 250));
             femaleBird.Expect(x => x.Eat("seeds", 250));
@@ -184,8 +184,8 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void OrderedExecutionOfUnorderedSequence()
         {
-            ISongBird maleBird = (ISongBird)MockRepository.GenerateStrictMock(typeof(ISongBird));
-            ISongBird femaleBird = (ISongBird)MockRepository.GenerateStrictMock(typeof(ISongBird));
+            ISongBird maleBird = Repository.Mock<ISongBird>();
+            ISongBird femaleBird = Repository.Mock<ISongBird>();
 
             maleBird.Expect(x => x.Eat("seeds", 250));
             femaleBird.Expect(x => x.Eat("seeds", 250));
@@ -206,8 +206,8 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void SetupResultWithNestedOrdering()
         {
-            ISongBird maleBird = (ISongBird)MockRepository.GenerateStrictMock(typeof(ISongBird));
-            ISongBird femaleBird = (ISongBird)MockRepository.GenerateStrictMock(typeof(ISongBird));
+            ISongBird maleBird = Repository.Mock<ISongBird>();
+            ISongBird femaleBird = Repository.Mock<ISongBird>();
 
             maleBird.Stub(x => x.Sing())
                 .Return("");

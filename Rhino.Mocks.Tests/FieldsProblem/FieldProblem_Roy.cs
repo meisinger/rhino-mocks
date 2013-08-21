@@ -9,7 +9,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void StubNeverFailsTheTest()
         {
-            IGetResults resultGetter = MockRepository.GenerateStub<IGetResults>();
+            IGetResults resultGetter = Repository.Mock<IGetResults>();
 
             resultGetter.Expect(x => x.GetSomeNumber("a"))
                 .Return(1);
@@ -17,13 +17,13 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             int result = resultGetter.GetSomeNumber("b");
 
             Assert.Equal(0, result);
-            resultGetter.VerifyAllExpectations(); //<- should not fail the test methinks
+            resultGetter.VerifyExpectations(); //<- should not fail the test methinks
         }
 
         [Fact]
         public void CanGetSetupResultFromStub()
         {
-            IGetResults resultGetter = MockRepository.GenerateStub<IGetResults>();
+            IGetResults resultGetter = Repository.Mock<IGetResults>();
 
             resultGetter.Expect(x => x.GetSomeNumber("a"))
                 .Return(1);
@@ -34,20 +34,20 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             resultGetter.VerifyAllExpectations();
         }
 
-        [Fact]
-        public void CannotCallLastCallConstraintsMoreThanOnce()
-        {
-            IGetResults resultGetter = MockRepository.GenerateStub<IGetResults>();
+        //[Fact]
+        //public void CannotCallLastCallConstraintsMoreThanOnce()
+        //{
+        //    IGetResults resultGetter = Repository.Mock<IGetResults>();
 
-        	Assert.Throws<InvalidOperationException>(
-        		"You have already specified constraints for this method. (IGetResults.GetSomeNumber(contains \"b\");)",
-        		() =>
-        		{
-                    resultGetter.Expect(x => x.GetSomeNumber("a"))
-                        .Constraints(Text.Contains("b"))
-                        .Constraints(Text.Contains("a"));
-        		});
-        }
+        //    Assert.Throws<InvalidOperationException>(
+        //        "You have already specified constraints for this method. (IGetResults.GetSomeNumber(contains \"b\");)",
+        //        () =>
+        //        {
+        //            resultGetter.Expect(x => x.GetSomeNumber("a"))
+        //                .Constraints(Text.Contains("b"))
+        //                .Constraints(Text.Contains("a"));
+        //        });
+        //}
     }
 
     public interface IGetResults

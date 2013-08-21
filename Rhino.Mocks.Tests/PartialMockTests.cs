@@ -41,7 +41,7 @@ namespace Rhino.Mocks.Tests
 
 		public PartialMockTests()
         {
-            abs = (AbstractClass)MockRepository.GeneratePartialMock(typeof(AbstractClass));
+            abs = Repository.Partial<AbstractClass>();
         }
 
         [Fact]
@@ -84,21 +84,23 @@ namespace Rhino.Mocks.Tests
         {
             Assert.Throws<InvalidOperationException>(
                 "Can't create a partial mock from an interface",
-                () => MockRepository.GeneratePartialMock(typeof(IDemo)));
+                () => Repository.Partial<IDemo>());
         }
 
         [Fact]
         public void CallAnAbstractMethodWithoutSettingExpectation()
         {
+            abs.Decrement();
+
             Assert.Throws<ExpectationViolationException>(
                 "AbstractClass.Decrement(); Expected #0, Actual #1.",
-                () => abs.Decrement());
+                () => abs.VerifyExpectations(true));
         }
 
     	[Fact]
     	public void CanMockWithCtorParams()
     	{
-            WithParameters withParameters = MockRepository.GeneratePartialMock<WithParameters>(1);
+            WithParameters withParameters = Repository.Partial<WithParameters>(1);
 
             withParameters.Expect(x => x.Int)
                 .Return(4);

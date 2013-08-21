@@ -1,8 +1,7 @@
 ﻿
 using Xunit;
-using Rhino.Mocks.Core;
-using Rhino.Mocks.Core.Extensions;
-using Rhino.Mocks.Core.Interfaces;
+using Rhino.Mocks.Interfaces;
+using Rhino.Mocks.Exceptions;
 
 namespace Rhino.Mocks.Tests.Core
 {
@@ -69,7 +68,7 @@ namespace Rhino.Mocks.Tests.Core
         [Fact]
         public void Mock_Class_Can_Be_Created_From_Repository()
         {
-            var mock = Repository.Mock<ScenarioObject>();
+            var mock = Repository.Partial<ScenarioObject>();
             Assert.NotNull(mock);
             Assert.True(mock is ScenarioObject);
         }
@@ -77,7 +76,7 @@ namespace Rhino.Mocks.Tests.Core
         [Fact]
         public void Mock_Class_Created_From_Repository_Is_Of_Type_IMockInstance()
         {
-            var mock = Repository.Mock<ScenarioObject>();
+            var mock = Repository.Partial<ScenarioObject>();
             var instance = mock as IMockInstance;
             Assert.NotNull(instance);
             Assert.True(mock is ScenarioObject);
@@ -86,8 +85,8 @@ namespace Rhino.Mocks.Tests.Core
         [Fact]
         public void Mock_Class_Can_Have_An_Expectation_Set_On_Method_With_Void_Return_Type()
         {
-            var mock = Repository.Mock<ScenarioObject>();
-            var options = mock.ExpectCall(x => x.VoidMethod());
+            var mock = Repository.Partial<ScenarioObject>();
+            var options = mock.Expect(x => x.VoidMethod());
             Assert.NotNull(mock);
             Assert.NotNull(options);
         }
@@ -95,8 +94,8 @@ namespace Rhino.Mocks.Tests.Core
         [Fact]
         public void Mock_Class_Can_Have_An_Expectation_Set_On_Method_With_A_Return_Type()
         {
-            var mock = Repository.Mock<ScenarioObject>();
-            var options = mock.ExpectCall(x => x.StringMethod());
+            var mock = Repository.Partial<ScenarioObject>();
+            var options = mock.Expect(x => x.StringMethod());
             Assert.NotNull(mock);
             Assert.NotNull(options);
         }
@@ -104,9 +103,9 @@ namespace Rhino.Mocks.Tests.Core
         [Fact]
         public void Exception_Is_Raised_When_An_Expectation_Is_Set_On_NonVirtual_Method()
         {
-            var mock = Repository.Mock<ScenarioObject>();
+            var mock = Repository.Partial<ScenarioObject>();
             Assert.Throws<System.InvalidOperationException>(
-                () => mock.ExpectCall(x => x.NonVirtualStringMethod()));
+                () => mock.Expect(x => x.NonVirtualStringMethod()));
         }
 
         [Fact]
@@ -130,7 +129,7 @@ namespace Rhino.Mocks.Tests.Core
         void Mock_Delegate_With_Void_Return_Type_Can_Have_An_Expectation_Set()
         {
             var mock = Repository.Mock<VoidScenario>();
-            var options = mock.ExpectCall(x => x("mike", "meisinger"));
+            var options = mock.Expect(x => x("mike", "meisinger"));
             Assert.NotNull(mock);
             Assert.NotNull(options);
         }
@@ -139,7 +138,7 @@ namespace Rhino.Mocks.Tests.Core
         public void Mock_Delegate_With_Return_Type_Can_Have_An_Expectation_Set()
         {
             var mock = Repository.Mock<StringScenario>();
-            var options = mock.ExpectCall(x => x("mike", "meisinger"));
+            var options = mock.Expect(x => x("mike", "meisinger"));
             Assert.NotNull(mock);
             Assert.NotNull(options);
         }
@@ -147,12 +146,12 @@ namespace Rhino.Mocks.Tests.Core
         [Fact]
         public void Mock_Instance_Is_Assigned_Invocation_Proxy_When_Expectation_Is_Set_On_Method_From_A_Mock_Class()
         {
-            var mock = Repository.Mock<ScenarioObject>();
+            var mock = Repository.Partial<ScenarioObject>();
 
             var instance = mock as IMockInstance;
             Assert.Null(instance.ProxyInstance);
 
-            mock.ExpectCall(x => x.StringMethod())
+            mock.Expect(x => x.StringMethod())
                 .Return("meisinger");
 
             Assert.NotNull(instance.ProxyInstance);
@@ -164,8 +163,8 @@ namespace Rhino.Mocks.Tests.Core
         [Fact]
         public void Mock_Instance_Has_Method_Invoked_When_Expectation_Indicates_Original_Method_Should_Be_Called()
         {
-            var mock = Repository.Mock<ScenarioObject>();
-            mock.ExpectCall(x => x.StringMethod())
+            var mock = Repository.Partial<ScenarioObject>();
+            mock.Expect(x => x.StringMethod())
                 .CallOriginalMethod();
 
             Assert.Throws<System.NotImplementedException>(() => mock.StringMethod());
@@ -174,8 +173,8 @@ namespace Rhino.Mocks.Tests.Core
         [Fact]
         public void Mock_Instance_Does_Not_Return_Expected_Value_When_Expectation_Indicates_Original_Method_Should_Be_Called()
         {
-            var mock = Repository.Mock<ScenarioObject>();
-            mock.ExpectCall(x => x.StringMethodEcho("meisinger"))
+            var mock = Repository.Partial<ScenarioObject>();
+            mock.Expect(x => x.StringMethodEcho("meisinger"))
                 .Return("ayende")
                 .CallOriginalMethod();
 
@@ -204,7 +203,7 @@ namespace Rhino.Mocks.Tests.Core
         public void Mock_Interface_Can_Have_An_Expectation_Set_On_Method_With_Void_Return_Type()
         {
             var mock = Repository.Mock<IScenarioObject>();
-            var options = mock.ExpectCall(x => x.VoidMethod());
+            var options = mock.Expect(x => x.VoidMethod());
             Assert.NotNull(mock);
             Assert.NotNull(options);
         }
@@ -213,7 +212,7 @@ namespace Rhino.Mocks.Tests.Core
         public void Mock_Interface_Can_Have_An_Expectation_Set_On_Method_With_A_Return_Type()
         {
             var mock = Repository.Mock<IScenarioObject>();
-            var options = mock.ExpectCall(x => x.StringMethod());
+            var options = mock.Expect(x => x.StringMethod());
             Assert.NotNull(mock);
             Assert.NotNull(options);
         }
@@ -222,7 +221,7 @@ namespace Rhino.Mocks.Tests.Core
         public void Mock_Interface_Can_Have_A_Generic_Expectation_Set_On_Method_With_A_Return_Type()
         {
             var mock = Repository.Mock<IScenarioObject>();
-            var options = mock.ExpectCall(x => x.GenericMethod<int>());
+            var options = mock.Expect(x => x.GenericMethod<int>());
             Assert.NotNull(mock);
             Assert.NotNull(options);
         }
@@ -235,7 +234,7 @@ namespace Rhino.Mocks.Tests.Core
             var instance = mock as IMockInstance;
             Assert.Null(instance.ProxyInstance);
 
-            mock.ExpectCall(x => x.StringMethod())
+            mock.Expect(x => x.StringMethod())
                 .Return("meisinger");
 
             Assert.NotNull(instance.ProxyInstance);
@@ -247,12 +246,12 @@ namespace Rhino.Mocks.Tests.Core
         [Fact]
         public void Mock_Instance_Can_Distinguish_Between_Duplicate_Method_Expectation_With_Unique_Arguments()
         {
-            var mock = Repository.Mock<ScenarioObject>();
+            var mock = Repository.Partial<ScenarioObject>();
 
-            mock.ExpectCall(x => x.StringMethodEcho("one"))
+            mock.Expect(x => x.StringMethodEcho("one"))
                 .Return("value one");
 
-            mock.ExpectCall(x => x.StringMethodEcho("two"))
+            mock.Expect(x => x.StringMethodEcho("two"))
                 .Return("value two");
 
             var resultOne = mock.StringMethodEcho("one");
@@ -266,16 +265,16 @@ namespace Rhino.Mocks.Tests.Core
         public void Mock_Instance_Can_Distinguish_Between_Duplicate_Method_Expectation_With_Complex_Arguments()
         {
             var argumentMock = Repository.Mock<IScenarioArgument>();
-            var mock = Repository.Mock<ScenarioObject>();
+            var mock = Repository.Partial<ScenarioObject>();
 
-            argumentMock.ExpectCall(x => x.Age = 15);
-            argumentMock.ExpectCall(x => x.Age)
+            argumentMock.Expect(x => x.Age = 15);
+            argumentMock.Expect(x => x.Age)
                 .Return(15);
 
-            mock.ExpectCall(x => x.IntegerMethodArgument(argumentMock))
+            mock.Expect(x => x.IntegerMethodArgument(argumentMock))
                 .Return(24);
 
-            mock.ExpectCall(x => x.IntegerMethodArgument(argumentMock))
+            mock.Expect(x => x.IntegerMethodArgument(argumentMock))
                 .CallOriginalMethod();
 
             var resultOne = mock.IntegerMethodArgument(argumentMock);
@@ -288,9 +287,9 @@ namespace Rhino.Mocks.Tests.Core
         [Fact]
         public void Mock_Instance_Can_Distinguish_Between_Method_Expectation_With_Generic_Arguments()
         {
-            var mock = Repository.Mock<ScenarioObject>();
+            var mock = Repository.Partial<ScenarioObject>();
             
-            mock.ExpectCall(x => x.StringMethodEcho(Mocks.Core.Arg<string>.Is.Anything))
+            mock.Expect(x => x.StringMethodEcho(Arg<string>.Is.Anything))
                 .Return("rhino")
                 .Repeat.Any();
 
@@ -304,13 +303,13 @@ namespace Rhino.Mocks.Tests.Core
         [Fact]
         public void Mock_Instance_Is_Called_Twice_When_Expectation_Is_Set_To_Repeat_Twice()
         {
-            var mock = Repository.Mock<ScenarioObject>();
+            var mock = Repository.Partial<ScenarioObject>();
 
-            mock.ExpectCall(x => x.StringMethodEcho("ayende"))
+            mock.Expect(x => x.StringMethodEcho("ayende"))
                 .Return("rahien")
                 .Repeat.Twice();
 
-            mock.ExpectCall(x => x.StringMethodEcho("mike"))
+            mock.Expect(x => x.StringMethodEcho("mike"))
                 .Return("meisinger");
 
             var resultOne = mock.StringMethodEcho("ayende");
@@ -327,14 +326,14 @@ namespace Rhino.Mocks.Tests.Core
         [Fact]
         public void Mock_Instance_Is_Called_With_Invalid_Arguments_When_Expectation_Is_Set_To_Ignore_Arguments()
         {
-            var mock = Repository.Mock<ScenarioObject>();
+            var mock = Repository.Partial<ScenarioObject>();
 
-            mock.ExpectCall(x => x.StringMethodEcho("ayende"))
+            mock.Expect(x => x.StringMethodEcho("ayende"))
                 .IgnoreArguments()
                 .Return("rahien")
                 .Repeat.Twice();
 
-            mock.ExpectCall(x => x.StringMethodEcho("mike"))
+            mock.Expect(x => x.StringMethodEcho("mike"))
                 .IgnoreArguments()
                 .Return("meisinger");
 
@@ -352,14 +351,14 @@ namespace Rhino.Mocks.Tests.Core
         [Fact]
         public void Mock_Instance_Maintains_Separate_Expectations()
         {
-            var mockOne = Repository.Mock<ScenarioObject>();
-            var mockTwo = Repository.Mock<ScenarioObject>();
+            var mockOne = Repository.Partial<ScenarioObject>();
+            var mockTwo = Repository.Partial<ScenarioObject>();
 
-            mockOne.ExpectCall(x => x.StringMethod())
+            mockOne.Expect(x => x.StringMethod())
                 .Return("one")
                 .Repeat.Any();
 
-            mockTwo.ExpectCall(x => x.StringMethod())
+            mockTwo.Expect(x => x.StringMethod())
                 .Return("two")
                 .Repeat.Any();
 
@@ -380,9 +379,9 @@ namespace Rhino.Mocks.Tests.Core
         [Fact]
         public void Verification_Throws_Exception_When_Expectations_Set_Against_Mock_Class_Are_Not_Met()
         {
-            var mock = Repository.Mock<ScenarioObject>();
+            var mock = Repository.Partial<ScenarioObject>();
 
-            mock.ExpectCall(x => x.StringMethodEcho(Mocks.Core.Arg.Text.StartsWith("m")))
+            mock.Expect(x => x.StringMethodEcho(Arg.Text.StartsWith("m")))
                 .Return("one")
                 .Repeat.Times(3);
 
@@ -392,7 +391,7 @@ namespace Rhino.Mocks.Tests.Core
             Assert.Equal("one", first);
             Assert.Equal("one", second);
 
-            Assert.Throws<System.Exception>(
+            Assert.Throws<ExpectationViolationException>(
                 "ScenarioObject.StringMethodEcho(starts with m); Expected # 3, Actual # 2.",
                 () => mock.VerifyExpectations());
         }
@@ -401,7 +400,7 @@ namespace Rhino.Mocks.Tests.Core
         public void Verification_Throws_Exception_When_Expectations_Set_Against_Mock_Delegate_Are_Not_Met()
         {
             var mock = Repository.Mock<StringScenario>();
-            mock.ExpectCall(x => x("mike", "meisinger"))
+            mock.Expect(x => x("mike", "meisinger"))
                 .Return("one")
                 .Repeat.Times(3);
 
@@ -411,20 +410,20 @@ namespace Rhino.Mocks.Tests.Core
             Assert.Equal("one", first);
             Assert.Equal("one", second);
 
-            Assert.Throws<System.Exception>(() => mock.VerifyExpectations());
+            Assert.Throws<ExpectationViolationException>(() => mock.VerifyExpectations());
         }
 
         [Fact]
         public void When_Asserting_A_Method_Was_Called_With_Expectation_No_Exception_Is_Thrown_When_Method_Was_Called()
         {
             var mock = Repository.Mock<IScenarioObject>();
-            mock.ExpectCall(x => x.StringMethodEcho("mike"))
+            mock.Expect(x => x.StringMethodEcho("mike"))
                 .Return("true");
 
             var value = mock.StringMethodEcho("mike");
             Assert.Equal("true", value);
 
-            mock.WasCalled(x => x.StringMethodEcho("mike"));
+            mock.AssertWasCalled(x => x.StringMethodEcho("mike"));
         }
 
         [Fact]
@@ -433,15 +432,15 @@ namespace Rhino.Mocks.Tests.Core
             var mock = Repository.Mock<IScenarioObject>();
             mock.StringMethodEcho("mike");
 
-            mock.WasCalled(x => x.StringMethodEcho("mike"));
+            mock.AssertWasCalled(x => x.StringMethodEcho("mike"));
         }
 
         [Fact]
-        public void Expectation_Throws_Exception_When_An_Exception_Is_Set()
+        public void Expectation_Throws_Exception_When_Setting_Expectation_To_Throw()
         {
             var mock = Repository.Mock<IScenarioObject>();
 
-            mock.ExpectCall(x => x.StringMethod())
+            mock.Expect(x => x.StringMethod())
                 .Throws<System.InvalidTimeZoneException>();
 
             Assert.Throws<System.InvalidTimeZoneException>(() => mock.StringMethod());

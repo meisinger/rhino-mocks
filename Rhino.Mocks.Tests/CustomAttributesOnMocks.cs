@@ -9,7 +9,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void Mock_will_have_Protect_attriute_defined_on_them()
         {
-            var disposable = MockRepository.GenerateMock<IDisposable>();
+            var disposable = Repository.Mock<IDisposable>();
             Assert.True(disposable.GetType().IsDefined(typeof (__ProtectAttribute), true));
         }
     }

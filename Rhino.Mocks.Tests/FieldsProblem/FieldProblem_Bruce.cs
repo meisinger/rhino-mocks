@@ -30,7 +30,7 @@
 using System;
 using System.Text;
 using Xunit;
-using Rhino.Mocks.Impl;
+using Rhino.Mocks.Constraints;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
 {
@@ -39,14 +39,14 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void CreateClassWithDefaultCtor()
         {
-            ClassWithDefaultCtor cwdc = (ClassWithDefaultCtor)MockRepository.GenerateDynamicMock(typeof(ClassWithDefaultCtor));
+            ClassWithDefaultCtor cwdc = Repository.Partial<ClassWithDefaultCtor>();
             Assert.NotNull(cwdc);
         }
 
         [Fact]
         public void HandlingArraysWithValueTypeArrays()
         {
-            Assert.True(Validate.ArgsEqual(new object[] { new ushort[0] }, new object[] { new ushort[0] }));
+            Assert.True(Equal.CollectionsAreEqual(new object[] { new ushort[0] }, new object[] { new ushort[0] }));
         }
 
         public class ClassWithDefaultCtor

@@ -13,7 +13,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
 		public FieldProblem_Wendy()
         {
-            _searchPatternBuilder = MockRepository.GenerateDynamicMock<ISearchPatternBuilder>();
+            _searchPatternBuilder = Repository.Mock<ISearchPatternBuilder>();
             _imageFinder = new ImageFinder(_searchPatternBuilder);
         }
 

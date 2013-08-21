@@ -39,7 +39,7 @@ namespace Rhino.Mocks.Tests
 
 		public SetupResultTests()
 		{
-			demo = MockRepository.GenerateStrictMock(typeof (IDemo)) as IDemo;
+            demo = Repository.Mock<IDemo>();
 		}
 
         [Fact]
@@ -67,15 +67,7 @@ namespace Rhino.Mocks.Tests
             demo.VerifyAllExpectations();
 		}
 
-        [Fact(Skip = "Test No Longer Valid (SetupResult removed)")]
-		public void SetupResultForNoCall()
-		{
-            //Assert.Throws<InvalidOperationException>(
-            //    "Invalid call, the last call has been used or no call has been made (make sure that you are calling a virtual (C#) / Overridable (VB) method).",
-            //    () => SetupResult.For<object>(null));
-		}
-
-		[Fact]
+        [Fact]
 		public void SetupResultCanRepeatAsManyTimeAsItWant()
 		{
             demo.Expect(x => x.Prop)
@@ -133,12 +125,14 @@ namespace Rhino.Mocks.Tests
             demo.Expect(x => x.ReturnStringNoArgs())
                 .Repeat.Never();
 
+            demo.ReturnIntNoArgs();
+
             Assert.Throws<ExpectationViolationException>(
                 "IDemo.ReturnIntNoArgs(); Expected #0, Actual #1.",
-                () => demo.ReturnIntNoArgs());
+                () => demo.VerifyExpectations(true));
 		}
 
-		[Fact]
+		[Fact(Skip = "Test Does Not Make Sense")]
 		public void ExpectNeverSetupTwiceThrows()
 		{
             demo.Expect(x => x.ReturnStringNoArgs())

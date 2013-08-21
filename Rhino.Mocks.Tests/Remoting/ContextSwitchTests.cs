@@ -68,7 +68,7 @@ namespace Rhino.Mocks.Tests.Remoting
 		[Fact]
 		public void MockInterface()
 		{
-			IDemo demo = (IDemo)MockRepository.GenerateStrictMock(typeof(IDemo));
+			IDemo demo = Repository.Mock<IDemo>();
 
             demo.Expect(x => x.ReturnIntNoArgs())
                 .Return(54);
@@ -82,8 +82,8 @@ namespace Rhino.Mocks.Tests.Remoting
 		[Fact]
 		public void MockInterfaceWithSameName()
 		{
-			IDemo demo = (IDemo)MockRepository.GenerateStrictMock(typeof(IDemo));
-            Other.IDemo remotingDemo = (Other.IDemo)MockRepository.GenerateStrictMock(typeof(Other.IDemo));
+			IDemo demo = Repository.Mock<IDemo>();
+            Other.IDemo remotingDemo = Repository.Mock<Other.IDemo>();
 
             demo.Expect(x => x.ReturnIntNoArgs())
                 .Return(54);
@@ -102,10 +102,10 @@ namespace Rhino.Mocks.Tests.Remoting
 		[Fact]
 		public void MockInterfaceExpectException()
 		{
-            IDemo demo = (IDemo)MockRepository.GenerateStrictMock(typeof(IDemo));
+            IDemo demo = Repository.Mock<IDemo>();
 
             demo.Expect(x => x.ReturnIntNoArgs())
-                .Throw(new InvalidOperationException("That was expected."));
+                .Throws<InvalidOperationException>();
 
 			Assert.Throws<InvalidOperationException>(
 				"That was expected.",
@@ -115,22 +115,23 @@ namespace Rhino.Mocks.Tests.Remoting
 		[Fact]
 		public void MockInterfaceUnexpectedCall()
 		{
-			IDemo demo = (IDemo)MockRepository.GenerateStrictMock(typeof(IDemo));
+			IDemo demo = Repository.Mock<IDemo>();
 
             demo.Expect(x => x.ReturnIntNoArgs())
                 .Return(34);
 
             demo.Expect(x => x.VoidStringArg("bang"));
+            contextSwitcher.DoStuff(demo);
 			
 			Assert.Throws<ExpectationViolationException>(
 				"IDemo.VoidStringArg(\"34\"); Expected #0, Actual #1.\r\nIDemo.VoidStringArg(\"bang\"); Expected #1, Actual #0.",
-				() => contextSwitcher.DoStuff(demo));
+				() => demo.VerifyExpectations(true));
 		}
 
 		[Fact]
 		public void MockClass()
 		{
-			RemotableDemoClass demo = (RemotableDemoClass)MockRepository.GenerateStrictMock(typeof(RemotableDemoClass));
+			RemotableDemoClass demo = Repository.Mock<RemotableDemoClass>();
 
             demo.Expect(x => x.Two())
                 .Return(44);
@@ -141,10 +142,10 @@ namespace Rhino.Mocks.Tests.Remoting
 
 		public void MockClassExpectException()
 		{
-            RemotableDemoClass demo = (RemotableDemoClass)MockRepository.GenerateStrictMock(typeof(RemotableDemoClass));
+            RemotableDemoClass demo = Repository.Mock<RemotableDemoClass>();
 
             demo.Expect(x => x.Two())
-                .Throw(new InvalidOperationException("That was expected for class."));
+                .Throws<InvalidOperationException>();
 
 			Assert.Throws<InvalidOperationException>(
 				"That was expected for class.",
@@ -154,14 +155,16 @@ namespace Rhino.Mocks.Tests.Remoting
 		[Fact]
 		public void MockClassUnexpectedCall()
 		{
-            RemotableDemoClass demo = (RemotableDemoClass)MockRepository.GenerateStrictMock(typeof(RemotableDemoClass));
+            RemotableDemoClass demo = Repository.Mock<RemotableDemoClass>();
 
             demo.Expect(x => x.Prop)
                 .Return(11);
 
+            contextSwitcher.DoStuff(demo);
+
 			Assert.Throws<ExpectationViolationException>(
 				"RemotableDemoClass.Two(); Expected #0, Actual #1.",
-				() => contextSwitcher.DoStuff(demo));
+				() => demo.VerifyExpectations(true));
 		}
 	}
 }

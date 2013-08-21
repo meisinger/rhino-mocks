@@ -31,7 +31,6 @@ using System;
 
 namespace Rhino.Mocks.Tests.Remoting
 {
-
 	public class ContextSwitcher : MarshalByRefObject
 	{
 		public void DoStuff(IDemo mock)
@@ -40,19 +39,14 @@ namespace Rhino.Mocks.Tests.Remoting
 			mock.VoidStringArg(n.ToString());
 		}
 
-
-
 		public int DoStuff(RemotableDemoClass mock)
 		{
 			return mock.Two();
 		}
-
-
 
 		public void DoStuff(Other.IDemo remotingDemo)
 		{
 			remotingDemo.ProcessString("in");
 		}
 	}
-
 }

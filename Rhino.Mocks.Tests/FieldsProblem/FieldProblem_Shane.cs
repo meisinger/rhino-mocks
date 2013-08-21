@@ -13,7 +13,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		{
             CustomerMapper mapper = new CustomerMapper();
 
-			ICustomer customer = MockRepository.GenerateStrictMock<ICustomer>();
+            ICustomer customer = Repository.Mock<ICustomer>();
             customer.Expect(x => x.Id)
                 .Return(0);
 

@@ -1,118 +1,112 @@
-using System;
+﻿using System;
 using System.Linq.Expressions;
 using Rhino.Mocks.Constraints;
+using Rhino.Mocks.Helpers;
 
 namespace Rhino.Mocks
 {
     /// <summary>
-    /// Use the Arg class (without generic) to define Text constraints
+    /// Provides access to create constraints
+    /// against arguments of a mock
     /// </summary>
     public static class Arg
     {
         /// <summary>
-        /// Define constraints on text arguments.
+        /// Access to constraints against
+        /// string arguments
         /// </summary>
-        public static TextArg Text { get { return new TextArg(); } }
+        public static TextArg Text
+        {
+            get { return new TextArg(); }
+        }
 
         /// <summary>
-        /// Evaluate an equal constraint for <see cref="IComparable"/>.
+        /// Constraint that argument is equal
+        /// to the given source
         /// </summary>
-        /// <param name="arg">The object the parameter should equal to</param>
-        public static T Is<T>(T arg)
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static T Is<T>(T source)
         {
-            return Arg<T>.Is.Equal(arg);
+            return Arg<T>.Is.Equal(source);
         }
     }
 
-	/// <summary>
-	/// Defines constraints and return values for arguments of a mock.
-	/// Only use Arg inside a method call on a mock that is recording.
-	/// Example: 
-	///   ExpectCall( 
-	///     mock.foo(
-	///       Arg&lt;int&gt;.Is.GreaterThan(2),
-	///       Arg&lt;string&gt;.Is.Anything
-	///     ));
-	/// Use Arg.Text for string specific constraints
-	/// Use Arg&lt;ListClass&gt;.List for list specific constraints
-	/// </summary>
-	/// <typeparam name="T"></typeparam>
-	public static class Arg<T>
+    /// <summary>
+    /// Provides access to create constraints
+    /// against arguments of a mock
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public static class Arg<T>
     {
         /// <summary>
-		/// Register the predicate as a constraint for the current call.
-		/// </summary>
-		/// <param name="predicate">The predicate.</param>
-		/// <returns>default(T)</returns>
-		/// <example>
-		/// Allow you to use code to create constraints
-		/// <code>
-		/// demo.AssertWasCalled(x => x.Bar(Arg{string}.Matches(a => a.StartsWith("b") &amp;&amp; a.Contains("ba"))));
-		/// </code>
-		/// </example>
-		public static T Matches(Expression<Predicate<T>> predicate)
-		{
-			ArgManager.AddInArgument(new LambdaConstraint(predicate));
-			return default(T);
-		}
+        /// Provides access to create simple
+        /// constraints against arguments of a mock
+        /// </summary>
+        public static IsArg<T> Is
+        {
+            get { return new IsArg<T>(); }
+        }
 
-		/// <summary>
-		/// Define a simple constraint for this argument. (Use Matches in simple cases.)
-		/// Example: 
-		///   Arg&lt;int&gt;.Is.Anthing
-		///   Arg&lt;string&gt;.Is.Equal("hello")
-		/// </summary>
-		public static IsArg<T> Is { get { return new IsArg<T>(); } }
+        /// <summary>
+        /// Provides access to create 
+        /// constraints against <see cref="System.Collections.ICollection"/>
+        /// arguments of a mock
+        /// </summary>
+        public static ListArg<T> List
+        {
+            get { return new ListArg<T>(); }
+        }
 
-		/// <summary>
-		/// Define a complex constraint for this argument by passing several constraints
-		/// combined with operators. (Use Is in simple cases.)
-		/// Example: Arg&lt;string&gt;.Matches(Is.Equal("Hello") || Text.EndsWith("u"));
-		/// </summary>
-		/// <param name="constraint">Constraints using Is, Text and List</param>
-		/// <returns>Dummy to satisfy the compiler</returns>
-		public static T Matches(AbstractConstraint constraint)
-		{
-			ArgManager.AddInArgument(constraint);
-			return default(T);
-		}
+        /// <summary>
+        /// Provides ability to create complex
+        /// constraints against arguments of a mock
+        /// </summary>
+        /// <param name="constraint"></param>
+        /// <returns></returns>
+        public static T Matches(AbstractConstraint constraint)
+        {
+            ArgumentManager.AddArgument(constraint);
+            return default(T);
+        }
 
-		/// <summary>
-		/// Define a Ref argument.
-		/// </summary>
-		/// <param name="constraint">Constraints for this argument</param>
-		/// <param name="returnValue">value returned by the mock</param>
-		/// <returns></returns>
-		public static OutRefArgDummy<T> Ref(AbstractConstraint constraint, T returnValue)
-		{
-			ArgManager.AddRefArgument(constraint, returnValue);
-			return new OutRefArgDummy<T>();
-		}
+        /// <summary>
+        /// Provides ability to create a constraint
+        /// using an <see cref="System.Linq.Expressions.LambdaExpression"/>
+        /// for evaluation
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        public static T Matches(Expression<Func<T, bool>> expression)
+        {
+            ArgumentManager.AddArgument(new LambdaConstraint(expression));
+            return default(T);
+        }
 
-		/// <summary>
-		/// Define a out parameter. Use it together with the keyword out and use the
-		/// Dummy field available by the return value.
-		/// Example:  mock.foo( out Arg&lt;string&gt;.Out("hello").Dummy );
-		/// </summary>
-		/// <param name="returnValue"></param>
-		/// <returns></returns>
-		public static OutRefArgDummy<T> Out(T returnValue)
-		{
-			ArgManager.AddOutArgument(returnValue);
-			return new OutRefArgDummy<T>();
-		}
+        /// <summary>
+        /// Add constraint for an "out" argument
+        /// of a mock
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static ByRefDummy<T> Out(T value)
+        {
+            ArgumentManager.AddOutArgument(value);
+            return new ByRefDummy<T>();
+        }
 
-		/// <summary>
-		/// Define Constraints on list arguments.
-		/// </summary>
-		public static ListArg<T> List
-		{
-			get
-			{
-				return new ListArg<T>();
-			}
-		}
-
-	}
+        /// <summary>
+        /// Add constraint for a "ref" argument
+        /// of a mock
+        /// </summary>
+        /// <param name="constraint"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static ByRefDummy<T> Ref(AbstractConstraint constraint, T value)
+        {
+            ArgumentManager.AddRefArgument(constraint, value);
+            return new ByRefDummy<T>();
+        }
+    }
 }
-

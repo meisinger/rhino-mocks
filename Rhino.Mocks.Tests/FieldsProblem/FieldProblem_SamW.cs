@@ -12,9 +12,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         {
             string b;
 
-            ITest test = MockRepository.GenerateStrictMock<ITest>();
-            test.Expect(x => x.ArrayWithOut(new string[] { "data" }, out b))
-                .OutRef("SuccessWithOut2")
+            ITest test = Repository.Mock<ITest>();
+            test.Expect(x => x.ArrayWithOut(Arg<string[]>.List.IsIn("data"), out Arg<string>.Out("SuccessWithOut2").Dummy))
                 .Return("SuccessWithOut1");
 
             Console.WriteLine(test.ArrayWithOut(new string[] { "data" }, out b));

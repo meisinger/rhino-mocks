@@ -11,7 +11,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void GoodExplanationForUsingRepeatNeverAndReturn()
 		{
-            ILogWriter eventLogMock = (ILogWriter)MockRepository.GenerateDynamicMock(typeof(ILogWriter));
+            ILogWriter eventLogMock = Repository.Mock<ILogWriter>();
 			Log log = new Log(null, eventLogMock, "MOCK", true, false);
 
             eventLogMock.Expect(x => x.WriteLog(EventLogEntryType.SuccessAudit, "MOCK", null, null, 0))
@@ -28,7 +28,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void GoodExplanationForUsingReturnAndRepeatNever()
 		{
-            ILogWriter eventLogMock = (ILogWriter)MockRepository.GenerateDynamicMock(typeof(ILogWriter));
+            ILogWriter eventLogMock = Repository.Mock<ILogWriter>();
 			Log log = new Log(null, eventLogMock, "MOCK", true, false);
 
             eventLogMock.Expect(x => x.WriteLog(EventLogEntryType.SuccessAudit, "MOCK", null, null, 0))

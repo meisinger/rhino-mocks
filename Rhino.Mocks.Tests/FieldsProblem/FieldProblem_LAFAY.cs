@@ -9,7 +9,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         
 		public FieldProblem_LAFAY()
         {
-            demo = MockRepository.GenerateStrictMock(typeof(IDemo)) as IDemo;
+            demo = Repository.Mock<IDemo>();
         }
 
         [Fact]

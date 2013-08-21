@@ -48,7 +48,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void MockAGenericInterface()
         {
-            IList<int> list = MockRepository.GenerateStrictMock<IList<int>>();
+            IList<int> list = Repository.Mock<IList<int>>();
             Assert.NotNull(list);
 
             list.Expect(x => x.Count)
@@ -61,7 +61,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void DynamicMockOfGeneric()
         {
-            IList<int> list = MockRepository.GenerateDynamicMock<IList<int>>();
+            IList<int> list = Repository.Mock<IList<int>>();
             Assert.NotNull(list);
 
             list.Expect(x => x.Count)

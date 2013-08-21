@@ -42,7 +42,7 @@ namespace Rhino.Mocks.Tests
 
 		public MockingClassesTests()
 		{
-			demoClass = (DemoClass) MockRepository.GenerateStrictMock(typeof (DemoClass));
+			demoClass = Repository.Partial<DemoClass>();
 		}
 
 		[Fact]
@@ -59,7 +59,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void MockClassWithParametrizedCtor()
 		{
-			ParametrizedCtor pc = MockRepository.GenerateStrictMock(typeof (ParametrizedCtor), 3, "Hello") as ParametrizedCtor;
+			ParametrizedCtor pc = Repository.Partial<ParametrizedCtor>(3, "Hello");
 			Assert.Equal(3, pc.Int);
 			Assert.Equal("Hello", pc.String);
 
@@ -73,13 +73,13 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void MockClassWithOverloadedCtor()
 		{
-			OverLoadedCtor oc = MockRepository.GenerateStrictMock(typeof (OverLoadedCtor), 1) as OverLoadedCtor;
+			OverLoadedCtor oc = Repository.Partial<OverLoadedCtor>(1);
 			OverLoadCtorExercise(oc, 1, null);
 
-			oc = MockRepository.GenerateStrictMock(typeof (OverLoadedCtor), "Hello") as OverLoadedCtor;
+			oc = Repository.Partial<OverLoadedCtor>("Hello");
 			OverLoadCtorExercise(oc, 0, "Hello");
 
-			oc = MockRepository.GenerateStrictMock(typeof (OverLoadedCtor), 33, "Hello") as OverLoadedCtor;
+			oc = Repository.Partial<OverLoadedCtor>(33, "Hello");
 			OverLoadCtorExercise(oc, 33, "Hello");
 		}
 
@@ -88,7 +88,7 @@ namespace Rhino.Mocks.Tests
 		{
 		    try
 		    {
-                MockRepository.GenerateStrictMock(typeof(OverLoadedCtor), "Ayende", 55);
+                Repository.Partial<OverLoadedCtor>("Ayende", 55);
 
                 Assert.False(true, "The above call should have failed");
 		    }
@@ -100,26 +100,7 @@ namespace Rhino.Mocks.Tests
 		    }			
 		}
 
-
-		[Fact]
-		public void MockSealedClass()
-		{
-			Assert.Throws<NotSupportedException>("Can't create mocks of sealed classes",
-			                                     () => MockRepository.GenerateStrictMock(typeof (File)));
-		}
-
-        [Fact(Skip = "Test No Longer Valid (LastCall removed)")]
-        public void CallNonVirtualMethodThatImplementsAnInterface()
-        {
-            //((IDisposable)demoClass).Dispose();
-
-            //Assert.Throws<InvalidOperationException>(
-            //    "Invalid call, the last call has been used or no call has been made (make sure that you are calling a virtual (C#) / Overridable (VB) method).",
-            //    () => LastCall.Repeat.Never());
-           
-        }
-
-		[Fact]
+        [Fact]
 		public void ToStringMocked()
 		{
             if (demoClass.ToString()=="")

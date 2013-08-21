@@ -37,15 +37,19 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void StaticAccessorForStubAll()
 		{
-			ICat cat = MockRepository.GenerateStub<ICat>();
+            ICat cat = Repository.Mock<ICat>();
+            cat.StubProperties();
+
 			cat.Eyes = 2;
-			Assert.Equal(2, cat.Eyes );
+            Assert.Equal(2, cat.Eyes);
 		}
 
 		[Fact]
 		public void StubAllHasPropertyBehaviorForAllProperties()
 		{
-			ICat cat = MockRepository.GenerateStub<ICat>();
+            ICat cat = Repository.Mock<ICat>();
+            cat.StubProperties();
+
 			cat.Legs = 4;
 			Assert.Equal(4, cat.Legs);
 
@@ -63,7 +67,8 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void StubAllHasPropertyBehaviorForAllPropertiesWhenStubbingClasses()
 		{
-			Housecat housecat = MockRepository.GenerateStub<Housecat>();
+            Housecat housecat = Repository.Partial<Housecat>();
+            housecat.StubProperties();
 
 			housecat.FurLength = 7;
 			Assert.Equal(7, housecat.FurLength);
@@ -72,32 +77,33 @@ namespace Rhino.Mocks.Tests
 			Assert.Equal("Black", housecat.Color);
 		}
 
-		[Fact]
-		public void StubAllCanRegisterToEventsAndRaiseThem()
-		{
-			ICat cat = MockRepository.GenerateStub<ICat>();
+        //[Fact]
+        //public void StubAllCanRegisterToEventsAndRaiseThem()
+        //{
+        //    ICat cat = Repository.Mock<ICat>();
 
-            //cat.Hungry += null; //Note, no expectation!
-            //IEventRaiser eventRaiser = LastCall.GetEventRaiser();
+        //    //cat.Hungry += null; //Note, no expectation!
+        //    //IEventRaiser eventRaiser = LastCall.GetEventRaiser();
 
-            IEventRaiser eventRaiser = cat
-                .Stub(x => x.Hungry += null)
-                .GetEventRaiser();
+        //    IEventRaiser eventRaiser = cat
+        //        .Stub(x => x.Hungry += null)
+        //        .GetEventRaiser();
 
-			bool raised = false;
-			cat.Hungry += delegate
-			{
-				raised = true;
-			};
+        //    bool raised = false;
+        //    cat.Hungry += delegate
+        //    {
+        //        raised = true;
+        //    };
 
-			eventRaiser.Raise(cat, EventArgs.Empty);
-			Assert.True(raised);
-		}
+        //    eventRaiser.Raise(cat, EventArgs.Empty);
+        //    Assert.True(raised);
+        //}
 
 		[Fact]
 		public void CallingMethodOnStubAllDoesNotCreateExpectations()
 		{
-			ICat cat = MockRepository.GenerateStub<ICat>();
+            ICat cat = Repository.Mock<ICat>();
+            cat.StubProperties();
 
 			cat.Legs = 4;
 			cat.Name = "Esther";
@@ -112,7 +118,8 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void DemoStubAllLegsProperty()
 		{
-			ICat catStub = MockRepository.GenerateStub<ICat>();
+            ICat catStub = Repository.Mock<ICat>();
+            catStub.StubProperties();
 
 			catStub.Legs = 0;
 			Assert.Equal(0, catStub.Legs);
@@ -125,7 +132,8 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void StubAllCanCreateExpectationOnMethod()
 		{
-			ICat cat = MockRepository.GenerateStub<ICat>();
+            ICat cat = Repository.Mock<ICat>();
+            cat.StubProperties();
 
             cat.Legs = 4;
             cat.Name = "Esther";
@@ -142,7 +150,8 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void StubAllCanHandlePropertiesGettingRegisteredMultipleTimes()
 		{
-			SpecificFish fish = MockRepository.GenerateStub<SpecificFish>();
+            SpecificFish fish = Repository.Partial<SpecificFish>();
+            fish.StubProperties();
 
 			fish.IsFreshWater = true;
 			Assert.True(fish.IsFreshWater);
@@ -151,7 +160,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void StubCanHandlePolymorphicArgConstraints()
         {
-            IAquarium aquarium = MockRepository.GenerateStub<IAquarium>();
+            IAquarium aquarium = Repository.Mock<IAquarium>();
             aquarium.Stub(x => x.DetermineAge(Arg<MartianFish>.Matches(arg => arg.Planet == "mars"))).Return(100);
             aquarium.Stub(x => x.DetermineAge(Arg<SpecificFish>.Is.TypeOf)).Return(5);
             

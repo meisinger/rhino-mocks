@@ -39,7 +39,7 @@ namespace Rhino.Mocks.Tests
 
 		public DynamicMockTests()
 		{
-            demo = (IDemo)MockRepository.GenerateDynamicMock(typeof(IDemo));
+            demo = Repository.Mock<IDemo>();
 		}
 
 		public void Dispose()
@@ -56,8 +56,7 @@ namespace Rhino.Mocks.Tests
 		public void CanSetupExpectations()
 		{
             demo.Expect(x => x.ReturnIntNoArgs())
-                .Return(30)
-                .Repeat.Once();
+                .Return(30);
 
             Assert.Equal(30, demo.ReturnIntNoArgs());
             Assert.Equal(0, demo.ReturnIntNoArgs());
@@ -80,7 +79,8 @@ namespace Rhino.Mocks.Tests
 		public void SetupResultWorksWithDynamicMocks()
 		{
             demo.Expect(x => x.StringArgString("Ayende"))
-                .Return("Rahien");
+                .Return("Rahien")
+                .Repeat.Any();
 
 			for (int i = 0; i < 43; i++)
 			{
@@ -102,9 +102,11 @@ namespace Rhino.Mocks.Tests
 			demo.Expect(x => x.ReturnIntNoArgs())
                 .Repeat.Never();
 
+            demo.ReturnIntNoArgs();
+
 			Assert.Throws<ExpectationViolationException>(
 				"IDemo.ReturnIntNoArgs(); Expected #0, Actual #1.",
-				() => demo.ReturnIntNoArgs());
+				() => demo.VerifyExpectations());
 		}
 	}
 }

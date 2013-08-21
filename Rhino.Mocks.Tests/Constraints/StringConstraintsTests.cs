@@ -29,6 +29,7 @@
 
 using Xunit;
 using Rhino.Mocks.Constraints;
+using Rhino.Mocks.Helpers;
 
 namespace Rhino.Mocks.Tests.Constraints
 {

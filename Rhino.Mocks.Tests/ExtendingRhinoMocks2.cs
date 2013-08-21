@@ -27,13 +27,8 @@
 #endregion
 
 
-using System;
-using System.Reflection;
-using Castle.DynamicProxy;
 using Xunit;
 using Rhino.Mocks.Exceptions;
-using Rhino.Mocks.Impl;
-using Rhino.Mocks.Interfaces;
 
 namespace Rhino.Mocks.Tests
 {
@@ -42,65 +37,20 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void DeleteThisTest()
 		{
-			MockedClass mock = MockRepository.GenerateStrictMock<MockedClass>();
+			MockedClass mock = Repository.Partial<MockedClass>();
 			
             mock.Expect(x => x.Method("expectedParameter"));
+            mock.Method("invalidParameter");
 
-			Assert.Throws<ExpectationViolationException>(() => mock.Method("invalidParameter"));
+			Assert.Throws<ExpectationViolationException>(() => mock.VerifyExpectations());
 		}
 	}
 
-	public class ErnstMockRepository : MockRepository
-	{
-		public T StrictMockObjectThatVerifyAndCallOriginalMethod<T>()
-		{
-            return (T)CreateMockObject(typeof(T), new CreateMockState(CreateVerifyAndCallOriginalMockState), new Type[0]);
-		}
-
-		private IMockState CreateVerifyAndCallOriginalMockState(IMockedObject mockedObject)
-		{
-			return new VerifyExpectationAndCallOriginalRecordState(mockedObject, this);
-		}
-	}
-
-	public class MockedClass
-	{
-		public virtual void Method(string parameter)
-		{
-			//Something in this method must be executed
-		}
-	}
-
-	public class VerifyExpectationAndCallOriginalRecordState : RecordMockState
-	{
-		public VerifyExpectationAndCallOriginalRecordState(IMockedObject mockedObject, MockRepository repository) 
-            : base(mockedObject, repository)
-		{
-		}
-
-        /// <summary>
-		/// AssertWasCalled that we can move to replay state and move 
-		/// to the reply state.
-		/// </summary>
-		protected override IMockState DoReplay()
-		{
-			return new VerifyExpectationAndCallOriginalReplayState(this);
-		}
-	}
-
-	internal class VerifyExpectationAndCallOriginalReplayState : ReplayMockState
-	{
-		public VerifyExpectationAndCallOriginalReplayState(RecordMockState previousState)
-			: base(previousState)
-		{
-		}
-
-
-		protected override object DoMethodCall(IInvocation invocation, MethodInfo method, object[] args)
-		{
-			object result = base.DoMethodCall(invocation, method, args);
-			invocation.Proceed();
-			return result;
-		}
-	}
+    public class MockedClass
+    {
+        public virtual void Method(string parameter)
+        {
+            //Something in this method must be executed
+        }
+    }
 }

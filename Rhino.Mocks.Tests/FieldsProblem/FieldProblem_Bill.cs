@@ -12,7 +12,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void Should_be_able_to_proxy_IUnityContainer()
         {
-            var unity = MockRepository.GenerateMock<IUnityContainer>();
+            var unity = Repository.Mock<IUnityContainer>();
         }
     }
 }

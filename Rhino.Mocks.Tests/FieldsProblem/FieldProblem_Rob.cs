@@ -11,7 +11,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void CanFailIfCalledMoreThanOnceUsingDynamicMock()
 		{
-            IDemo demo = MockRepository.GenerateDynamicMock<IDemo>();
+            IDemo demo = Repository.Mock<IDemo>();
 
             demo.Expect(x => x.VoidNoArgs())
                 .Repeat.Once();

@@ -52,8 +52,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CallingMockedDelegatesWithoutOn()
         {
-            ObjectDelegateWithNoParams d1 = (ObjectDelegateWithNoParams)MockRepository
-                .GenerateStrictMock(typeof(ObjectDelegateWithNoParams));
+            ObjectDelegateWithNoParams d1 = Repository.Mock<ObjectDelegateWithNoParams>();
 
             d1.Expect(x => x())
                 .Return(1);
@@ -64,11 +63,9 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void MockTwoDelegatesWithTheSameName()
         {
-            ObjectDelegateWithNoParams d1 = (ObjectDelegateWithNoParams)MockRepository
-                .GenerateStrictMock(typeof(ObjectDelegateWithNoParams));
+            ObjectDelegateWithNoParams d1 = Repository.Mock<ObjectDelegateWithNoParams>();
 
-            Tests.ObjectDelegateWithNoParams d2 = (Tests.ObjectDelegateWithNoParams)MockRepository
-                .GenerateStrictMock(typeof(Tests.ObjectDelegateWithNoParams));
+            Tests.ObjectDelegateWithNoParams d2 = Repository.Mock<Tests.ObjectDelegateWithNoParams>();
 
             d1.Expect(x => x())
                 .Return(1);
@@ -86,8 +83,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void MockObjectDelegateWithNoParams()
         {
-            ObjectDelegateWithNoParams d = (ObjectDelegateWithNoParams)MockRepository
-                .GenerateStrictMock(typeof(ObjectDelegateWithNoParams));
+            ObjectDelegateWithNoParams d = Repository.Mock<ObjectDelegateWithNoParams>();
 
             d.Expect(x => x())
                 .Return("abc");
@@ -97,50 +93,32 @@ namespace Rhino.Mocks.Tests
 
             Assert.Equal("abc", d());
             Assert.Equal("def", d());
+            Assert.Null(d());
 
-            Assert.Throws<ExpectationViolationException>(() => d());
-
-            //try
-            //{
-            //    d();
-            //    Assert.False(true, "Expected an expectation violation to occur.");
-            //}
-            //catch (ExpectationViolationException)
-            //{
-            //    // Expected.
-            //}
+            Assert.Throws<ExpectationViolationException>(
+                () => d.VerifyExpectations(true));
         }
 
         [Fact]
         public void MockVoidDelegateWithNoParams()
         {
-            VoidDelegateWithParams d = (VoidDelegateWithParams)MockRepository
-                .GenerateStrictMock(typeof(VoidDelegateWithParams));
+            VoidDelegateWithParams d = Repository.Mock<VoidDelegateWithParams>();
 
             d.Expect(x => x("abc"));
             d.Expect(x => x("efg"));
 
             d("abc");
             d("efg");
+            d("hij");
 
-            Assert.Throws<ExpectationViolationException>(() => d("hij"));
-
-            //try
-            //{
-            //    d("hij");
-            //    Assert.False(true, "Expected an expectation violation to occur.");
-            //}
-            //catch (ExpectationViolationException)
-            //{
-            //    // Expected.
-            //}
+            Assert.Throws<ExpectationViolationException>(
+                () => d.VerifyExpectations(true));
         }
 
         [Fact]
         public void MockStringDelegateWithParams()
         {
-            StringDelegateWithParams d = (StringDelegateWithParams)MockRepository
-                .GenerateStrictMock(typeof(StringDelegateWithParams));
+            StringDelegateWithParams d = Repository.Mock<StringDelegateWithParams>();
 
             d.Expect(x => x(1, "111"))
                 .Return("abc");
@@ -150,92 +128,83 @@ namespace Rhino.Mocks.Tests
 
             Assert.Equal("abc", d(1, "111"));
             Assert.Equal("def", d(2, "222"));
+            d(3, "333");
 
-            Assert.Throws<ExpectationViolationException>(() => d(3, "333"));
-
-            //try
-            //{
-            //    d(3, "333");
-            //    Assert.False(true, "Expected an expectation violation to occur.");
-            //}
-            //catch (ExpectationViolationException)
-            //{
-            //    // Expected.
-            //}
+            Assert.Throws<ExpectationViolationException>(
+                () => d.VerifyExpectations(true));
         }
 
-        [Fact]
-        public void MockIntDelegateWithRefAndOutParams()
-        {
-            IntDelegateWithRefAndOutParams d = (IntDelegateWithRefAndOutParams)MockRepository
-                .GenerateStrictMock(typeof(IntDelegateWithRefAndOutParams));
+        //[Fact]
+        //public void MockIntDelegateWithRefAndOutParams()
+        //{
+        //    IntDelegateWithRefAndOutParams d = Repository.Mock<IntDelegateWithRefAndOutParams>();
 
-            int a = 3;
-            string b = null;
+        //    int a = 3;
+        //    string b = null;
 
-            d.Expect(x => x(ref a, out b))
-                .Do(new IntDelegateWithRefAndOutParams(Return1_Plus2_A));
+        //    d.Expect(x => x(ref a, out b))
+        //        .Do(new IntDelegateWithRefAndOutParams(Return1_Plus2_A));
 
-            Assert.Equal(1, d(ref a, out b));
-            Assert.Equal(5, a);
-            Assert.Equal("A", b);
+        //    Assert.Equal(1, d(ref a, out b));
+        //    Assert.Equal(5, a);
+        //    Assert.Equal("A", b);
 
-            Assert.Throws<ExpectationViolationException>(() => d(ref a, out b));
+        //    Assert.Throws<ExpectationViolationException>(() => d(ref a, out b));
 
-            //try
-            //{
-            //    d(ref a, out b);
-            //    Assert.False(true, "Expected an expectation violation to occur.");
-            //}
-            //catch (ExpectationViolationException)
-            //{
-            //    // Expected.
-            //}
-        }
+        //    //try
+        //    //{
+        //    //    d(ref a, out b);
+        //    //    Assert.False(true, "Expected an expectation violation to occur.");
+        //    //}
+        //    //catch (ExpectationViolationException)
+        //    //{
+        //    //    // Expected.
+        //    //}
+        //}
 
-        [Fact]
-        public void InterceptsDynamicInvokeAlso()
-        {
-            IntDelegateWithRefAndOutParams d = (IntDelegateWithRefAndOutParams)MockRepository
-                .GenerateStrictMock(typeof(IntDelegateWithRefAndOutParams));
+        //[Fact]
+        //public void InterceptsDynamicInvokeAlso()
+        //{
+        //    IntDelegateWithRefAndOutParams d = (IntDelegateWithRefAndOutParams)MockRepository
+        //        .GenerateStrictMock(typeof(IntDelegateWithRefAndOutParams));
 
-            int a = 3;
-            string b = null;
+        //    int a = 3;
+        //    string b = null;
 
-            d.Expect(x => x(ref a, out b))
-                .Do(new IntDelegateWithRefAndOutParams(Return1_Plus2_A));
+        //    d.Expect(x => x(ref a, out b))
+        //        .Do(new IntDelegateWithRefAndOutParams(Return1_Plus2_A));
 
-            object[] args = new object[] { 3, null };
-            Assert.Equal(1, d.DynamicInvoke(args));
-            Assert.Equal(5, args[0]);
-            Assert.Equal("A", args[1]);
+        //    object[] args = new object[] { 3, null };
+        //    Assert.Equal(1, d.DynamicInvoke(args));
+        //    Assert.Equal(5, args[0]);
+        //    Assert.Equal("A", args[1]);
 
-            Assert.Throws<TargetInvocationException>(() => d.DynamicInvoke(args));
+        //    Assert.Throws<TargetInvocationException>(() => d.DynamicInvoke(args));
 
-            //try
-            //{
-            //    d.DynamicInvoke(args);
-            //    Assert.False(true, "Expected an expectation violation to occur.");
-            //}
-            //catch (TargetInvocationException ex)
-            //{
-            //    // Expected.
-            //    Assert.True(ex.InnerException is ExpectationViolationException);
-            //}
-        }
+        //    //try
+        //    //{
+        //    //    d.DynamicInvoke(args);
+        //    //    Assert.False(true, "Expected an expectation violation to occur.");
+        //    //}
+        //    //catch (TargetInvocationException ex)
+        //    //{
+        //    //    // Expected.
+        //    //    Assert.True(ex.InnerException is ExpectationViolationException);
+        //    //}
+        //}
 
         [Fact]
         public void DelegateBaseTypeCannotBeMocked()
         {
             Assert.Throws<InvalidOperationException>(
                 "Cannot mock the Delegate base type.",
-                () => MockRepository.GenerateStrictMock(typeof(Delegate)));
+                () => Repository.Mock<Delegate>());
         }
 
         [Fact]
         public void GenericDelegate()
         {
-            Action<int> action = MockRepository.GenerateStrictMock<Action<int>>();
+            Action<int> action = Repository.Mock<Action<int>>();
 
             action.Expect(x =>
             {

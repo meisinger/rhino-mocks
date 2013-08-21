@@ -30,7 +30,6 @@
 using System;
 using Xunit;
 using Rhino.Mocks.Exceptions;
-using Rhino.Mocks.Impl;
 using Rhino.Mocks.Interfaces;
 
 namespace Rhino.Mocks.Tests.FieldsProblem
@@ -46,12 +45,12 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void VerifyingThatEventWasAttached()
 		{
-            IWithEvents events = (IWithEvents)MockRepository.GenerateStrictMock(typeof(IWithEvents));
+            IWithEvents events = Repository.Mock<IWithEvents>();
             events.Expect(x => x.Blah += new EventHandler(events_Blah));
 
 			MethodThatSubscribeToEventBlah(events);
 
-            events.VerifyAllExpectations();
+            events.VerifyExpectations();
 		}
 
 		public void MethodThatSubscribeToEventBlah(IWithEvents events)
@@ -62,7 +61,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void VerifyingThatAnEventWasFired()
 		{
-            IEventSubscriber subscriber = (IEventSubscriber)MockRepository.GenerateStrictMock(typeof(IEventSubscriber));
+            IEventSubscriber subscriber = Repository.Mock<IEventSubscriber>();
             IWithEvents events = new WithEvents();
 
             // This doesn't create an expectation because no method is called on subscriber!!
@@ -71,13 +70,13 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             			
 			events.RaiseEvent();
 
-            subscriber.VerifyAllExpectations();
+            subscriber.VerifyExpectations();
 		}
 
 		[Fact]
 		public void VerifyingThatAnEventWasFiredThrowsForDifferentArgument()
 		{
-            IEventSubscriber subscriber = (IEventSubscriber)MockRepository.GenerateStrictMock(typeof(IEventSubscriber));
+            IEventSubscriber subscriber = Repository.Mock<IEventSubscriber>();
 			IWithEvents events = new WithEvents();
 			
             // This doesn't create an expectation because no method is called on subscriber!!
@@ -92,7 +91,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void CanSetExpectationToUnsubscribeFromEvent()
 		{
-            IWithEvents events = (IWithEvents)MockRepository.GenerateStrictMock(typeof(IWithEvents));
+            IWithEvents events = Repository.Mock<IWithEvents>();
 
             events.Expect(x => x.Blah += new EventHandler(events_Blah));
             events.Expect(x => x.Blah -= new EventHandler(events_Blah));
@@ -101,142 +100,142 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 			events.Blah += new EventHandler(events_Blah);
 			events.Blah -= new EventHandler(events_Blah);
 
-            events.VerifyAllExpectations();
+            events.VerifyExpectations();
 		}
 
 		[Fact]
 		public void VerifyingExceptionIfEventIsNotAttached()
 		{
-			IWithEvents events = (IWithEvents)MockRepository.GenerateStrictMock(typeof(IWithEvents));
+			IWithEvents events = Repository.Mock<IWithEvents>();
 
             events.Expect(x => x.Blah += new EventHandler(events_Blah));
 
 			Assert.Throws<ExpectationViolationException>(
                 "IWithEvents.add_Blah(System.EventHandler); Expected #1, Actual #0.",
-                () => events.VerifyAllExpectations());
+                () => events.VerifyExpectations());
 		}
 
 		[Fact]
 		public void VerifyingThatCanAttackOtherEvent()
 		{
-            IWithEvents events = (IWithEvents)MockRepository.GenerateStrictMock(typeof(IWithEvents));
+            IWithEvents events = Repository.Mock<IWithEvents>();
 
             events.Expect(x => x.Blah += new EventHandler(events_Blah))
                 .IgnoreArguments();
 
 			events.Blah += new EventHandler(events_Blah_Other);
 
-            events.VerifyAllExpectations();
+            events.VerifyExpectations();
 		}
 
-		[Fact]
-		public void BetterErrorMessageOnIncorrectParametersCount()
-		{
-            IWithEvents events = (IWithEvents)MockRepository.GenerateStrictMock(typeof(IWithEvents));
+        //[Fact]
+        //public void BetterErrorMessageOnIncorrectParametersCount()
+        //{
+        //    IWithEvents events = Repository.Mock<IWithEvents>();
 
-            raiser = events.Expect(x => x.Blah += null)
-                .IgnoreArguments()
-                .GetEventRaiser();
+        //    raiser = events.Expect(x => x.Blah += null)
+        //        .IgnoreArguments()
+        //        .GetEventRaiser();
 
-			events.Blah += delegate { };
+        //    events.Blah += delegate { };
 			
-			Assert.Throws<InvalidOperationException>(
-				"You have called the event raiser with the wrong number of parameters. Expected 2 but was 0",
-				() => raiser.Raise(null));
-		}
+        //    Assert.Throws<InvalidOperationException>(
+        //        "You have called the event raiser with the wrong number of parameters. Expected 2 but was 0",
+        //        () => raiser.Raise(null));
+        //}
 
-		[Fact]
-		public void BetterErrorMessageOnIncorrectParameters()
-		{
-            IWithEvents events = (IWithEvents)MockRepository.GenerateStrictMock(typeof(IWithEvents));
+        //[Fact]
+        //public void BetterErrorMessageOnIncorrectParameters()
+        //{
+        //    IWithEvents events = Repository.Mock<IWithEvents>();
 
-            raiser = events.Expect(x => x.Blah += null)
-                .IgnoreArguments()
-                .GetEventRaiser();
+        //    raiser = events.Expect(x => x.Blah += null)
+        //        .IgnoreArguments()
+        //        .GetEventRaiser();
 
-			events.Blah += delegate { };
+        //    events.Blah += delegate { };
 
-			Assert.Throws<InvalidOperationException>(
-				"Parameter #2 is System.Int32 but should be System.EventArgs",
-				() => raiser.Raise("", 1));
-		}
+        //    Assert.Throws<InvalidOperationException>(
+        //        "Parameter #2 is System.Int32 but should be System.EventArgs",
+        //        () => raiser.Raise("", 1));
+        //}
 
-		[Fact]
-		public void RaiseEvent()
-		{
-            IWithEvents eventHolder = (IWithEvents)MockRepository.GenerateStrictMock(typeof(IWithEvents));
+        //[Fact]
+        //public void RaiseEvent()
+        //{
+        //    IWithEvents eventHolder = Repository.Mock<IWithEvents>();
 
-            raiser = eventHolder
-                .Expect(x => x.Blah += null)
-                .IgnoreArguments()
-                .GetEventRaiser();
+        //    raiser = eventHolder
+        //        .Expect(x => x.Blah += null)
+        //        .IgnoreArguments()
+        //        .GetEventRaiser();
 
-            eventHolder.Expect(x => x.RaiseEvent())
-                .Do(new System.Threading.ThreadStart(UseEventRaiser));
+        //    eventHolder.Expect(x => x.RaiseEvent())
+        //        .Do(new System.Threading.ThreadStart(UseEventRaiser));
 
-            IEventSubscriber eventSubscriber = (IEventSubscriber)MockRepository.GenerateStrictMock(typeof(IEventSubscriber));
-            eventSubscriber.Expect(x => x.Hanlder(this, EventArgs.Empty));
+        //    IEventSubscriber eventSubscriber = Repository.Mock<IEventSubscriber>();
+        //    eventSubscriber.Expect(x => x.Hanlder(this, EventArgs.Empty));
 
-			eventHolder.Blah += new EventHandler(eventSubscriber.Hanlder);
-            eventHolder.RaiseEvent();
+        //    eventHolder.Blah += new EventHandler(eventSubscriber.Hanlder);
+        //    eventHolder.RaiseEvent();
 
-            eventHolder.VerifyAllExpectations();
-            eventSubscriber.VerifyAllExpectations();
-		}
+        //    eventHolder.VerifyExpectations();
+        //    eventSubscriber.VerifyExpectations();
+        //}
 
-		[Fact]
-		public void UsingEventRaiserCreate()
-		{
-            IWithEvents eventHolder = (IWithEvents)MockRepository.GenerateStub(typeof(IWithEvents));
+        //[Fact]
+        //public void UsingEventRaiserCreate()
+        //{
+        //    IWithEvents eventHolder = Repository.Mock<IWithEvents>();
 
-            //IEventRaiser eventRaiser = EventRaiser.Create(eventHolder, "Blah");
-            IEventRaiser eventRaiser = eventHolder.GetEventRaiser(x => x.Blah += null);
+        //    //IEventRaiser eventRaiser = EventRaiser.Create(eventHolder, "Blah");
+        //    IEventRaiser eventRaiser = eventHolder.GetEventRaiser(x => x.Blah += null);
 
-			bool called = false;
-			eventHolder.Blah += delegate
-			{
-				called = true;
-			};
+        //    bool called = false;
+        //    eventHolder.Blah += delegate
+        //    {
+        //        called = true;
+        //    };
 
-			eventRaiser.Raise(this, EventArgs.Empty);
+        //    eventRaiser.Raise(this, EventArgs.Empty);
 
-			Assert.True(called);
-            eventHolder.VerifyAllExpectations();
-		}
+        //    Assert.True(called);
+        //    eventHolder.VerifyExpectations();
+        //}
 
-        [Fact]
-        public void RaiseEventUsingExtensionMethod() 
-        {
-            IWithEvents eventHolder = (IWithEvents)MockRepository.GenerateStub(typeof(IWithEvents));
+        //[Fact]
+        //public void RaiseEventUsingExtensionMethod() 
+        //{
+        //    IWithEvents eventHolder = Repository.Mock<IWithEvents>();
 
-            bool called = false;
-            eventHolder.Blah += delegate {
-                called = true;
-            };
+        //    bool called = false;
+        //    eventHolder.Blah += delegate {
+        //        called = true;
+        //    };
             
-            eventHolder.Raise(stub => stub.Blah += null, this, EventArgs.Empty);
+        //    eventHolder.Raise(stub => stub.Blah += null, this, EventArgs.Empty);
             
-            Assert.True(called);
-        }
+        //    Assert.True(called);
+        //}
 
-        [Fact]
-        public void UsingEventRaiserFromExtensionMethod() 
-        {
-            IWithEvents eventHolder = (IWithEvents)MockRepository.GenerateStub(typeof(IWithEvents));
+        //[Fact]
+        //public void UsingEventRaiserFromExtensionMethod() 
+        //{
+        //    IWithEvents eventHolder = (IWithEvents)MockRepository.GenerateStub(typeof(IWithEvents));
 
-            IEventRaiser eventRaiser = eventHolder
-                .GetEventRaiser(stub => stub.Blah += null);
+        //    IEventRaiser eventRaiser = eventHolder
+        //        .GetEventRaiser(stub => stub.Blah += null);
 			
-			bool called = false;
-            eventHolder.Blah += delegate {
-                called = true;
-            };
+        //    bool called = false;
+        //    eventHolder.Blah += delegate {
+        //        called = true;
+        //    };
             
-            eventRaiser.Raise(this, EventArgs.Empty);
+        //    eventRaiser.Raise(this, EventArgs.Empty);
 
-            Assert.True(called);
-            eventHolder.VerifyAllExpectations();
-		}
+        //    Assert.True(called);
+        //    eventHolder.VerifyAllExpectations();
+        //}
 
         private void events_Blah_Other(object sender, EventArgs e)
         {

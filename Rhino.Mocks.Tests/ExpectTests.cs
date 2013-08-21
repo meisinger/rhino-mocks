@@ -37,7 +37,7 @@ namespace Rhino.Mocks.Tests
 
 		public ExpectTests()
 		{
-			demo = MockRepository.GenerateStrictMock(typeof(IDemo)) as IDemo;
+            demo = Repository.Mock<IDemo>();
 		}
 
 		public void Dispose()
@@ -66,7 +66,7 @@ namespace Rhino.Mocks.Tests
 		public void CanUseAnonymousDelegatesToCallVoidMethods()
 		{
             demo.Expect(x => x.VoidNoArgs())
-                .Throw(new ArgumentNullException());
+                .Throws<ArgumentNullException>();
 
 			Assert.Throws<ArgumentNullException>(demo.VoidNoArgs);
 		}
@@ -75,7 +75,7 @@ namespace Rhino.Mocks.Tests
 		public void CanUseAnonymousDelegatesToCallVoidMethods_WithoutAnonymousDelegate()
 		{
             demo.Expect(x => x.VoidNoArgs())
-                .Throw(new ArgumentNullException());
+                .Throws<ArgumentNullException>();
 
 			Assert.Throws<ArgumentNullException>(demo.VoidNoArgs);
 		}

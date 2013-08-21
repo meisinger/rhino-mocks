@@ -7,7 +7,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
         public void ThisTestPasses()
         {
-            var interfaceStub = MockRepository.GenerateStub<InterfaceINeedToStub>();
+            var interfaceStub = Repository.Mock<InterfaceINeedToStub>();
 
             interfaceStub.Stub(x => x.MyStringValue)
                 .Return("string");
@@ -19,7 +19,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void ThisTestDoesNotPass()
         {
-            var myInterface = MockRepository.GenerateStub<InterfaceINeedToStub>();
+            var myInterface = Repository.Mock<InterfaceINeedToStub>();
 
             // Changed order of property initialization
             myInterface.MyIntValue = 4;

@@ -27,8 +27,8 @@
 #endregion
 
 using System.IO;
-using Rhino.Mocks.Impl;
 using Rhino.Mocks.Interfaces;
+using Rhino.Mocks.Loggers;
 
 namespace Rhino.Mocks
 {
@@ -49,9 +49,10 @@ namespace Rhino.Mocks
 		/// </summary>
 		public const string NormalName = "DynamicProxyGenAssembly2";
 
-		/// <summary>
-		/// Logs all method calls for methods
-		/// </summary>
-		public static IExpectationLogger Logger = new NullLogger();
+        /// <summary>
+        /// Logs expected and unexpected method calls as well
+        /// as expectations created against methods
+        /// </summary>
+        public static IExpectationLogger Logger = new NullLogger();
 	}
 }
