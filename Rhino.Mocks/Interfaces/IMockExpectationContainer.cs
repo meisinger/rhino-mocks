@@ -44,12 +44,6 @@ namespace Rhino.Mocks.Interfaces
         void AddExpectation(Expectation expectation);
 
         /// <summary>
-        /// Add a property stub without an expectation
-        /// </summary>
-        /// <param name="property"></param>
-        void AddPropertyStub(PropertyInfo property);
-
-        /// <summary>
         /// Set an expectation for consideration
         /// </summary>
         /// <param name="expectation"></param>

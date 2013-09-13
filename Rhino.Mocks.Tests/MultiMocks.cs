@@ -388,8 +388,8 @@ namespace Rhino.Mocks.Tests
                 .CallOriginalMethod();
 
             mockedWriter.Expect(x => x.Flush())
-                .CallOriginalMethod()
-                .Repeat.Any();
+                .Repeat.Any()
+                .CallOriginalMethod();
 
             mockedWriter.Expect(x => x.Close());
 

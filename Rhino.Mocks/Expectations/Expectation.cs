@@ -2,63 +2,50 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Rhino.Mocks.Interfaces;
-using Rhino.Mocks.Helpers;
-using Rhino.Mocks.Constraints;
+using Castle.DynamicProxy;
 
 namespace Rhino.Mocks.Expectations
 {
     /// <summary>
-    /// Access to various options that can 
-    /// be applied to an expectation
+    /// Access to various options that can be applied to an expectation
     /// </summary>
-    public class Expectation : IMockExpectation, IExpectationOptions
+    public abstract class Expectation
     {
-        private readonly IRepeatOptions repeatOptions;
         private readonly List<Actuals> actuals;
-
+        private Range range;
         private bool consider;
-        private bool proceedIsForced;
-        private bool throwsException;
-        private Range expectedCount;
 
         /// <summary>
-        /// Access to repeat options on expectation
+        /// Identifies the type of expectation
         /// </summary>
-        IRepeatOptions IExpectationOptions.Repeat
-        {
-            get { return repeatOptions; }
-        }
-
+        internal abstract ExpectationType Type { get; }
+        
         /// <summary>
-        /// The number of times the expectation
-        /// was actually called
+        /// The number of times the expectation was actually called
         /// </summary>
         public int ActualCount
         {
-            get { return (actuals.Count); }
+            get { return actuals.Count; }
         }
-
+        
         /// <summary>
-        /// The number of times the expectation
-        /// is expected to be called
+        /// The number of times the expectation is expected to be called
         /// </summary>
         public Range ExpectedCount
         {
-            get { return expectedCount; }
+            get { return range; }
         }
-
+        
         /// <summary>
-        /// Indicates whether or not the
-        /// expectation have been met
+        /// Indicates whether or not the expectation have been met
         /// </summary>
         public bool ExpectationMet
         {
             get
             {
                 var actualCount = actuals.Count;
-                var minimum = expectedCount.Minimum;
-                var maximum = expectedCount.Maximum;
+                var minimum = range.Minimum;
+                var maximum = range.Maximum;
 
                 if (minimum == int.MaxValue)
                     if (maximum.HasValue && maximum.Value == int.MaxValue)
@@ -75,8 +62,7 @@ namespace Rhino.Mocks.Expectations
         }
 
         /// <summary>
-        /// Indicates whether or not the
-        /// expectation have been satisfied
+        /// Indicates whether or not the expectation have been satisfied
         /// </summary>
         public bool ExpectationSatisfied
         {
@@ -86,8 +72,8 @@ namespace Rhino.Mocks.Expectations
                     return false;
 
                 var actualCount = actuals.Count;
-                var minimum = expectedCount.Minimum;
-                var maximum = expectedCount.Maximum;
+                var minimum = range.Minimum;
+                var maximum = range.Maximum;
                 if (actualCount < minimum)
                     return false;
 
@@ -97,19 +83,9 @@ namespace Rhino.Mocks.Expectations
                 return (actualCount >= maximum.Value);
             }
         }
-
+        
         /// <summary>
-        /// Indicates whether or not the
-        /// mocked method is executed
-        /// </summary>
-        public virtual bool ForceProceed
-        {
-            get { return proceedIsForced; }
-        }
-
-        /// <summary>
-        /// Indicates whether or not actual
-        /// calls have been made against
+        /// Indicates whether or not actual calls have been made against
         /// this expectation
         /// </summary>
         public bool HasActuals
@@ -118,8 +94,7 @@ namespace Rhino.Mocks.Expectations
         }
 
         /// <summary>
-        /// Indicates whether or not the
-        /// expectation has a return type
+        /// Indicates whether or not the expectation has a return type
         /// </summary>
         public virtual bool HasReturnValue
         {
@@ -127,30 +102,9 @@ namespace Rhino.Mocks.Expectations
         }
 
         /// <summary>
-        /// Method of the expectation
-        /// </summary>
-        public MethodInfo Method { get; set; }
-
-        /// <summary>
-        /// Constraints against argument of the 
-        /// expectation
-        /// </summary>
-        public AbstractConstraint[] Arguments { get; set; }
-
-        /// <summary>
-        /// Expectation to throw if method is called
-        /// </summary>
-        public Exception ExceptionToThrow { get; set; }
-
-        /// <summary>
-        /// Collection of "out" and "ref" arguments
-        /// </summary>
-        public object[] ReturnArguments { get; set; }
-        
-        /// <summary>
         /// Return value for the expectation
         /// </summary>
-        public virtual object ReturnValue
+        public virtual object ReturnValue 
         {
             get { return null; }
         }
@@ -158,52 +112,42 @@ namespace Rhino.Mocks.Expectations
         /// <summary>
         /// Return type for the expectation
         /// </summary>
-        public virtual Type ReturnType
+        public virtual Type ReturnType 
         {
             get { return typeof(void); }
         }
-
-        /// <summary>
-        /// Indicates whether or not the
-        /// expectation should be considered
-        /// </summary>
-        /// <remarks>
-        /// Utilized for when <see cref="RepeatOptions.Never()"/>
-        /// is called to no longer consider the expectation.
-        /// This is horrible
-        /// </remarks>
-        public bool ShouldConsider
-        {
-            get { return consider; }
-        }
-
+        
         /// <summary>
         /// Indicates whether or not an
         /// exception should be thrown
         /// </summary>
-        public virtual bool ThrowsException
-        {
-            get { return throwsException; }
-        }
-        
+        public bool ThrowsException { get; set; }
+
+        /// <summary>
+        /// Expectation to throw if method is called
+        /// </summary>
+        public Exception ExceptionToThrow { get; set; }
+
+        /// <summary>
+        /// Indicates whether or not the mocked method is executed
+        /// </summary>
+        public bool ForceProceed { get; set; }
+
+        /// <summary>
+        /// Collection of "out" and "ref" arguments
+        /// </summary>
+        public object[] ReturnArguments { get; set; }
+
         /// <summary>
         /// constructor
         /// </summary>
-        public Expectation()
-            : this(new Range(1, 1))
+        /// <param name="range"></param>
+        protected Expectation(Range range)
         {
-            repeatOptions = new RepeatOptions(this);
-        }
-
-        /// <summary>
-        /// protected constructor
-        /// </summary>
-        protected Expectation(Range expected)
-        {
-            actuals = new List<Actuals>();
-            expectedCount = expected;
+            this.range = range;
 
             consider = true;
+            actuals = new List<Actuals>();
         }
 
         /// <summary>
@@ -216,8 +160,7 @@ namespace Rhino.Mocks.Expectations
         }
 
         /// <summary>
-        /// Indicates whether this expectation
-        /// handled the actual method call
+        /// Indicates whether this expectation handled the actual method call
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -227,37 +170,17 @@ namespace Rhino.Mocks.Expectations
         }
 
         /// <summary>
+        /// Returns the string representation of the expectation
+        /// </summary>
+        /// <returns>string</returns>
+        public abstract string GetDisplayName(IInvocation invocation);
+
+        /// <summary>
         /// Handles the method
         /// </summary>
         /// <param name="method"></param>
         /// <param name="arguments"></param>
-        public void HandleMethodCall(MethodInfo method, object[] arguments)
-        {
-            Method = method;
-
-            if (ArgumentManager.HasBeenUsed)
-            {
-                ArgumentManager.ValidateMethodSignature(method);
-                Arguments = ArgumentManager.GetConstraints();
-                ReturnArguments = ArgumentManager.GetReturnValues();
-                SetExpectedCount(new Range(1, null));
-                ArgumentManager.Clear();
-                                
-                return;
-            }
-
-            var parameters = method.GetParameters();
-            var constraints = new AbstractConstraint[parameters.Length];
-            for (int index = 0; index < parameters.Length; index++)
-            {
-                var parameter = parameters[index];
-                constraints[index] = (parameter.IsOut)
-                    ? Is.Anything()
-                    : Is.Equal(arguments[index]);
-            }
-
-            Arguments = constraints;
-        }
+        public abstract void HandleMethodCall(MethodInfo method, object[] arguments);
         
         /// <summary>
         /// Checks that the given method and arguments
@@ -266,42 +189,7 @@ namespace Rhino.Mocks.Expectations
         /// <param name="method"></param>
         /// <param name="arguments"></param>
         /// <returns></returns>
-        public bool MatchesCall(MethodInfo method, object[] arguments)
-        {
-            if (!Method.Equals(method))
-                return false;
-
-            return MatchesCallArguments(arguments);
-        }
-
-        /// <summary>
-        /// Checks that the given arguments match the
-        /// argument constraints
-        /// </summary>
-        /// <param name="arguments"></param>
-        /// <returns></returns>
-        public bool MatchesCallArguments(object[] arguments)
-        {
-            if (Arguments == null && arguments == null)
-                return true;
-
-            if (Arguments == null || arguments == null)
-                return false;
-
-            if (Arguments.Length != arguments.Length)
-                return false;
-
-            for (int index = 0; index < Arguments.Length; index++)
-            {
-                var argument = arguments[index];
-                var constraint = Arguments[index];
-
-                if (!constraint.Eval(argument))
-                    return false;
-            }
-
-            return true;
-        }
+        public abstract bool MatchesCall(MethodInfo method, object[] arguments);
 
         /// <summary>
         /// Sets expected call counter
@@ -309,7 +197,7 @@ namespace Rhino.Mocks.Expectations
         /// <param name="expected"></param>
         public void SetExpectedCount(Range expected)
         {
-            expectedCount = expected;
+            range = expected;
 
             var minimum = expected.Minimum;
             var maximum = expected.Maximum;
@@ -328,117 +216,22 @@ namespace Rhino.Mocks.Expectations
         public virtual void SetReturnValue(object value)
         {
         }
-
-        /// <summary>
-        /// Call original method
-        /// </summary>
-        /// <returns>Fluid Interface</returns>
-        IExpectationOptions IExpectationOptions.CallOriginalMethod()
-        {
-            if (Method.IsAbstract)
-            {
-                var message = string.Format(
-                    "Can't use CallOriginalMethod on method {0} because the method is abstract.",
-                        Method.Name);
-
-                throw new InvalidOperationException(message);
-            }
-
-            proceedIsForced = true;
-            return this;
-        }
-        
-        /// <summary>
-        /// Ignores all arguments removing any
-        /// existing argument constraints
-        /// </summary>
-        /// <returns>Fluid Interface</returns>
-        IExpectationOptions IExpectationOptions.IgnoreArguments()
-        {
-            var constraints = new AbstractConstraint[Arguments.Length];
-            for (int index = 0; index < Arguments.Length; index++)
-                constraints[index] = Is.Anything();
-
-            Arguments = constraints;
-            return this;
-        }
-
-        /// <summary>
-        /// Throw exception of the given type when
-        /// the method is called
-        /// </summary>
-        /// <typeparam name="TException"></typeparam>
-        /// <returns>Fluid Interface</returns>
-        IExpectationOptions IExpectationOptions.Throws<TException>()
-        {
-            throwsException = true;
-
-            ExceptionToThrow = new TException();
-            return this;
-        }
-
-        /// <summary>
-        /// Throw exception of the given type when
-        /// the method is called
-        /// </summary>
-        /// <typeparam name="TException"></typeparam>
-        /// <param name="exception"></param>
-        /// <returns>Fluid Interface</returns>
-        IExpectationOptions IExpectationOptions.Throws<TException>(TException exception)
-        {
-            throwsException = true;
-
-            ExceptionToThrow = exception;
-            return this;
-        }
     }
 
     /// <summary>
-    /// Access to various options that can 
-    /// be applied to an expectation
+    /// Access to various options that can be applied to an expectation
     /// </summary>
-    public class Expectation<T> : Expectation, IExpectationOptions<T>
+    public abstract class Expectation<T> : Expectation
     {
-        private readonly IRepeatOptions<T> repeatOptions;
-
-        private bool proceedIsForced;
-        private bool throwsException;
-        private bool returnValueSet;
         private T returnValue;
-
-        /// <summary>
-        /// Access to repeat options on expectation
-        /// </summary>
-        IRepeatOptions<T> IExpectationOptions<T>.Repeat
-        {
-            get { return repeatOptions; }
-        }
+        private bool returnValueIsSet;
         
         /// <summary>
-        /// Indicates whether or not the
-        /// mocked method is executed
-        /// </summary>
-        public override bool ForceProceed
-        {
-            get { return proceedIsForced; }
-        }
-
-        /// <summary>
-        /// Indicates whether or not an
-        /// exception should be thrown
-        /// </summary>
-        public override bool ThrowsException
-        {
-            get { return throwsException; }
-        }
-
-        /// <summary>
-        /// Indicates whether or not a return value
-        /// has been set
+        /// Indicates whether or not the expectation has a return type
         /// </summary>
         public override bool HasReturnValue
         {
-            get { return returnValueSet; }
+            get { return returnValueIsSet; }
         }
 
         /// <summary>
@@ -446,17 +239,7 @@ namespace Rhino.Mocks.Expectations
         /// </summary>
         public override object ReturnValue
         {
-            get
-            {
-                if (returnValueSet)
-                    return returnValue;
-
-                var returnType = Method.ReturnType;
-                if (!returnType.IsValueType || returnType == typeof(void))
-                    return null;
-
-                return Activator.CreateInstance(returnType);
-            }
+            get { return returnValue; }
         }
 
         /// <summary>
@@ -470,10 +253,10 @@ namespace Rhino.Mocks.Expectations
         /// <summary>
         /// constructor
         /// </summary>
-        public Expectation()
-            : base(new Range(1, 1))
+        /// <param name="range"></param>
+        protected Expectation(Range range)
+            : base(range)
         {
-            repeatOptions = new RepeatOptions<T>(this);
         }
 
         /// <summary>
@@ -483,92 +266,7 @@ namespace Rhino.Mocks.Expectations
         public override void SetReturnValue(object value)
         {
             returnValue = (T)value;
-            returnValueSet = true;
-        }
-
-        /// <summary>
-        /// Call original method
-        /// </summary>
-        /// <returns>Fluid Interface</returns>
-        IExpectationOptions<T> IExpectationOptions<T>.CallOriginalMethod()
-        {
-            if (Method.IsAbstract)
-            {
-                var message = string.Format(
-                    "Can't use CallOriginalMethod on method {0} because the method is abstract.",
-                        Method.Name);
-
-                throw new InvalidOperationException(message);
-            }
-
-            proceedIsForced = true;
-            return this;
-        }
-
-        /// <summary>
-        /// Ignores all arguments removing any
-        /// existing argument constraints
-        /// </summary>
-        /// <returns>Fluid Interface</returns>
-        IExpectationOptions<T> IExpectationOptions<T>.IgnoreArguments()
-        {
-            var constraints = new AbstractConstraint[Arguments.Length];
-            for (int index = 0; index < Arguments.Length; index++)
-                constraints[index] = Is.Anything();
-
-            Arguments = constraints;
-            return this;
-        }
-
-        /// <summary>
-        /// Define the return value of a method call (non-void)
-        /// </summary>
-        /// <param name="value">Value to return when method is called</param>
-        /// <returns>Fluid Interface</returns>
-        IExpectationOptions<T> IExpectationOptions<T>.Return(T value)
-        {
-            SetReturnValue(value);
-            return this;
-        }
-
-        /// <summary>
-        /// Define the return value of a method call (non-void)
-        /// </summary>
-        /// <param name="func">Value to return when method is called</param>
-        /// <returns>Fluid Interface</returns>
-        IExpectationOptions<T> IExpectationOptions<T>.Returns(Func<T> func)
-        {
-            SetReturnValue(func());
-            return this;
-        }
-
-        /// <summary>
-        /// Throw exception of the given type when
-        /// the method is called
-        /// </summary>
-        /// <typeparam name="TException"></typeparam>
-        /// <returns>Fluid Interface</returns>
-        IExpectationOptions<T> IExpectationOptions<T>.Throws<TException>()
-        {
-            throwsException = true;
-
-            ExceptionToThrow = new TException();
-            return this;
-        }
-
-        /// <summary>
-        /// Throw exception of the given type when
-        /// the method is called
-        /// </summary>
-        /// <typeparam name="TException"></typeparam>
-        /// <param name="exception"></param>
-        /// <returns>Fluid Interface</returns>
-        IExpectationOptions IExpectationOptions<T>.Throws<TException>(TException exception)
-        {
-            throwsException = true;
-
-            ExceptionToThrow = exception;
-            return this;
+            returnValueIsSet = true;
         }
     }
 }

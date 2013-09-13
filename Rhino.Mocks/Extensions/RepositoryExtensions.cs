@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using Castle.DynamicProxy;
+using Rhino.Mocks.Constraints;
+using Rhino.Mocks.Exceptions;
 using Rhino.Mocks.Expectations;
 using Rhino.Mocks.Helpers;
 using Rhino.Mocks.Interfaces;
-using Rhino.Mocks.Exceptions;
 
 namespace Rhino.Mocks
 {
@@ -15,7 +17,7 @@ namespace Rhino.Mocks
     public static class RepositoryExtensions
     {
         /// <summary>
-        /// Asserts the given action was called against the 
+        /// Asserts the given method was called against the 
         /// mocked object
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -24,44 +26,15 @@ namespace Rhino.Mocks
         public static void AssertWasCalled<T>(this T instance, Action<T> action)
             where T : class
         {
-            if (instance == null)
-                throw new ArgumentNullException("instance", "Assertions cannot be made on a null object or instance.");
-
-            var container = GetExpectationContainer(instance);
-            if (container == null)
-                throw new ArgumentOutOfRangeException("instance", "Assertions can only be made on a mocked object or instance.");
-
-            var actuals = container.ListActuals();
-            if (actuals.Length == 0)
-                throw new Exception("Nope");
-
-            var assertion = new Expectation();
-            container.MarkForAssertion(assertion);
-
-            try
-            {
-                action(instance);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException("Exception caught while making assertion.", ex);
-            }
-
-            if (container.ExpectationMarked)
-                throw new InvalidOperationException();
-
-            for (int index = 0; index < actuals.Length; index++)
-            {
-                var actual = actuals[index];
-                if (assertion.MatchesCall(actual.Method, actual.Arguments))
-                    return;
-            }
+            var actuals = Repository.GetMethodCallArguments(instance, action);
+            if (actuals.Any())
+                return;
 
             throw new Exception("Nope");
         }
 
         /// <summary>
-        /// Asserts the given action was called against the 
+        /// Asserts the given method was called against the 
         /// mocked object
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -71,38 +44,44 @@ namespace Rhino.Mocks
         public static void AssertWasCalled<T, TResult>(this T instance, Func<T, TResult> func)
             where T : class
         {
-            if (instance == null)
-                throw new ArgumentNullException("instance", "Assertions cannot be made on a null object or instance.");
+            var actuals = Repository.GetMethodCallArguments(instance, func);
+            if (actuals.Any())
+                return;
 
-            var container = GetExpectationContainer(instance);
-            if (container == null)
-                throw new ArgumentOutOfRangeException("instance", "Assertions can only be made on a mocked object or instance.");
+            throw new Exception("Nope");
+        }
 
-            var actuals = container.ListActuals();
-            if (actuals.Length == 0)
-                throw new Exception("Nope");
+        /// <summary>
+        /// Asserts the given method was not called against the 
+        /// mocked object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="instance"></param>
+        /// <param name="action"></param>
+        public static void AssertWasNotCalled<T>(this T instance, Action<T> action)
+            where T : class
+        {
+            var actuals = Repository.GetMethodCallArguments(instance, action);
+            if (!actuals.Any())
+                return;
 
-            var assertion = new Expectation();
-            container.MarkForAssertion(assertion);
+            throw new Exception("Nope");
+        }
 
-            try
-            {
-                func(instance);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException("Exception caught while making assertion.", ex);
-            }
-
-            if (container.ExpectationMarked)
-                throw new InvalidOperationException();
-
-            for (int index = 0; index < actuals.Length; index++)
-            {
-                var actual = actuals[index];
-                if (assertion.MatchesCall(actual.Method, actual.Arguments))
-                    return;
-            }
+        /// <summary>
+        /// Asserts the given method was not called against the 
+        /// mocked object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="instance"></param>
+        /// <param name="func"></param>
+        public static void AssertWasNotCalled<T, TResult>(this T instance, Func<T, TResult> func)
+            where T : class
+        {
+            var actuals = Repository.GetMethodCallArguments(instance, func);
+            if (!actuals.Any())
+                return;
 
             throw new Exception("Nope");
         }
@@ -113,7 +92,7 @@ namespace Rhino.Mocks
         /// <typeparam name="T"></typeparam>
         /// <param name="instance"></param>
         /// <param name="action"></param>
-        public static IExpectationOptions Expect<T>(this T instance, Action<T> action)
+        public static IMethodOptions Expect<T>(this T instance, Action<T> action)
             where T : class
         {
             if (instance == null)
@@ -123,7 +102,7 @@ namespace Rhino.Mocks
             if (container == null)
                 throw new ArgumentOutOfRangeException("instance", "Expectations can only be set on a mocked object or instance.");
 
-            var expectation = new Expectation();
+            var expectation = new ExpectMethod();
             container.MarkForExpectation(expectation);
 
             try
@@ -148,7 +127,7 @@ namespace Rhino.Mocks
         /// <typeparam name="TResult"></typeparam>
         /// <param name="instance"></param>
         /// <param name="func"></param>
-        public static IExpectationOptions<TResult> Expect<T, TResult>(this T instance, Func<T, TResult> func)
+        public static IMethodOptions<TResult> Expect<T, TResult>(this T instance, Func<T, TResult> func)
             where T : class
         {
             if (instance == null)
@@ -158,7 +137,7 @@ namespace Rhino.Mocks
             if (container == null)
                 throw new ArgumentOutOfRangeException("instance", "Expectations can only be set on a mocked object or instance.");
 
-            var expectation = new Expectation<TResult>();
+            var expectation = new ExpectMethod<TResult>();
             container.MarkForExpectation(expectation);
 
             try
@@ -182,7 +161,7 @@ namespace Rhino.Mocks
         /// <typeparam name="T"></typeparam>
         /// <param name="instance"></param>
         /// <param name="action"></param>
-        public static IExpectationOptions ExpectEvent<T>(this T instance, Action<T> action)
+        public static IMethodOptions ExpectEvent<T>(this T instance, Action<T> action)
             where T : class
         {
             if (instance == null)
@@ -192,7 +171,7 @@ namespace Rhino.Mocks
             if (container == null)
                 throw new ArgumentOutOfRangeException("instance", "Expectations can only be set on a mocked object or instance.");
 
-            var expectation = new Expectation();
+            var expectation = new ExpectMethod();
             container.MarkForExpectation(expectation);
 
             try
@@ -219,12 +198,48 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="instance"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        public static IPropertyOptions<TResult> ExpectProperty<T, TResult>(this T instance, Func<T, TResult> func)
+            where T : class
+        {
+            if (instance == null)
+                throw new ArgumentNullException("instance", "Expectations cannot be set on a null object or instance.");
+
+            var container = GetExpectationContainer(instance);
+            if (container == null)
+                throw new ArgumentOutOfRangeException("instance", "Expectations can only be set on a mocked object or instance.");
+
+            var expectation = new ExpectProperty<TResult>();
+            container.MarkForExpectation(expectation);
+
+            try
+            {
+                func(instance);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Exception caught while setting up expectation", ex);
+            }
+
+            if (container.ExpectationMarked)
+                throw new InvalidOperationException();
+
+            return expectation;
+        }
+        
+        /// <summary>
         /// Set stub on an object
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="instance"></param>
         /// <param name="action"></param>
-        public static IExpectationOptions Stub<T>(this T instance, Action<T> action)
+        public static IMethodOptions Stub<T>(this T instance, Action<T> action)
             where T : class
         {
             if (instance == null)
@@ -234,7 +249,7 @@ namespace Rhino.Mocks
             if (container == null)
                 throw new ArgumentOutOfRangeException("instance", "Stubs can only be set on a mocked object or instance.");
 
-            var expectation = new Expectation();
+            var expectation = new ExpectMethod();
             expectation.SetExpectedCount(new Range(int.MaxValue, int.MaxValue));
             container.MarkForExpectation(expectation);
 
@@ -260,7 +275,7 @@ namespace Rhino.Mocks
         /// <typeparam name="TResult"></typeparam>
         /// <param name="instance"></param>
         /// <param name="func"></param>
-        public static IExpectationOptions<TResult> Stub<T, TResult>(this T instance, Func<T, TResult> func)
+        public static IMethodOptions<TResult> Stub<T, TResult>(this T instance, Func<T, TResult> func)
             where T : class
         {
             if (instance == null)
@@ -270,7 +285,7 @@ namespace Rhino.Mocks
             if (container == null)
                 throw new ArgumentOutOfRangeException("instance", "Stubs can only be set on a mocked object or instance.");
 
-            var expectation = new Expectation<TResult>();
+            var expectation = new ExpectMethod<TResult>();
             expectation.SetExpectedCount(new Range(int.MaxValue, int.MaxValue));
             container.MarkForExpectation(expectation);
 
@@ -295,7 +310,7 @@ namespace Rhino.Mocks
         /// <typeparam name="T"></typeparam>
         /// <param name="instance"></param>
         /// <param name="action"></param>
-        public static IExpectationOptions StubEvent<T>(this T instance, Action<T> action)
+        public static IMethodOptions StubEvent<T>(this T instance, Action<T> action)
             where T : class
         {
             if (instance == null)
@@ -305,7 +320,7 @@ namespace Rhino.Mocks
             if (container == null)
                 throw new ArgumentOutOfRangeException("instance", "Stubs can only be set on a mocked object or instance.");
 
-            var expectation = new Expectation();
+            var expectation = new ExpectMethod();
             container.MarkForExpectation(expectation);
 
             try
@@ -329,27 +344,6 @@ namespace Rhino.Mocks
                 throw new InvalidOperationException("StubEvent method can only be used against events.");
 
             return expectation;
-        }
-
-        /// <summary>
-        /// Stubs all of the available properties
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="instance"></param>
-        public static void StubProperties<T>(this T instance)
-        {
-            if (instance == null)
-                throw new ArgumentNullException("instance", "Properties cannot be stubbed on a null object or instance.");
-
-            var container = GetExpectationContainer(instance);
-            if (container == null)
-                throw new ArgumentOutOfRangeException("instance", "Properties can only be stubbed on a mocked object or instance.");
-
-            var mock = instance as IMockInstance;
-            if (mock == null)
-                throw new ArgumentOutOfRangeException("instance", "Properties can only be stubbed on a mocked object or instance.");
-
-            HandleProperties(container, mock, mock.ImplementedTypes);
         }
 
         /// <summary>
@@ -433,8 +427,7 @@ namespace Rhino.Mocks
             for (int index = 0; index < unmet.Length; index++)
             {
                 var item = unmet[index];
-                var methodName = MethodFormatter.ToString(invocation, item.Method, item.Arguments,
-                    (x, i) => item.Arguments[i].Message);
+                var methodName = item.GetDisplayName(invocation);
 
                 buffer.Append(methodName)
                     .AppendFormat(" Expected # {0}, Actual # {1}.", item.ExpectedCount, item.ActualCount)
@@ -460,35 +453,6 @@ namespace Rhino.Mocks
             }
             
             return instance as IMockExpectationContainer;
-        }
-
-        private static void HandleProperties(IMockExpectationContainer container, IMockInstance instance, params Type[] types)
-        {
-            if (types == null || types.Length == 0)
-                return;
-
-            for (int typeIndex = 0; typeIndex < types.Length; typeIndex++)
-            {
-                var type = types[typeIndex];
-
-                var interfaces = type.GetInterfaces();
-                if (interfaces != null && interfaces.Length != 0)
-                    HandleProperties(container, instance, interfaces);
-
-                var properties = type.GetProperties();
-                if (properties == null || properties.Length == 0)
-                    continue;
-
-                for (int index = 0; index < properties.Length; index++)
-                {
-                    var property = properties[index];
-                    if (property.CanRead && property.CanWrite && property.PropertyType.IsValueType && 
-                        (property.GetSetMethod(false) != null))
-                    {
-                        container.AddPropertyStub(property);
-                    }
-                }
-            }
         }
     }
 }

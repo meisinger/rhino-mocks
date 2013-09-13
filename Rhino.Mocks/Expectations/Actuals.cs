@@ -42,7 +42,7 @@ namespace Rhino.Mocks.Expectations
         /// </summary>
         /// <param name="method"></param>
         /// <param name="arguments"></param>
-        public Actuals(MethodInfo method, object[] arguments)
+        internal Actuals(MethodInfo method, object[] arguments)
         {
             if (arguments == null)
                 arguments = new object[0];

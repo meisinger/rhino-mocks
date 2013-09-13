@@ -99,6 +99,9 @@
     <Compile Include="Exceptions\ExpectationViolationException.cs" />
     <Compile Include="Expectations\Actuals.cs" />
     <Compile Include="Expectations\Expectation.cs" />
+    <Compile Include="Expectations\ExpectationType.cs" />
+    <Compile Include="Expectations\ExpectMethod.cs" />
+    <Compile Include="Expectations\ExpectProperty.cs" />
     <Compile Include="Expectations\Range.cs" />
     <Compile Include="Expectations\RepeatOptions.cs" />
     <Compile Include="Extensions\RepositoryExtensions.cs" />
@@ -119,6 +122,8 @@
     <Compile Include="Interfaces\IMockExpectation.cs" />
     <Compile Include="Interfaces\IMockExpectationContainer.cs" />
     <Compile Include="Interfaces\IMockInstance.cs" />
+    <Compile Include="Interfaces\IMethodOptions.cs" />
+    <Compile Include="Interfaces\IPropertyOptions.cs" />
     <Compile Include="Interfaces\IRepeatOptions.cs" />
     <Compile Include="Loggers\NullLogger.cs" />
     <Compile Include="Loggers\TextWriterLogger.cs" />

@@ -11,13 +11,13 @@ namespace Rhino.Mocks.Interfaces
         /// Expectation will be called once
         /// </summary>
         /// <returns></returns>
-        IExpectationOptions Once();
+        IMethodOptions Once();
 
         /// <summary>
         /// Expectation will be called twice
         /// </summary>
         /// <returns></returns>
-        IExpectationOptions Twice();
+        IMethodOptions Twice();
 
         /// <summary>
         /// Expectation will be called exactly
@@ -25,7 +25,7 @@ namespace Rhino.Mocks.Interfaces
         /// </summary>
         /// <param name="expected"></param>
         /// <returns></returns>
-        IExpectationOptions Times(int expected);
+        IMethodOptions Times(int expected);
         
         /// <summary>
         /// Expectation will be called at least
@@ -33,7 +33,7 @@ namespace Rhino.Mocks.Interfaces
         /// </summary>
         /// <param name="expected"></param>
         /// <returns></returns>
-        IExpectationOptions AtLeast(int expected);
+        IMethodOptions AtLeast(int expected);
         
         /// <summary>
         /// Expectation could be called as many
@@ -41,19 +41,19 @@ namespace Rhino.Mocks.Interfaces
         /// </summary>
         /// <param name="expected"></param>
         /// <returns></returns>
-        IExpectationOptions AtMost(int expected);
+        IMethodOptions AtMost(int expected);
         
         /// <summary>
         /// Expectation may be called
         /// </summary>
         /// <returns></returns>
-        IExpectationOptions Any();
+        IMethodOptions Any();
 
         /// <summary>
         /// Expectation will not be called
         /// </summary>
         /// <returns></returns>
-        IExpectationOptions Never();
+        IMethodOptions Never();
     }
 
     /// <summary>
@@ -66,13 +66,13 @@ namespace Rhino.Mocks.Interfaces
         /// Expectation will be called once
         /// </summary>
         /// <returns></returns>
-        IExpectationOptions<T> Once();
+        IMethodOptions<T> Once();
 
         /// <summary>
         /// Expectation will be called twice
         /// </summary>
         /// <returns></returns>
-        IExpectationOptions<T> Twice();
+        IMethodOptions<T> Twice();
 
         /// <summary>
         /// Expectation will be called exactly
@@ -80,7 +80,7 @@ namespace Rhino.Mocks.Interfaces
         /// </summary>
         /// <param name="expected"></param>
         /// <returns></returns>
-        IExpectationOptions<T> Times(int expected);
+        IMethodOptions<T> Times(int expected);
 
         /// <summary>
         /// Expectation will be called at least
@@ -88,7 +88,7 @@ namespace Rhino.Mocks.Interfaces
         /// </summary>
         /// <param name="expected"></param>
         /// <returns></returns>
-        IExpectationOptions<T> AtLeast(int expected);
+        IMethodOptions<T> AtLeast(int expected);
 
         /// <summary>
         /// Expectation could be called as many
@@ -96,18 +96,18 @@ namespace Rhino.Mocks.Interfaces
         /// </summary>
         /// <param name="expected"></param>
         /// <returns></returns>
-        IExpectationOptions<T> AtMost(int expected);
+        IMethodOptions<T> AtMost(int expected);
 
         /// <summary>
         /// Expectation may be called
         /// </summary>
         /// <returns></returns>
-        IExpectationOptions<T> Any();
+        IMethodOptions<T> Any();
 
         /// <summary>
         /// Expectation will not be called
         /// </summary>
         /// <returns></returns>
-        IExpectationOptions<T> Never();
+        IMethodOptions<T> Never();
     }
 }

@@ -3,17 +3,16 @@
 namespace Rhino.Mocks.Expectations
 {
     /// <summary>
-    /// Access to repeatable options
-    /// on expectation
+    /// Access to repeatable options on expectation
     /// </summary>
     public class RepeatOptions : IRepeatOptions
     {
-        private readonly Expectation expectation;
+        private readonly ExpectMethod expectation;
 
         /// <summary>
         /// constructor
         /// </summary>
-        public RepeatOptions(Expectation expectation)
+        public RepeatOptions(ExpectMethod expectation)
         {
             this.expectation = expectation;
         }
@@ -22,7 +21,7 @@ namespace Rhino.Mocks.Expectations
         /// Expectation will be called once
         /// </summary>
         /// <returns></returns>
-        public IExpectationOptions Once()
+        public IMethodOptions Once()
         {
             expectation.SetExpectedCount(new Range(1, 1));
             return expectation;
@@ -32,7 +31,7 @@ namespace Rhino.Mocks.Expectations
         /// Expectation will be called twice
         /// </summary>
         /// <returns></returns>
-        public IExpectationOptions Twice()
+        public IMethodOptions Twice()
         {
             expectation.SetExpectedCount(new Range(2, 2));
             return expectation;
@@ -44,7 +43,7 @@ namespace Rhino.Mocks.Expectations
         /// </summary>
         /// <param name="expected"></param>
         /// <returns></returns>
-        public IExpectationOptions Times(int expected)
+        public IMethodOptions Times(int expected)
         {
             expectation.SetExpectedCount(new Range(expected, expected));
             return expectation;
@@ -56,7 +55,7 @@ namespace Rhino.Mocks.Expectations
         /// </summary>
         /// <param name="expected"></param>
         /// <returns></returns>
-        public IExpectationOptions AtLeast(int expected)
+        public IMethodOptions AtLeast(int expected)
         {
             expectation.SetExpectedCount(new Range(expected, null));
             return expectation;
@@ -68,7 +67,7 @@ namespace Rhino.Mocks.Expectations
         /// </summary>
         /// <param name="expected"></param>
         /// <returns></returns>
-        public IExpectationOptions AtMost(int expected)
+        public IMethodOptions AtMost(int expected)
         {
             expectation.SetExpectedCount(new Range(1, expected));
             return expectation;
@@ -78,7 +77,7 @@ namespace Rhino.Mocks.Expectations
         /// Expectation may be called
         /// </summary>
         /// <returns></returns>
-        public IExpectationOptions Any()
+        public IMethodOptions Any()
         {
             expectation.SetExpectedCount(new Range(int.MaxValue, int.MaxValue));
             return expectation;
@@ -88,7 +87,7 @@ namespace Rhino.Mocks.Expectations
         /// Expectation will not be called
         /// </summary>
         /// <returns></returns>
-        public IExpectationOptions Never()
+        public IMethodOptions Never()
         {
             expectation.SetExpectedCount(new Range(0, 0));
             return expectation;
@@ -96,17 +95,16 @@ namespace Rhino.Mocks.Expectations
     }
 
     /// <summary>
-    /// Access to repeatable options
-    /// on expectation
+    /// Access to repeatable options on expectation
     /// </summary>
     public class RepeatOptions<T> : IRepeatOptions<T>
     {
-        private readonly Expectation<T> expectation;
+        private readonly ExpectMethod<T> expectation;
 
         /// <summary>
         /// constructor
         /// </summary>
-        public RepeatOptions(Expectation<T> expectation)
+        public RepeatOptions(ExpectMethod<T> expectation)
         {
             this.expectation = expectation;
         }
@@ -115,7 +113,7 @@ namespace Rhino.Mocks.Expectations
         /// Expectation will be called once
         /// </summary>
         /// <returns></returns>
-        public IExpectationOptions<T> Once()
+        public IMethodOptions<T> Once()
         {
             expectation.SetExpectedCount(new Range(1, 1));
             return expectation;
@@ -125,7 +123,7 @@ namespace Rhino.Mocks.Expectations
         /// Expectation will be called twice
         /// </summary>
         /// <returns></returns>
-        public IExpectationOptions<T> Twice()
+        public IMethodOptions<T> Twice()
         {
             expectation.SetExpectedCount(new Range(2, 2));
             return expectation;
@@ -137,7 +135,7 @@ namespace Rhino.Mocks.Expectations
         /// </summary>
         /// <param name="expected"></param>
         /// <returns></returns>
-        public IExpectationOptions<T> Times(int expected)
+        public IMethodOptions<T> Times(int expected)
         {
             expectation.SetExpectedCount(new Range(expected, expected));
             return expectation;
@@ -149,7 +147,7 @@ namespace Rhino.Mocks.Expectations
         /// </summary>
         /// <param name="expected"></param>
         /// <returns></returns>
-        public IExpectationOptions<T> AtLeast(int expected)
+        public IMethodOptions<T> AtLeast(int expected)
         {
             expectation.SetExpectedCount(new Range(expected, null));
             return expectation;
@@ -161,7 +159,7 @@ namespace Rhino.Mocks.Expectations
         /// </summary>
         /// <param name="expected"></param>
         /// <returns></returns>
-        public IExpectationOptions<T> AtMost(int expected)
+        public IMethodOptions<T> AtMost(int expected)
         {
             expectation.SetExpectedCount(new Range(1, expected));
             return expectation;
@@ -171,7 +169,7 @@ namespace Rhino.Mocks.Expectations
         /// Expectation may be called
         /// </summary>
         /// <returns></returns>
-        public IExpectationOptions<T> Any()
+        public IMethodOptions<T> Any()
         {
             expectation.SetExpectedCount(new Range(int.MaxValue, int.MaxValue));
             return expectation;
@@ -181,7 +179,7 @@ namespace Rhino.Mocks.Expectations
         /// Expectation will not be called
         /// </summary>
         /// <returns></returns>
-        public IExpectationOptions<T> Never()
+        public IMethodOptions<T> Never()
         {
             expectation.SetExpectedCount(new Range(0, 0));
             return expectation;

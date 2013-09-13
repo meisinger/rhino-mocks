@@ -19,6 +19,9 @@ namespace Rhino.Mocks.Tests.Core
         {
             string Name { get; set; }
             int Age { get; set; }
+
+            string MessageOut { get; }
+            string MessageIn { set; }
         }
 
         public interface IScenarioObject
@@ -175,7 +178,6 @@ namespace Rhino.Mocks.Tests.Core
         {
             var mock = Repository.Partial<ScenarioObject>();
             mock.Expect(x => x.StringMethodEcho("meisinger"))
-                .Return("ayende")
                 .CallOriginalMethod();
 
             var result = mock.StringMethodEcho("meisinger");
@@ -267,8 +269,11 @@ namespace Rhino.Mocks.Tests.Core
             var argumentMock = Repository.Mock<IScenarioArgument>();
             var mock = Repository.Partial<ScenarioObject>();
 
-            argumentMock.Expect(x => x.Age = 15);
-            argumentMock.Expect(x => x.Age)
+            //argumentMock.Expect(x => x.Age = 15);
+            //argumentMock.Expect(x => x.Age)
+            //    .Return(15);
+
+            argumentMock.ExpectProperty(x => x.Age)
                 .Return(15);
 
             mock.Expect(x => x.IntegerMethodArgument(argumentMock))
@@ -444,6 +449,151 @@ namespace Rhino.Mocks.Tests.Core
                 .Throws<System.InvalidTimeZoneException>();
 
             Assert.Throws<System.InvalidTimeZoneException>(() => mock.StringMethod());
+        }
+
+        [Fact]
+        public void Can_Create_Expectation_For_A_Property_With_Default_Behavior()
+        {
+            var mock = Repository.Mock<IScenarioArgument>();
+
+            mock.ExpectProperty(x => x.Name)
+                .Return("mike");
+
+            var actual = mock.Name;
+            Assert.Equal("mike", actual);
+
+            mock.VerifyExpectations();
+        }
+
+        [Fact]
+        public void Property_With_Default_Behavior_Ignores_Set_Values_If_Expectation_Has_Return_Value()
+        {
+            var mock = Repository.Mock<IScenarioArgument>();
+
+            mock.ExpectProperty(x => x.Name)
+                .Return("returned_value");
+
+            mock.Name = "ignored";
+
+            var actual = mock.Name;
+            Assert.Equal("returned_value", actual);
+
+            mock.VerifyExpectations();
+        }
+
+        [Fact]
+        public void Property_With_Default_Behavior_Tracks_Return_Values_When_Different_Expectations_Are_Set()
+        {
+            var mock = Repository.Mock<IScenarioArgument>();
+
+            mock.ExpectProperty(x => x.Name = "first")
+                .Return("First");
+
+            mock.ExpectProperty(x => x.Name = "second")
+                .Return("Second");
+
+            mock.Name = "first";
+            var first = mock.Name;
+
+            mock.Name = "second";
+            var second = mock.Name;
+
+            Assert.Equal("First", first);
+            Assert.Equal("Second", second);
+
+            mock.VerifyExpectations();
+        }
+
+        [Fact]
+        public void Property_With_Default_Behavior_And_A_Get_Expectation_Defaults_To_The_Return_Value()
+        {
+            var mock = Repository.Mock<IScenarioArgument>();
+
+            mock.ExpectProperty(x => x.Name)
+                .Return("Default");
+
+            mock.ExpectProperty(x => x.Name = "first")
+                .Return("First");
+
+            mock.ExpectProperty(x => x.Name = "second")
+                .Return("Second");
+
+            mock.Name = "first";
+            var first = mock.Name;
+
+            mock.Name = "unexpected";
+            var unexpected = mock.Name;
+
+            mock.Name = "second";
+            var second = mock.Name;
+
+            Assert.Equal("First", first);
+            Assert.Equal("Second", second);
+            Assert.Equal("Default", unexpected);
+
+            mock.VerifyExpectations();
+        }
+
+        [Fact]
+        public void Property_With_Default_Behavior_Works_With_Dynamic_Property_Handling()
+        {
+            var mock = Repository.Mock<IScenarioArgument>();
+
+            mock.ExpectProperty(x => x.Name = "first")
+                .Return("First");
+
+            mock.ExpectProperty(x => x.Name = "second")
+                .Return("Second");
+
+            mock.Name = "first";
+            var first = mock.Name;
+
+            mock.Name = "unexpected";
+            var unexpected = mock.Name;
+
+            mock.Name = "second";
+            var second = mock.Name;
+
+            Assert.Equal("First", first);
+            Assert.Equal("Second", second);
+            Assert.Equal("unexpected", unexpected);
+
+            mock.VerifyExpectations();
+        }
+
+        [Fact]
+        public void Can_Create_Expectation_On_A_ReadOnly_Property()
+        {
+            var mock = Repository.Mock<IScenarioArgument>();
+
+            mock.ExpectProperty(x => x.MessageOut)
+                .Return("out");
+
+            var value = mock.MessageOut;
+            Assert.Equal("out", value);
+
+            mock.VerifyExpectations();
+        }
+
+        [Fact]
+        public void Can_Create_Expectation_On_A_WriteOnly_Property()
+        {
+            var mock = Repository.Mock<IScenarioArgument>();
+
+            mock.ExpectProperty(x => x.MessageIn = "in");
+
+            mock.MessageIn = "in";
+            mock.VerifyExpectations();
+        }
+
+        [Fact]
+        public void Setting_A_Return_Value_For_Write_Only_Property_Throws_Exception()
+        {
+            var mock = Repository.Mock<IScenarioArgument>();
+
+            Assert.Throws<System.InvalidOperationException>(() =>
+                mock.ExpectProperty(x => x.MessageIn = "in")
+                    .Return("invalid"));
         }
     }
 }

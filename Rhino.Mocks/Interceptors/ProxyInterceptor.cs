@@ -51,14 +51,12 @@ namespace Rhino.Mocks.Interceptors
                 if (expectation.ReturnType.Equals(type))
                 {
                     expectation.HandleMethodCall(method, arguments);
-
                     invocation.ReturnValue = IdentifyDefaultValue(type);
                     return;
                 }
-
+                
                 var recursive = ParseRecursiveExpectation(container, expectation, type);
                 recursive.HandleMethodCall(method, arguments);
-
                 invocation.ReturnValue = recursive.ReturnValue;
                 return;
             }
@@ -77,7 +75,10 @@ namespace Rhino.Mocks.Interceptors
 
         private object IdentifyReturnType(Type type)
         {
-            if (!type.IsValueType || type == typeof(void))
+            if (type == typeof(void))
+                return null;
+
+            if (!type.IsValueType)
             {
                 if (type == typeof(string))
                     return null;
@@ -107,7 +108,7 @@ namespace Rhino.Mocks.Interceptors
             if (typeContainer == null)
                 return current;
 
-            var genericType = typeof(Expectation<>);
+            var genericType = typeof(ExpectMethod<>);
             var replaceType = genericType.MakeGenericType(type);
             var replaceInstance = Activator.CreateInstance(replaceType) as Expectation;
             replaceInstance.SetReturnValue(typeInstance);

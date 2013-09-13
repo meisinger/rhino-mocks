@@ -29,6 +29,7 @@
 using System;
 using Xunit;
 using Rhino.Mocks.Interfaces;
+using Rhino.Mocks.Helpers;
 
 namespace Rhino.Mocks.Tests
 {
@@ -38,8 +39,7 @@ namespace Rhino.Mocks.Tests
 		public void StaticAccessorForStubAll()
 		{
             ICat cat = Repository.Mock<ICat>();
-            cat.StubProperties();
-
+            
 			cat.Eyes = 2;
             Assert.Equal(2, cat.Eyes);
 		}
@@ -48,8 +48,7 @@ namespace Rhino.Mocks.Tests
 		public void StubAllHasPropertyBehaviorForAllProperties()
 		{
             ICat cat = Repository.Mock<ICat>();
-            cat.StubProperties();
-
+            
 			cat.Legs = 4;
 			Assert.Equal(4, cat.Legs);
 
@@ -68,8 +67,7 @@ namespace Rhino.Mocks.Tests
 		public void StubAllHasPropertyBehaviorForAllPropertiesWhenStubbingClasses()
 		{
             Housecat housecat = Repository.Partial<Housecat>();
-            housecat.StubProperties();
-
+            
 			housecat.FurLength = 7;
 			Assert.Equal(7, housecat.FurLength);
 
@@ -103,8 +101,7 @@ namespace Rhino.Mocks.Tests
 		public void CallingMethodOnStubAllDoesNotCreateExpectations()
 		{
             ICat cat = Repository.Mock<ICat>();
-            cat.StubProperties();
-
+            
 			cat.Legs = 4;
 			cat.Name = "Esther";
 			cat.Species = "Ordinary housecat";
@@ -119,8 +116,7 @@ namespace Rhino.Mocks.Tests
 		public void DemoStubAllLegsProperty()
 		{
             ICat catStub = Repository.Mock<ICat>();
-            catStub.StubProperties();
-
+            
 			catStub.Legs = 0;
 			Assert.Equal(0, catStub.Legs);
 
@@ -133,8 +129,7 @@ namespace Rhino.Mocks.Tests
 		public void StubAllCanCreateExpectationOnMethod()
 		{
             ICat cat = Repository.Mock<ICat>();
-            cat.StubProperties();
-
+            
             cat.Legs = 4;
             cat.Name = "Esther";
             cat.Species = "Ordinary housecat";
@@ -151,8 +146,7 @@ namespace Rhino.Mocks.Tests
 		public void StubAllCanHandlePropertiesGettingRegisteredMultipleTimes()
 		{
             SpecificFish fish = Repository.Partial<SpecificFish>();
-            fish.StubProperties();
-
+            
 			fish.IsFreshWater = true;
 			Assert.True(fish.IsFreshWater);
 		}
@@ -168,11 +162,68 @@ namespace Rhino.Mocks.Tests
             Assert.Equal(5, aquarium.DetermineAge(new SpecificFish()));
         }
 
-	}
+        [Fact]
+        public void Indexed_Based_Properties()
+        {
+            var mock = Repository.Mock<ICat>();
 
+            mock[1] = 10;
+            mock[10] = 100;
+            Assert.Equal(10, mock[1]);
+            Assert.Equal(100, mock[10]);
+            Assert.Equal(0, mock[100]);
+
+            mock["1", 2] = "3";
+            mock["2", 3] = "5";
+            Assert.Equal("3", mock["1", 2]);
+            Assert.Equal("5", mock["2", 3]);
+            Assert.Null(mock["3", 1]);
+        }
+
+        [Fact]
+        public void Properties_Can_Have_Expectations_Created_For_Set()
+        {
+            //var mock = Repository.Mock<ICat>();
+
+            //mock.ExpectProperty(x => x.Eyes, Arg<int>.Is.Anything)
+            //    .Repeat.Twice()
+            //    .Return(4);
+
+            //mock.ExpectProperty(x => x.Eyes)
+            //    .Return(5);
+
+            //mock.Eyes = 3;
+            //Assert.Equal(4, mock.Eyes);
+
+            ////mock.Eyes = 3;
+            //Assert.Equal(4, mock.Eyes);
+            //Assert.Equal(5, mock.Eyes);
+
+            //mock.VerifyExpectations();
+        }
+
+        [Fact]
+        public void Properties_Can_Have_Expectations_Created_For_Get()
+        {
+            var mock = Repository.Mock<ICat>();
+
+            mock.Expect(x => x.Eyes)
+                .Return(52352);
+
+            var alienCatEyeCount = mock.Eyes;
+            Assert.Equal(52352, alienCatEyeCount);
+
+            mock.VerifyExpectations();
+        }
+	}
+    
 	public interface ICat : IAnimal
 	{
 		bool IsDeclawed { get; set; }
+        bool FeedMe { set; }
+
+        int this[int x] { get; set; }
+        string this[string n, int y] { get; set; }
 	}
 
 	public class Feline

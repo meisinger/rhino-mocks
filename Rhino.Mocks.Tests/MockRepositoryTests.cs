@@ -133,8 +133,8 @@ namespace Rhino.Mocks.Tests
             string exceptionMessage = "Reserved value, must be zero";
 
             demo.Expect(x => x.VoidStringArg("test"))
-                .Throws(new ArgumentException(exceptionMessage))
-                .Repeat.Twice();
+                .Repeat.Twice()
+                .Throws(new ArgumentException(exceptionMessage));
 
 			for (int i = 0; i < 2; i++)
 			{

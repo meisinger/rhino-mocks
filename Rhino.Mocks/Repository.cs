@@ -7,6 +7,7 @@ using Rhino.Mocks.Helpers;
 using Rhino.Mocks.Interceptors;
 using Rhino.Mocks.Interfaces;
 using Rhino.Mocks.Remoting;
+using Rhino.Mocks.Expectations;
 
 namespace Rhino.Mocks
 {
@@ -46,6 +47,101 @@ namespace Rhino.Mocks
             };
 
             ArgumentManager.Clear();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="instance"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static Actuals[] GetMethodCallArguments<T>(T instance, Action<T> action)
+            where T : class
+        {
+            if (instance == null)
+                throw new ArgumentNullException("instance", "Assertions cannot be made on a null object or instance.");
+
+            var container = GetExpectationContainer(instance);
+            if (container == null)
+                throw new ArgumentOutOfRangeException("instance", "Assertions can only be made on a mocked object or instance.");
+
+            var actuals = container.ListActuals();
+            if (actuals.Length == 0)
+                return new Actuals[0];
+
+            var assertion = new ExpectMethod<T>();
+            container.MarkForAssertion(assertion);
+
+            try
+            {
+                action(instance);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Exception caught while making assertion.", ex);
+            }
+
+            if (container.ExpectationMarked)
+                throw new InvalidOperationException();
+
+            var results = new List<Actuals>();
+            for (int index = 0; index < actuals.Length; index++)
+            {
+                var actual = actuals[index];
+                if (assertion.MatchesCall(actual.Method, actual.Arguments))
+                    results.Add(actual);
+            }
+
+            return results.ToArray();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="instance"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        public static Actuals[] GetMethodCallArguments<T, TResult>(T instance, Func<T, TResult> func)
+            where T : class
+        {
+            if (instance == null)
+                throw new ArgumentNullException("instance", "Assertions cannot be made on a null object or instance.");
+
+            var container = GetExpectationContainer(instance);
+            if (container == null)
+                throw new ArgumentOutOfRangeException("instance", "Assertions can only be made on a mocked object or instance.");
+
+            var actuals = container.ListActuals();
+            if (actuals.Length == 0)
+                return new Actuals[0];
+
+            var assertion = new ExpectMethod();
+            container.MarkForAssertion(assertion);
+
+            try
+            {
+                func(instance);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Exception caught while making assertion.", ex);
+            }
+
+            if (container.ExpectationMarked)
+                throw new InvalidOperationException();
+
+            var results = new List<Actuals>();
+            for (int index = 0; index < actuals.Length; index++)
+            {
+                var actual = actuals[index];
+                if (assertion.MatchesCall(actual.Method, actual.Arguments))
+                    results.Add(actual);
+            }
+
+            return results.ToArray();
         }
 
         /// <summary>
@@ -202,6 +298,17 @@ namespace Rhino.Mocks
             }
 
             return CreateMockClass(type, extraTypes, arguments, false);
+        }
+
+        internal static IMockExpectationContainer GetExpectationContainer(object instance)
+        {
+            if (typeof(Delegate).IsAssignableFrom(instance.GetType()))
+            {
+                var instanceDelegate = (Delegate)instance;
+                return instanceDelegate.Target as IMockExpectationContainer;
+            }
+
+            return instance as IMockExpectationContainer;
         }
 
         private object CreateMockClass(Type type, Type[] extraTypes, object[] arguments, bool isPartial)
