@@ -266,17 +266,19 @@ namespace Rhino.Mocks.Tests.Core
         [Fact]
         public void Mock_Instance_Can_Distinguish_Between_Duplicate_Method_Expectation_With_Complex_Arguments()
         {
+            var wasCalled = false;
             var argumentMock = Repository.Mock<IScenarioArgument>();
             var mock = Repository.Partial<ScenarioObject>();
-
-            //argumentMock.Expect(x => x.Age = 15);
-            //argumentMock.Expect(x => x.Age)
-            //    .Return(15);
 
             argumentMock.ExpectProperty(x => x.Age)
                 .Return(15);
 
             mock.Expect(x => x.IntegerMethodArgument(argumentMock))
+                .WhenCalled<IScenarioArgument>(x =>
+                {
+                    if (x.Age == 15)
+                        wasCalled = true;
+                })
                 .Return(24);
 
             mock.Expect(x => x.IntegerMethodArgument(argumentMock))
@@ -287,6 +289,7 @@ namespace Rhino.Mocks.Tests.Core
 
             Assert.Equal(24, resultOne);
             Assert.Equal(15, resultTwo);
+            Assert.True(wasCalled);
         }
 
         [Fact]

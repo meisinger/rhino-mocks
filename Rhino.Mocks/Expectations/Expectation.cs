@@ -27,7 +27,7 @@ namespace Rhino.Mocks.Expectations
         {
             get { return actuals.Count; }
         }
-        
+
         /// <summary>
         /// The number of times the expectation is expected to be called
         /// </summary>
@@ -94,6 +94,15 @@ namespace Rhino.Mocks.Expectations
         }
 
         /// <summary>
+        /// Indicates whether or not a delegate has been set against
+        /// this expectation
+        /// </summary>
+        public bool HasDelegateToInvoke
+        {
+            get { return (DelegateToInvoke != null); }
+        }
+
+        /// <summary>
         /// Indicates whether or not the expectation has a return type
         /// </summary>
         public virtual bool HasReturnValue
@@ -118,10 +127,9 @@ namespace Rhino.Mocks.Expectations
         }
         
         /// <summary>
-        /// Indicates whether or not an
-        /// exception should be thrown
+        /// Delegate to invoke when expectation has been called
         /// </summary>
-        public bool ThrowsException { get; set; }
+        public Delegate DelegateToInvoke { get; set; }
 
         /// <summary>
         /// Expectation to throw if method is called
@@ -137,6 +145,12 @@ namespace Rhino.Mocks.Expectations
         /// Collection of "out" and "ref" arguments
         /// </summary>
         public object[] ReturnArguments { get; set; }
+
+        /// <summary>
+        /// Indicates whether or not an
+        /// exception should be thrown
+        /// </summary>
+        public bool ThrowsException { get; set; }
 
         /// <summary>
         /// constructor

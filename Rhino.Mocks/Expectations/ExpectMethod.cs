@@ -201,6 +201,71 @@ namespace Rhino.Mocks.Expectations
             ExceptionToThrow = exception;
             return this;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        IMethodOptions IMethodOptions.WhenCalled(Action<object[]> action)
+        {
+            DelegateToInvoke = action;
+            return this;
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <typeparam name="TArg"></typeparam>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        IMethodOptions IMethodOptions.WhenCalled<TArg>(Action<TArg> action)
+        {
+            DelegateToInvoke = action;
+            return this;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TArg1"></typeparam>
+        /// <typeparam name="TArg2"></typeparam>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        IMethodOptions IMethodOptions.WhenCalled<TArg1, TArg2>(Action<TArg1, TArg2> action)
+        {
+            DelegateToInvoke = action;
+            return this;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TArg1"></typeparam>
+        /// <typeparam name="TArg2"></typeparam>
+        /// <typeparam name="TArg3"></typeparam>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        IMethodOptions IMethodOptions.WhenCalled<TArg1, TArg2, TArg3>(Action<TArg1, TArg2, TArg3> action)
+        {
+            DelegateToInvoke = action;
+            return this;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TArg1"></typeparam>
+        /// <typeparam name="TArg2"></typeparam>
+        /// <typeparam name="TArg3"></typeparam>
+        /// <typeparam name="TArg4"></typeparam>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        IMethodOptions IMethodOptions.WhenCalled<TArg1, TArg2, TArg3, TArg4>(Action<TArg1, TArg2, TArg3, TArg4> action)
+        {
+            DelegateToInvoke = action;
+            return this;
+        }
     }
 
     /// <summary>
@@ -417,6 +482,71 @@ namespace Rhino.Mocks.Expectations
         {
             ThrowsException = true;
             ExceptionToThrow = exception;
+            return this;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        IMethodOptions<T> IMethodOptions<T>.WhenCalled(Action<object[]> action)
+        {
+            DelegateToInvoke = action;
+            return this;
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <typeparam name="TArg"></typeparam>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        IMethodOptions<T> IMethodOptions<T>.WhenCalled<TArg>(Action<TArg> action)
+        {
+            DelegateToInvoke = action;
+            return this;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TArg1"></typeparam>
+        /// <typeparam name="TArg2"></typeparam>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        IMethodOptions<T> IMethodOptions<T>.WhenCalled<TArg1, TArg2>(Action<TArg1, TArg2> action)
+        {
+            DelegateToInvoke = action;
+            return this;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TArg1"></typeparam>
+        /// <typeparam name="TArg2"></typeparam>
+        /// <typeparam name="TArg3"></typeparam>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        IMethodOptions<T> IMethodOptions<T>.WhenCalled<TArg1, TArg2, TArg3>(Action<TArg1, TArg2, TArg3> action)
+        {
+            DelegateToInvoke = action;
+            return this;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TArg1"></typeparam>
+        /// <typeparam name="TArg2"></typeparam>
+        /// <typeparam name="TArg3"></typeparam>
+        /// <typeparam name="TArg4"></typeparam>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        IMethodOptions<T> IMethodOptions<T>.WhenCalled<TArg1, TArg2, TArg3, TArg4>(Action<TArg1, TArg2, TArg3, TArg4> action)
+        {
+            DelegateToInvoke = action;
             return this;
         }
     }

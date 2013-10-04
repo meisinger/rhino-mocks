@@ -201,6 +201,34 @@ namespace Rhino.Mocks
             RhinoMocks.Logger.LogExpectedMethodCall(invocation);
             expectation.AddActualCall(actual);
 
+            if (expectation.HasDelegateToInvoke)
+            {
+                var callback = expectation.DelegateToInvoke;
+                var parameters = callback.Method.GetParameters();
+
+                var invokeCallback = true;
+                var invokeArguments = new object[parameters.Length];
+                for (int index = 0; index < parameters.Length; index++)
+                {
+                    var parameter = parameters[index];
+                    var parameterType = parameter.ParameterType;
+
+                    var argument = arguments[index];
+                    var argumentType = argument.GetType();
+
+                    if (!parameterType.IsAssignableFrom(argumentType))
+                    {
+                        invokeCallback = false;
+                        break;
+                    }
+
+                    invokeArguments[index] = argument;
+                }
+
+                if (invokeCallback)
+                    callback.DynamicInvoke(invokeArguments);
+            }
+
             if (expectation.ReturnArguments != null && expectation.ReturnArguments.Any())
             {
                 var parameters = method.GetParameters();
