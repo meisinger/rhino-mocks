@@ -100,6 +100,7 @@
     <Compile Include="Expectations\Actuals.cs" />
     <Compile Include="Expectations\Expectation.cs" />
     <Compile Include="Expectations\ExpectationType.cs" />
+    <Compile Include="Expectations\ExpectEvent.cs" />
     <Compile Include="Expectations\ExpectMethod.cs" />
     <Compile Include="Expectations\ExpectProperty.cs" />
     <Compile Include="Expectations\Range.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="Interceptors\MockInterceptor.cs" />
     <Compile Include="Interceptors\ObjectInterceptor.cs" />
     <Compile Include="Interceptors\ProxyInterceptor.cs" />
+    <Compile Include="Interfaces\IEventOptions.cs" />
     <Compile Include="Interfaces\IExpectationLogger.cs" />
     <Compile Include="Interfaces\IExpectationOptions.cs" />
     <Compile Include="Interfaces\IMockExpectation.cs" />

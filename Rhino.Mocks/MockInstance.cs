@@ -171,6 +171,13 @@ namespace Rhino.Mocks
                     if (container.Any(x => x.Type == ExpectationType.Property))
                         return HandlePropertyCall(invocation, method, arguments);
                 }
+
+                if (methodName.StartsWith("add_", StringComparison.Ordinal) ||
+                    methodName.StartsWith("remove_", StringComparison.Ordinal))
+                {
+                    if (container.Any(x => x.Type == ExpectationType.Event))
+                        return HandleEventCall(invocation, method, arguments);
+                }
             }
 
             var actual = new Actuals(method, arguments);
@@ -242,6 +249,55 @@ namespace Rhino.Mocks
                     returnIndex++;
                 }
             }
+
+            if (expectation.ThrowsException)
+                throw expectation.ExceptionToThrow;
+
+            if (expectation.ForceProceed)
+            {
+                invocation.Proceed();
+                return invocation.ReturnValue;
+            }
+
+            return expectation.ReturnValue;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="invocation"></param>
+        /// <param name="method"></param>
+        /// <param name="arguments"></param>
+        /// <returns></returns>
+        public object HandleEventCall(IInvocation invocation, MethodInfo method, object[] arguments)
+        {
+            var actual = new Actuals(method, arguments);
+            actuals.Add(actual);
+
+            var eventCollection = container
+                .Where(x => x.Type == ExpectationType.Event)
+                .ToArray();
+
+            Expectation expectation = null;
+            for (int entryIndex = 0; entryIndex < eventCollection.Length; entryIndex++)
+            {
+                var entry = container[entryIndex];
+                if (!entry.MatchesCall(method, arguments))
+                    continue;
+
+                if (entry.ExpectationSatisfied)
+                    continue;
+
+                expectation = entry;
+                break;
+            }
+
+            //NOTE: this could be where a "strict" mock call would throw an exception
+            if (expectation == null)
+                return HandleUnexpectedMethodCall(invocation, method, arguments);
+
+            RhinoMocks.Logger.LogExpectedMethodCall(invocation);
+            expectation.AddActualCall(actual);
 
             if (expectation.ThrowsException)
                 throw expectation.ExceptionToThrow;

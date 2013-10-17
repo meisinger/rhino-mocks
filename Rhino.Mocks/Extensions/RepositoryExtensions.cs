@@ -161,7 +161,7 @@ namespace Rhino.Mocks
         /// <typeparam name="T"></typeparam>
         /// <param name="instance"></param>
         /// <param name="action"></param>
-        public static IMethodOptions ExpectEvent<T>(this T instance, Action<T> action)
+        public static IEventOptions ExpectEvent<T>(this T instance, Action<T> action)
             where T : class
         {
             if (instance == null)
@@ -171,7 +171,7 @@ namespace Rhino.Mocks
             if (container == null)
                 throw new ArgumentOutOfRangeException("instance", "Expectations can only be set on a mocked object or instance.");
 
-            var expectation = new ExpectMethod();
+            var expectation = new ExpectEvent();
             container.MarkForExpectation(expectation);
 
             try

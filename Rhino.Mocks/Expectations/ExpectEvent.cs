@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Castle.DynamicProxy;
 using Rhino.Mocks.Constraints;
 using Rhino.Mocks.Helpers;
@@ -8,14 +7,14 @@ using Rhino.Mocks.Interfaces;
 namespace Rhino.Mocks.Expectations
 {
     /// <summary>
-    /// Represents an expectation against a property call.
+    /// Represents an expectation against an event call.
     /// Allows access to various options that can be applied to an expectation
     /// </summary>
-    public class ExpectProperty<T> : Expectation<T>, IPropertyOptions<T>
+    public class ExpectEvent : Expectation, IEventOptions
     {
         internal override ExpectationType Type
         {
-            get { return ExpectationType.Property; }
+            get { return ExpectationType.Event; }
         }
 
         /// <summary>
@@ -26,22 +25,12 @@ namespace Rhino.Mocks.Expectations
         /// <summary>
         /// Get Method of the expectation
         /// </summary>
-        public MethodInfo MethodGet { get; set; }
-
-        /// <summary>
-        /// Set Method of the expectation
-        /// </summary>
-        public MethodInfo MethodSet { get; set; }
-
-        /// <summary>
-        /// Property of the expectation
-        /// </summary>
-        public PropertyInfo Property { get; set; }
-
+        public MethodInfo Method { get; set; }
+        
         /// <summary>
         /// constructor
         /// </summary>
-        public ExpectProperty()
+        public ExpectEvent()
             : this(new Range(1, null))
         {
         }
@@ -50,7 +39,7 @@ namespace Rhino.Mocks.Expectations
         /// constructor
         /// </summary>
         /// <param name="range"></param>
-        protected ExpectProperty(Range range)
+        protected ExpectEvent(Range range)
             : base(range)
         {
         }
@@ -61,7 +50,7 @@ namespace Rhino.Mocks.Expectations
         /// <returns>string</returns>
         public override string GetDisplayName(IInvocation invocation)
         {
-            return MethodFormatter.ToString(invocation, MethodGet, Arguments,
+            return MethodFormatter.ToString(invocation, Method, Arguments,
                 (x, i) => Arguments[i].Message);
         }
 
@@ -72,18 +61,7 @@ namespace Rhino.Mocks.Expectations
         /// <param name="arguments"></param>
         public override void HandleMethodCall(MethodInfo method, object[] arguments)
         {
-            if (!method.IsSpecialName)
-                throw new InvalidOperationException("Property expectations can only be set for properties.");
-
-            var methodName = method.Name;
-            if (!methodName.StartsWith("get_") && !methodName.StartsWith("set_"))
-                throw new InvalidOperationException("Property expectations can only be set for properties.");
-
-            var propertyName = method.Name.Substring(4);
-            var property = method.DeclaringType.GetProperty(propertyName);
-
-            MethodGet = property.GetGetMethod(true);
-            MethodSet = property.GetSetMethod(true);
+            Method = method;
 
             if (ArgumentManager.HasBeenUsed)
             {
@@ -118,14 +96,10 @@ namespace Rhino.Mocks.Expectations
         /// <returns></returns>
         public override bool MatchesCall(MethodInfo method, object[] arguments)
         {
-            var argumentsMatch = MatchesCallArguments(arguments);
-            if (MethodGet != null && MethodGet.Equals(method))
-                return argumentsMatch;
+            if (!Method.Equals(method))
+                return false;
 
-            if (MethodSet != null && MethodSet.Equals(method))
-                return argumentsMatch;
-
-            return false;
+            return MatchesCallArguments(arguments);
         }
 
         /// <summary>
@@ -155,31 +129,12 @@ namespace Rhino.Mocks.Expectations
 
             return true;
         }
-
-        /// <summary>
-        /// Call original property
-        /// </summary>
-        /// <returns>Fluid Interface</returns>
-        IPropertyOptions<T> IPropertyOptions<T>.CallOriginalProperty()
-        {
-            //if (Method.IsAbstract)
-            //{
-            //    var message = string.Format(
-            //        "Can't use CallOriginalMethod on method {0} because the method is abstract.",
-            //            Method.Name);
-
-            //    throw new InvalidOperationException(message);
-            //}
-
-            ForceProceed = true;
-            return this;
-        }
-
+        
         /// <summary>
         /// Ignores all arguments removing any existing argument constraints
         /// </summary>
         /// <returns>Fluid Interface</returns>
-        IPropertyOptions<T> IPropertyOptions<T>.IgnoreArguments()
+        IEventOptions IEventOptions.IgnoreArguments()
         {
             var constraints = new AbstractConstraint[Arguments.Length];
             for (int index = 0; index < Arguments.Length; index++)
@@ -188,41 +143,14 @@ namespace Rhino.Mocks.Expectations
             Arguments = constraints;
             return this;
         }
-
+        
         /// <summary>
-        /// Define the return value of a property (non write-only)
-        /// </summary>
-        /// <param name="value">Value to return when "get" is called</param>
-        /// <returns>Fluid Interface</returns>
-        IPropertyOptions<T> IPropertyOptions<T>.Return(T value)
-        {
-            if (MethodGet == null)
-                throw new InvalidOperationException("Return value cannot be set for a write-only property.");
-
-            SetReturnValue(value);
-            return this;
-        }
-
-        /// <summary>
-        /// Define the return value of a property (non write-only)
-        /// </summary>
-        /// <param name="func">Value to return when "get" is called</param>
-        /// <returns>Fluid Interface</returns>
-        IPropertyOptions<T> IPropertyOptions<T>.Returns(Func<T> func)
-        {
-            if (MethodGet == null)
-                throw new InvalidOperationException("Return value cannot be set for a write-only property.");
-
-            SetReturnValue(func());
-            return this;
-        }
-
-        /// <summary>
-        /// Throw exception of the given type when the property is called
+        /// Throw exception of the given type when
+        /// the method is called
         /// </summary>
         /// <typeparam name="TException"></typeparam>
         /// <returns>Fluid Interface</returns>
-        IPropertyOptions<T> IPropertyOptions<T>.Throws<TException>()
+        IEventOptions IEventOptions.Throws<TException>()
         {
             ThrowsException = true;
             ExceptionToThrow = new TException();
@@ -230,12 +158,13 @@ namespace Rhino.Mocks.Expectations
         }
 
         /// <summary>
-        /// Throw exception of the given type when the property is called
+        /// Throw exception of the given type when
+        /// the method is called
         /// </summary>
         /// <typeparam name="TException"></typeparam>
         /// <param name="exception"></param>
         /// <returns>Fluid Interface</returns>
-        IPropertyOptions<T> IPropertyOptions<T>.Throws<TException>(TException exception)
+        IEventOptions IEventOptions.Throws<TException>(TException exception)
         {
             ThrowsException = true;
             ExceptionToThrow = exception;

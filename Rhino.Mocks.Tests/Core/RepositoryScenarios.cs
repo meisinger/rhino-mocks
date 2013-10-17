@@ -2,6 +2,7 @@
 using Xunit;
 using Rhino.Mocks.Interfaces;
 using Rhino.Mocks.Exceptions;
+using System;
 
 namespace Rhino.Mocks.Tests.Core
 {
@@ -12,7 +13,7 @@ namespace Rhino.Mocks.Tests.Core
 
         public interface IScenarioEvent
         {
-            event VoidScenario ScenarioEvent;
+            event EventHandler<EventArgs> ScenarioEvent;
         }
 
         public interface IScenarioArgument
@@ -597,6 +598,29 @@ namespace Rhino.Mocks.Tests.Core
             Assert.Throws<System.InvalidOperationException>(() =>
                 mock.ExpectProperty(x => x.MessageIn = "in")
                     .Return("invalid"));
+        }
+
+        [Fact]
+        public void Can_Create_Expectation_For_Event()
+        {
+            var mock = Repository.Mock<IScenarioEvent>();
+
+            var eventValue = 0;
+            var noneWasCalled = false;
+            var someWasCalled = false;
+
+            mock.ExpectEvent(x => x.ScenarioEvent += Arg<EventHandler<EventArgs>>.Is.Anything);
+
+            var handler = new EventHandler<EventArgs>((s, e) => { eventValue = 1; });
+            mock.ScenarioEvent += handler;
+
+            var subscriber = (Delegate)handler;
+            subscriber.DynamicInvoke(new[] { null, new EventArgs() });
+
+            Assert.False(noneWasCalled);
+            Assert.False(someWasCalled);
+            Assert.Equal(1, eventValue);
+            mock.VerifyExpectations();
         }
     }
 }
