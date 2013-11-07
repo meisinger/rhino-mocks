@@ -611,15 +611,14 @@ namespace Rhino.Mocks.Tests.Core
 
             mock.ExpectEvent(x => x.ScenarioEvent += Arg<EventHandler<EventArgs>>.Is.Anything);
 
-            var handler = new EventHandler<EventArgs>((s, e) => { eventValue = 1; });
-            mock.ScenarioEvent += handler;
+            mock.ScenarioEvent += (s, e) => { eventValue += 1; };
 
-            var subscriber = (Delegate)handler;
-            subscriber.DynamicInvoke(new[] { null, new EventArgs() });
+            mock.Raise(x => x.ScenarioEvent += null, new EventArgs());
+            mock.Raise(x => x.ScenarioEvent += null, new EventArgs());
 
             Assert.False(noneWasCalled);
             Assert.False(someWasCalled);
-            Assert.Equal(1, eventValue);
+            Assert.Equal(2, eventValue);
             mock.VerifyExpectations();
         }
     }

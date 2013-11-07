@@ -18,6 +18,7 @@ namespace Rhino.Mocks
         private readonly List<Expectation> container;
         private readonly Stack<Expectation> stack;
         private readonly Dictionary<string, object> dynamicProperties;
+        private readonly Dictionary<string, Delegate> eventSubscriptions;
         private readonly Dictionary<string, Expectation> expectedProperties;
         private readonly Type[] types;
         private readonly int hashcode;
@@ -73,8 +74,23 @@ namespace Rhino.Mocks
             container = new List<Expectation>();
             stack = new Stack<Expectation>();
             dynamicProperties = new Dictionary<string, object>();
+            eventSubscriptions = new Dictionary<string, Delegate>();
             expectedProperties = new Dictionary<string, Expectation>();
             hashcode = MockInstanceEquality.NextHash;
+        }
+
+        /// <summary>
+        /// Returns subscribers that have been added
+        /// for the given event
+        /// </summary>
+        /// <param name="name">event name</param>
+        /// <returns></returns>
+        public Delegate GetEventSubscribers(string name)
+        {
+            if (!eventSubscriptions.ContainsKey(name))
+                return null;
+
+            return eventSubscriptions[name];
         }
 
         /// <summary>
@@ -274,6 +290,9 @@ namespace Rhino.Mocks
             var actual = new Actuals(method, arguments);
             actuals.Add(actual);
 
+            var subscription = (Delegate)arguments[0];
+            HandleEventSubscription(method, subscription);
+
             var eventCollection = container
                 .Where(x => x.Type == ExpectationType.Event)
                 .ToArray();
@@ -426,6 +445,33 @@ namespace Rhino.Mocks
             }
 
             return GetDefaultValue(method.ReturnType);
+        }
+
+        private void HandleEventSubscription(MethodInfo method, Delegate subscription)
+        {
+            var methodName = method.Name;
+            if (methodName.StartsWith("remove_"))
+            {
+                var removeName = methodName.Substring(7);
+                if (!eventSubscriptions.ContainsKey(removeName))
+                    return;
+
+                Delegate removeDelegate = (MulticastDelegate)eventSubscriptions[removeName];
+                removeDelegate = MulticastDelegate.Remove(removeDelegate, subscription);
+                eventSubscriptions[removeName] = removeDelegate;
+                return;
+            }
+
+            var addName = methodName.Substring(4);
+            if (!eventSubscriptions.ContainsKey(addName))
+            {
+                eventSubscriptions[addName] = subscription;
+                return;
+            }
+
+            Delegate addDelegate = (MulticastDelegate)eventSubscriptions[addName];
+            addDelegate = MulticastDelegate.Combine(addDelegate, subscription);
+            eventSubscriptions[addName] = addDelegate;
         }
 
         private static string GeneratePropertyKey(MethodInfo method, object[] arguments)

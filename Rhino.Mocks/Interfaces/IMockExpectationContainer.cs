@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using Castle.DynamicProxy;
 using Rhino.Mocks.Expectations;
 
@@ -15,6 +16,14 @@ namespace Rhino.Mocks.Interfaces
         /// for consideration
         /// </summary>
         bool ExpectationMarked { get; }
+
+        /// <summary>
+        /// Returns subscribers that have been added
+        /// for the given event
+        /// </summary>
+        /// <param name="name">event name</param>
+        /// <returns></returns>
+        Delegate GetEventSubscribers(string name);
 
         /// <summary>
         /// Returns the last expectation that has

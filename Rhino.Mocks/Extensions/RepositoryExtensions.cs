@@ -232,7 +232,70 @@ namespace Rhino.Mocks
 
             return expectation;
         }
-        
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="instance"></param>
+        /// <param name="eventSubscription"></param>
+        /// <param name="args"></param>
+        public static void Raise<T>(this T instance, Action<T> eventSubscription, params object[] args)
+            where T : class
+        {
+            if (instance == null)
+                throw new ArgumentNullException("instance", "Events cannot be raised from a null object or instance.");
+
+            var container = GetExpectationContainer(instance);
+            if (container == null)
+                throw new ArgumentOutOfRangeException("instance", "Events can only be raised from a mocked object or instance.");
+
+            var expectation = new ExpectEvent();
+            container.MarkForAssertion(expectation);
+
+            try
+            {
+                eventSubscription(instance);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Exception caught while identifying event", ex);
+            }
+
+            if (container.ExpectationMarked)
+                throw new InvalidOperationException();
+
+            var method = expectation.Method;
+            if (!method.IsSpecialName)
+                throw new InvalidOperationException("Raise method can only be used against events.");
+
+            var methodName = method.Name;
+            if (!methodName.StartsWith("add_"))
+                throw new InvalidOperationException("Raise method can only be used against events.");
+
+            var eventName = methodName.Substring(4);
+            var subscription = container.GetEventSubscribers(eventName);
+            if (subscription == null)
+                return;
+
+            var raiser = new EventRaiser(instance);
+            raiser.Raise(subscription, args);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="instance"></param>
+        /// <param name="eventSubscription"></param>
+        /// <param name="args"></param>
+        public static void Raise<T>(this T instance, Action<T> eventSubscription, EventArgs args)
+            where T : class
+        {
+            Raise(instance, eventSubscription, new object[] { null, args });
+        }
+
         /// <summary>
         /// Set stub on an object
         /// </summary>

@@ -74,14 +74,28 @@ namespace Rhino.Mocks.Expectations
                 return;
             }
 
+            var argumentNullCount = 0;
             var parameters = method.GetParameters();
             var constraints = new AbstractConstraint[parameters.Length];
             for (int index = 0; index < parameters.Length; index++)
             {
                 var parameter = parameters[index];
-                constraints[index] = (parameter.IsOut)
-                    ? Is.Anything()
-                    : Is.Equal(arguments[index]);
+                if (parameter.IsOut)
+                    constraints[index] = Is.Anything();
+                else
+                {
+                    var argument = arguments[index];
+                    if (argument == null)
+                        argumentNullCount++;
+
+                    constraints[index] = Is.Equal(argument);
+                }
+            }
+
+            if (argumentNullCount == parameters.Length)
+            {
+                for (int index = 0; index < parameters.Length; index++)
+                    constraints[index] = Is.Anything();
             }
 
             Arguments = constraints;

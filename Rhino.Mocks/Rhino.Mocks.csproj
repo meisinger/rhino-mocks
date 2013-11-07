@@ -108,6 +108,7 @@
     <Compile Include="Extensions\RepositoryExtensions.cs" />
     <Compile Include="Helpers\ArgumentManager.cs" />
     <Compile Include="Helpers\ByRefDummy.cs" />
+    <Compile Include="Helpers\EventRaiser.cs" />
     <Compile Include="Helpers\Is.cs" />
     <Compile Include="Helpers\IsArg.cs" />
     <Compile Include="Helpers\List.cs" />
