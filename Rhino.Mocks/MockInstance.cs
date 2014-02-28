@@ -254,8 +254,9 @@ namespace Rhino.Mocks
 
             if (expectation.ReturnArguments != null && expectation.ReturnArguments.Any())
             {
+                var lenth = expectation.ReturnArguments.Length;
                 var parameters = method.GetParameters();
-                for (int index = 0, returnIndex = 0; index < parameters.Length; index++)
+                for (int index = 0, returnIndex = 0; index < parameters.Length && returnIndex < lenth; index++)
                 {
                     var parameter = parameters[index];
                     if (!parameter.IsOut && !parameter.ParameterType.IsByRef)
@@ -345,19 +346,6 @@ namespace Rhino.Mocks
             var methodName = method.Name;
             var propertyKey = GeneratePropertyKey(method, arguments);
 
-            if (methodName.StartsWith("get_"))
-            {
-                Expectation expected;
-                if (expectedProperties.TryGetValue(propertyKey, out expected))
-                {
-                    if (expected.ExpectationSatisfied)
-                        return GetDefaultValue(method.ReturnType);
-
-                    expected.AddActualCall(actual);
-                    return expected.ReturnValue;
-                }
-            }
-
             var propertyCollection = container
                 .Where(x => x.Type == ExpectationType.Property)
                 .ToArray();
@@ -378,24 +366,44 @@ namespace Rhino.Mocks
 
             //NOTE: this could be where a "strict" mock call would throw an exception
             if (expectation == null)
-                return HandleUnexpectedMethodCall(invocation, method, arguments);
-
-            RhinoMocks.Logger.LogExpectedMethodCall(invocation);
-            expectation.AddActualCall(actual);
-
-            if (expectation.ThrowsException)
-                throw expectation.ExceptionToThrow;
-
-            if (methodName.StartsWith("set_", StringComparison.Ordinal))
-                expectedProperties[propertyKey] = expectation;
-
-            if (expectation.ForceProceed)
+                RhinoMocks.Logger.LogUnexpectedMethodCall(invocation, 
+                    "Property: Dynamic handling of property.");
+            else
             {
-                invocation.Proceed();
-                return invocation.ReturnValue;
+                RhinoMocks.Logger.LogExpectedMethodCall(invocation);
+                expectation.AddActualCall(actual);
+
+                if (expectation.ThrowsException)
+                    throw expectation.ExceptionToThrow;
+
+                if (methodName.StartsWith("get_", StringComparison.Ordinal))
+                    return expectation.ReturnValue;
+
+                //if (methodName.StartsWith("set_", StringComparison.Ordinal))
+                //    expectedProperties[propertyKey] = expectation;
+
+                if (expectation.ForceProceed)
+                {
+                    invocation.Proceed();
+                    return invocation.ReturnValue;
+                }
             }
 
-            return expectation.ReturnValue;
+            if (methodName.StartsWith("get_", StringComparison.Ordinal))
+            {
+                if (dynamicProperties.ContainsKey(propertyKey))
+                    return dynamicProperties[propertyKey];
+            }
+
+            if (methodName.StartsWith("set_", StringComparison.Ordinal))
+            {
+                if (expectation != null && expectation.HasReturnValue)
+                    dynamicProperties[propertyKey] = expectation.ReturnValue;
+                else
+                    dynamicProperties[propertyKey] = arguments.Last();
+            }
+
+            return null;
         }
 
         /// <summary>

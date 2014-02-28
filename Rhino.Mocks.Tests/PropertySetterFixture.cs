@@ -8,10 +8,8 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void Setter_Expectation_With_Custom_Ignore_Arguments()
 		{
-            IBar bar = MockRepository.GenerateStrictMock<IBar>();
-
-            bar.Expect(x => x.Foo)
-                .SetPropertyAndIgnoreArgument();
+            IBar bar = Repository.Mock<IBar>();
+            bar.ExpectProperty(x => x.Foo = Arg<int>.Is.Anything);
 
             bar.Foo = 2;
             bar.VerifyAllExpectations();
@@ -20,10 +18,8 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void Setter_Expectation_Not_Fullfilled()
 		{
-            IBar bar = MockRepository.GenerateStrictMock<IBar>();
-
-            bar.Expect(x => x.Foo)
-                .SetPropertyAndIgnoreArgument();
+            IBar bar = Repository.Mock<IBar>();
+            bar.ExpectProperty(x => x.Foo = Arg<int>.Is.Anything);
 
             Assert.Throws<ExpectationViolationException>(
                 "IBar.set_Foo(any); Expected #1, Actual #0.",
@@ -33,10 +29,8 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void Setter_Expectation_With_Correct_Argument()
 		{
-            IBar bar = MockRepository.GenerateStrictMock<IBar>();
-
-            bar.Expect(x => x.Foo)
-                .SetPropertyAndIgnoreArgument();
+            IBar bar = Repository.Mock<IBar>();
+            bar.ExpectProperty(x => x.Foo = Arg<int>.Is.Anything);
 
 			bar.Foo = 1;
             bar.VerifyAllExpectations();
@@ -45,14 +39,14 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void Setter_Expectation_With_Wrong_Argument()
 		{
-            IBar bar = MockRepository.GenerateStrictMock<IBar>();
+            IBar bar = Repository.Mock<IBar>();
+            bar.ExpectProperty(x => x.Foo = 1);
 
-            bar.Expect(x => x.Foo)
-                .SetPropertyWithArgument(1);
+            bar.Foo = 0;
 
             Assert.Throws<ExpectationViolationException>(
                 "IBar.set_Foo(0); Expected #0, Actual #1.\r\nIBar.set_Foo(1); Expected #1, Actual #0.",
-                () => bar.Foo = 0);
+                () => bar.VerifyExpectations(true));
 		}
 	}
 

@@ -39,15 +39,16 @@ namespace Rhino.Mocks.Tests
         
 		public HandlingProperties()
         {
-            demo = (IDemo)MockRepository.GenerateStrictMock(typeof(IDemo));
+            demo = Repository.Mock<IDemo>();
         }
 
         [Fact]
         public void PropertyBehaviorForSingleProperty()
         {
-            demo.Expect(x => x.Prop)
-                .PropertyBehavior();
+            //demo.Expect(x => x.Prop)
+            //    .PropertyBehavior();
 
+            // property behavior should be automatic
             for (int i = 0; i < 49; i++)
             {
                 demo.Prop = "ayende" + i;
@@ -57,22 +58,21 @@ namespace Rhino.Mocks.Tests
             demo.VerifyAllExpectations();
         }
 
-        [Fact]
-        public void ExceptionIfLastMethodCallIsNotProperty()
-        {
-        	Assert.Throws<InvalidOperationException>(
-                "Last method call was not made on a setter or a getter",
-                () => demo.Expect(x => x.EnumNoArgs())
-                        .PropertyBehavior());
-        }
+        //[Fact]
+        //public void ExceptionIfLastMethodCallIsNotProperty()
+        //{
+        //    Assert.Throws<InvalidOperationException>(
+        //        "Last method call was not made on a setter or a getter",
+        //        () => demo.Expect(x => x.EnumNoArgs())
+        //                .PropertyBehavior());
+        //}
 
         [Fact]
         public void ExceptionIfPropHasOnlyGetter()
         {
-        	Assert.Throws<InvalidOperationException>(
+            Assert.Throws<InvalidOperationException>(
                 "Property must be read/write",
-                () => demo.Expect(x => x.ReadOnly)
-                        .PropertyBehavior());
+                () => demo.ExpectProperty(x => x.ReadOnly));
         }
 
         [Fact]
@@ -80,20 +80,19 @@ namespace Rhino.Mocks.Tests
         {
         	Assert.Throws<InvalidOperationException>(
                 "Property must be read/write",
-                () => demo.Expect(x => x.WriteOnly)
-                    .PropertyBehavior());
+                () => demo.ExpectProperty(x => x.WriteOnly));
         }
 
         [Fact]
         public void IndexedPropertiesSupported()
         {
-            IWithIndexers with = (IWithIndexers)MockRepository.GenerateStrictMock(typeof(IWithIndexers));
+            IWithIndexers with = Repository.Mock<IWithIndexers>();
 
-            with.Expect(x => x[1])
-                .PropertyBehavior();
+            //with.Expect(x => x[1])
+            //    .PropertyBehavior();
 
-            with.Expect(x => x["", 1])
-                .PropertyBehavior();
+            //with.Expect(x => x["", 1])
+            //    .PropertyBehavior();
 
             with[1] = 10;
             with[10] = 100;
@@ -108,27 +107,24 @@ namespace Rhino.Mocks.Tests
             with.VerifyAllExpectations();
         }
 
-        [Fact]
+        [Fact(Skip = "Test No Longer Valid")]
         public void IndexPropertyWhenValueTypeAndNotFoundThrows()
         {
-            IWithIndexers with = (IWithIndexers)MockRepository.GenerateStrictMock(typeof(IWithIndexers));
+            IWithIndexers with = Repository.Mock<IWithIndexers>();
 
-            with.Expect(x => x[1])
-                .PropertyBehavior();
+            with.ExpectProperty(x => x[1]);
 
             Assert.Throws<InvalidOperationException>(
-        		"Can't return a value for property Item because no value was set and the Property return a value type.",
-        		() => GC.KeepAlive(with[1]));
+                "Can't return a value for property Item because no value was set and the Property return a value type.",
+                () => GC.KeepAlive(with[1]));
         }
 
         [Fact]
         public void IndexPropertyWhenRefTypeAndNotFoundReturnNull()
         {
-            IWithIndexers with = (IWithIndexers)MockRepository.GenerateStrictMock(typeof(IWithIndexers));
+            IWithIndexers with = Repository.Mock<IWithIndexers>();
 
-            with.Expect(x => x["", 3])
-                .PropertyBehavior();
-            
+            with.ExpectProperty(x => x["", 3]);
             Assert.Null(with["", 2]);
         }
 

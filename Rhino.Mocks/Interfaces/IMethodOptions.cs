@@ -21,8 +21,15 @@ namespace Rhino.Mocks.Interfaces
         /// <summary>
         /// Ignores all arguments removing any existing argument constraints
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Fluid Interface</returns>
         IMethodOptions IgnoreArguments();
+
+        /// <summary>
+        /// Set the parameter values for [out] and [ref] parameters
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns>Fluid Interface</returns>
+        IMethodOptions OutRef(params object[] parameters);
 
         /// <summary>
         /// Throw exception of the given type when the method is called
@@ -109,6 +116,13 @@ namespace Rhino.Mocks.Interfaces
         /// </summary>
         /// <returns></returns>
         IMethodOptions<T> IgnoreArguments();
+
+        /// <summary>
+        /// Set the parameter values for [out] and [ref] parameters
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns>Fluid Interface</returns>
+        IMethodOptions<T> OutRef(params object[] parameters);
 
         /// <summary>
         /// Define the return value of a method call (non-void)

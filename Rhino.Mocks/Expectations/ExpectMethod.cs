@@ -176,6 +176,23 @@ namespace Rhino.Mocks.Expectations
         }
 
         /// <summary>
+        /// Set the parameter values for [out] and [ref] parameters
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns>Fluid Interface</returns>
+        IMethodOptions IMethodOptions.OutRef(params object[] parameters)
+        {
+            if (ReturnArguments != null)
+                throw new InvalidOperationException("Output and ref parameters has already been set for this expectation");
+
+            if (parameters == null)
+                parameters = new object[0];
+
+            ReturnArguments = parameters;
+            return this;
+        }
+
+        /// <summary>
         /// Throw exception of the given type when
         /// the method is called
         /// </summary>
@@ -433,6 +450,23 @@ namespace Rhino.Mocks.Expectations
                 constraints[index] = Is.Anything();
 
             Arguments = constraints;
+            return this;
+        }
+
+        /// <summary>
+        /// Set the parameter values for [out] and [ref] parameters
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns>Fluid Interface</returns>
+        IMethodOptions<T> IMethodOptions<T>.OutRef(params object[] parameters)
+        {
+            if (ReturnArguments != null)
+                throw new InvalidOperationException("Output and ref parameters has already been set for this expectation");
+
+            if (parameters == null)
+                parameters = new object[0];
+
+            ReturnArguments = parameters;
             return this;
         }
 

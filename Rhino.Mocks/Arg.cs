@@ -97,8 +97,18 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Add constraint for a "ref" argument
-        /// of a mock
+        /// Add constraint for a "ref" argument of a mock
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static ByRefDummy<T> Ref(T value)
+        {
+            ArgumentManager.AddRefArgument(new Anything(), value);
+            return new ByRefDummy<T>();
+        }
+
+        /// <summary>
+        /// Add constraint for a "ref" argument of a mock
         /// </summary>
         /// <param name="constraint"></param>
         /// <param name="value"></param>

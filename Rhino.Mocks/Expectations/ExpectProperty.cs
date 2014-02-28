@@ -80,10 +80,37 @@ namespace Rhino.Mocks.Expectations
                 throw new InvalidOperationException("Property expectations can only be set for properties.");
 
             var propertyName = method.Name.Substring(4);
-            var property = method.DeclaringType.GetProperty(propertyName);
 
+            PropertyInfo property;
+            if (methodName.StartsWith("get_"))
+            {
+                var types = new Type[arguments.Length];
+                if (arguments.Length > 0)
+                {
+                    for (int argumentIndex = 0; argumentIndex < arguments.Length; argumentIndex++)
+                        types[argumentIndex] = arguments[argumentIndex].GetType();
+                }
+
+                property = method.DeclaringType.GetProperty(propertyName, types);
+            }
+            else
+            {
+                var argumentLength = (arguments.Length - 1);
+                var types = new Type[argumentLength];
+                if (argumentLength > 0)
+                {
+                    for (int argumentIndex = 0; argumentIndex < argumentLength; argumentIndex++)
+                        types[argumentIndex] = arguments[argumentIndex].GetType();
+                }
+
+                property = method.DeclaringType.GetProperty(propertyName, types);
+            }
+            
             MethodGet = property.GetGetMethod(true);
             MethodSet = property.GetSetMethod(true);
+
+            if (MethodGet == null || MethodSet == null)
+                throw new InvalidOperationException("Property must be read/write.");
 
             if (ArgumentManager.HasBeenUsed)
             {
@@ -197,7 +224,7 @@ namespace Rhino.Mocks.Expectations
         IPropertyOptions<T> IPropertyOptions<T>.Return(T value)
         {
             if (MethodGet == null)
-                throw new InvalidOperationException("Return value cannot be set for a write-only property.");
+                throw new InvalidOperationException("Return value cannot be set for a \"write\" enabled property.");
 
             SetReturnValue(value);
             return this;
@@ -211,7 +238,7 @@ namespace Rhino.Mocks.Expectations
         IPropertyOptions<T> IPropertyOptions<T>.Returns(Func<T> func)
         {
             if (MethodGet == null)
-                throw new InvalidOperationException("Return value cannot be set for a write-only property.");
+                throw new InvalidOperationException("Return value cannot be set for a \"write\" enabled property.");
 
             SetReturnValue(func());
             return this;

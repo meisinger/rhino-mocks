@@ -30,6 +30,7 @@
 using System;
 using System.Text;
 using Xunit;
+using Rhino.Mocks.Helpers;
 
 namespace Rhino.Mocks.Tests
 {
@@ -46,7 +47,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void UseTheOutMethodToSpecifyOutputAndRefParameters()
         {
-            MyClass myClass = (MyClass)MockRepository.GenerateStrictMock(typeof(MyClass));
+            MyClass myClass = Repository.Mock<MyClass>();
 
             int i;
             string s = null;
@@ -64,15 +65,15 @@ namespace Rhino.Mocks.Tests
             myClass.VerifyAllExpectations();
         }
 
-		[Fact]
-		public void UseTheOutMethodToSpecifyOutputAndRefParameters_CanOnlyBeCalledOnce()
+        [Fact]
+        public void UseTheOutMethodToSpecifyOutputAndRefParameters_CanOnlyBeCalledOnce()
         {
-            MyClass myClass = (MyClass)MockRepository.GenerateStrictMock(typeof(MyClass));
+            MyClass myClass = Repository.Mock<MyClass>();
 
             int i;
             string s = null;
             string s2;
-            
+
             Assert.Throws<InvalidOperationException>(
                 "Output and ref parameters has already been set for this expectation",
                 () => myClass.Expect(x => x.MyMethod(out i, ref s, 1, out s2))
@@ -80,10 +81,10 @@ namespace Rhino.Mocks.Tests
                         .OutRef(100, "s", "b"));
         }
 
-    	[Fact]
-    	public void GivingLessParametersThanWhatIsInTheMethodWillNotThrow()
-    	{
-            MyClass myClass = (MyClass)MockRepository.GenerateStrictMock(typeof(MyClass));
+        [Fact]
+        public void GivingLessParametersThanWhatIsInTheMethodWillNotThrow()
+        {
+            MyClass myClass = Repository.Mock<MyClass>();
 
             int i;
             string s = null;
@@ -94,11 +95,11 @@ namespace Rhino.Mocks.Tests
                 .OutRef(100);
 
             myClass.MyMethod(out i, ref s, 1, out s2);
-            
+
             Assert.Equal(100, i);
             Assert.Null(s);
             Assert.Null(s2);
             myClass.VerifyAllExpectations();
-    	}
+        }
     }
 }
