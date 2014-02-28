@@ -226,30 +226,35 @@ namespace Rhino.Mocks
 
             if (expectation.HasDelegateToInvoke)
             {
+                var methodParameters = method.GetParameters();
+
                 var callback = expectation.DelegateToInvoke;
-                var parameters = callback.Method.GetParameters();
+                var callbackParameters = callback.Method.GetParameters();
 
-                var invokeCallback = true;
-                var invokeArguments = new object[parameters.Length];
-                for (int index = 0; index < parameters.Length; index++)
+                if (callbackParameters.Length == 0)
+                    callback.DynamicInvoke(new object[0]);
+                else
                 {
-                    var parameter = parameters[index];
-                    var parameterType = parameter.ParameterType;
-
-                    var argument = arguments[index];
-                    var argumentType = argument.GetType();
-
-                    if (!parameterType.IsAssignableFrom(argumentType))
+                    var invokeCallback = true;
+                    var invokeArguments = new object[callbackParameters.Length];
+                    for (int index = 0; index < callbackParameters.Length; index++)
                     {
-                        invokeCallback = false;
-                        break;
+                        var parameter = callbackParameters[index];
+                        var parameterType = parameter.ParameterType;
+
+                        var argument = methodParameters[index];
+                        var argumentType = argument.ParameterType;
+
+                        if (!parameterType.IsAssignableFrom(argumentType))
+                        {
+                            invokeCallback = false;
+                            break;
+                        }
                     }
 
-                    invokeArguments[index] = argument;
+                    if (invokeCallback)
+                        callback.DynamicInvoke(arguments);
                 }
-
-                if (invokeCallback)
-                    callback.DynamicInvoke(invokeArguments);
             }
 
             if (expectation.ReturnArguments != null && expectation.ReturnArguments.Any())
@@ -273,10 +278,19 @@ namespace Rhino.Mocks
             if (expectation.ForceProceed)
             {
                 invocation.Proceed();
+
+                if (expectation.HasDelegateToIntercept)
+                    expectation.DelegateToIntercept(new MethodInvocation(invocation));
+
                 return invocation.ReturnValue;
             }
 
-            return expectation.ReturnValue;
+            invocation.ReturnValue = expectation.ReturnValue;
+
+            if (expectation.HasDelegateToIntercept)
+                expectation.DelegateToIntercept(new MethodInvocation(invocation));
+
+            return invocation.ReturnValue;
         }
 
         /// <summary>

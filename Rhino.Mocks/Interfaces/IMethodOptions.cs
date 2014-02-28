@@ -19,10 +19,24 @@ namespace Rhino.Mocks.Interfaces
         IMethodOptions CallOriginalMethod();
 
         /// <summary>
+        ///
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns>Fluid Interface</returns>
+        IMethodOptions DoInstead(Delegate action);
+
+        /// <summary>
         /// Ignores all arguments removing any existing argument constraints
         /// </summary>
         /// <returns>Fluid Interface</returns>
         IMethodOptions IgnoreArguments();
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns>Fluid Interface</returns>
+        IMethodOptions Intercept(Action<MethodInvocation> action);
 
         /// <summary>
         /// Set the parameter values for [out] and [ref] parameters
@@ -53,7 +67,7 @@ namespace Rhino.Mocks.Interfaces
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        IMethodOptions WhenCalled(Action<object[]> action);
+        IMethodOptions WhenCalled(Action action);
 
         /// <summary>
         /// 
@@ -112,10 +126,24 @@ namespace Rhino.Mocks.Interfaces
         IMethodOptions<T> CallOriginalMethod();
 
         /// <summary>
+        ///
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns>Fluid Interface</returns>
+        IMethodOptions<T> DoInstead(Delegate action);
+
+        /// <summary>
         /// Ignores all arguments removing any existing argument constraints
         /// </summary>
         /// <returns></returns>
         IMethodOptions<T> IgnoreArguments();
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns>Fluid Interface</returns>
+        IMethodOptions<T> Intercept(Action<MethodInvocation> action);
 
         /// <summary>
         /// Set the parameter values for [out] and [ref] parameters
@@ -160,7 +188,7 @@ namespace Rhino.Mocks.Interfaces
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        IMethodOptions<T> WhenCalled(Action<object[]> action);
+        IMethodOptions<T> WhenCalled(Action action);
 
         /// <summary>
         /// 

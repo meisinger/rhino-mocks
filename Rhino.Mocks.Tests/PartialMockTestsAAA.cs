@@ -50,27 +50,35 @@ namespace Rhino.Mocks.Tests
             Assert.Equal(1, abs.Increment());
             Assert.Equal(6, abs.Add(5));
             Assert.Equal(6, abs.Count);
+
             abs.VerifyAllExpectations();
         }
 
         [Fact]
         public void CanMockVirtualMethods()
         {
-            abs.Expect(x => x.Increment()).Return(5);
-            abs.Expect(x => x.Add(2)).Return(3);
+            abs.Expect(x => x.Increment())
+                .Return(5);
+
+            abs.Expect(x => x.Add(2))
+                .Return(3);
 
             Assert.Equal(5, abs.Increment());
             Assert.Equal(3, abs.Add(2));
             Assert.Equal(0, abs.Count);
+
             abs.VerifyAllExpectations();
         }
 
         [Fact]
         public void CanMockAbstractMethods()
         {
-            abs.Expect(x => x.Decrement()).Return(5);
+            abs.Expect(x => x.Decrement())
+                .Return(5);
+
             Assert.Equal(5, abs.Decrement());
             Assert.Equal(0, abs.Count);
+
             abs.VerifyAllExpectations();
         }
 
@@ -79,23 +87,28 @@ namespace Rhino.Mocks.Tests
         {
             Assert.Throws<InvalidOperationException>(
                 "Can't create a partial mock from an interface",
-                () => Repository.Mock<IDemo>());
+                () => Repository.Partial<IDemo>());
         }
 
         [Fact]
         public void CallAnAbstractMethodWithoutSettingExpectation()
         {
+            abs.Decrement();
+
             Assert.Throws<ExpectationViolationException>(
                 "AbstractClass.Decrement(); Expected #0, Actual #1.",
-                () => abs.Decrement());
+                () => abs.VerifyExpectations(true));
         }
 
         [Fact]
         public void CanMockWithCtorParams()
         {
             var withParameters = Repository.Partial<WithParameters>(1);
-            withParameters.Expect(x => x.Int).Return(4);
+            withParameters.Expect(x => x.Int)
+                .Return(4);
+
             Assert.Equal(4, withParameters.Int);
+
             withParameters.VerifyAllExpectations();
         }
     }

@@ -185,7 +185,7 @@ namespace Rhino.Mocks
             if (remoteType.IsAssignableFrom(type))
             {
                 if (arguments == null || arguments.Length == 0)
-                    return repository.CreateMockRemoted(type) as T;
+                    return (T)repository.CreateMockRemoted(type);
             }
 
             return repository.CreateMockObject<T>(extraTypes, arguments);

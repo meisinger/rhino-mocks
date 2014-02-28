@@ -40,8 +40,8 @@ namespace Rhino.Mocks.Tests
 
 		public MockWithRefAndOutParams()
 		{
-			target = (IRefAndOut)MockRepository.GenerateStrictMock(typeof(IRefAndOut));
-			remotingTarget = MockRepository.GenerateStrictMock<RemotingProxyWithOutRef>();
+			target = Repository.Mock<IRefAndOut>();
+			remotingTarget = Repository.Mock<RemotingProxyWithOutRef>();
 		}
 
 		[Fact]
@@ -50,7 +50,7 @@ namespace Rhino.Mocks.Tests
 			string s = "";
 
             target.Expect(x => x.RefStr(ref s))
-                .Do(new RefStrDel(SayHello));
+                .DoInstead(new RefStrDel(SayHello));
 
             target.RefStr(ref s);
 
@@ -63,7 +63,7 @@ namespace Rhino.Mocks.Tests
 			string s = "";
 
             target.Expect(x => x.OutStr(out s))
-                .Do(new OutStrDel(OutSayHello));
+                .DoInstead(new OutStrDel(OutSayHello));
 
 			target.OutStr(out s);
 
@@ -76,7 +76,7 @@ namespace Rhino.Mocks.Tests
 			int i = 0;
 
             target.Expect(x => x.OutInt(out i))
-                .Do(new OutIntDel(OutFive));
+                .DoInstead(new OutIntDel(OutFive));
 
 			target.OutInt(out i);
 
@@ -89,7 +89,7 @@ namespace Rhino.Mocks.Tests
 			int i = 0;
 
             target.Expect(x => x.RefInt(ref i))
-                .Do(new RefIntDel(RefFive));
+                .DoInstead(new RefIntDel(RefFive));
 
 			target.RefInt(ref i);
 
@@ -102,7 +102,7 @@ namespace Rhino.Mocks.Tests
 			string s = "";
 
             remotingTarget.Expect(x => x.RefStr(ref s))
-                .Do(new RefStrDel(SayHello));
+                .DoInstead(new RefStrDel(SayHello));
 
 			remotingTarget.RefStr(ref s);
 
@@ -115,7 +115,7 @@ namespace Rhino.Mocks.Tests
 			string s = "";
 
             remotingTarget.Expect(x => x.OutStr(out s))
-                .Do(new OutStrDel(OutSayHello));
+                .DoInstead(new OutStrDel(OutSayHello));
 
 			remotingTarget.OutStr(out s);
 
@@ -128,7 +128,7 @@ namespace Rhino.Mocks.Tests
 			int i = 0;
 
             remotingTarget.Expect(x => x.OutInt(out i))
-                .Do(new OutIntDel(OutFive));
+                .DoInstead(new OutIntDel(OutFive));
 
 			remotingTarget.OutInt(out i);
 
@@ -141,7 +141,7 @@ namespace Rhino.Mocks.Tests
 			int i = 0;
 
             remotingTarget.Expect(x => x.RefInt(ref i))
-                .Do(new RefIntDel(RefFive));
+                .DoInstead(new RefIntDel(RefFive));
 
 			remotingTarget.RefInt(ref i);
 

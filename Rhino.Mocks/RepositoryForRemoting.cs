@@ -18,7 +18,8 @@ namespace Rhino.Mocks
                 throw new InvalidCastException(message);
             }
 
-            return new RemotingProxy(type, interceptor, instance);
+            return new RemotingProxy(type, interceptor, instance)
+                .GetTransparentProxy();
         }
 
         internal static bool IsRemotingProxy(object obj)

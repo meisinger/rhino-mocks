@@ -565,31 +565,6 @@ namespace Rhino.Mocks.Tests.Core
             mock.VerifyExpectations();
         }
 
-        //[Fact]
-        //public void Can_Create_Expectation_On_A_ReadOnly_Property()
-        //{
-        //    var mock = Repository.Mock<IScenarioArgument>();
-
-        //    mock.ExpectProperty(x => x.MessageOut)
-        //        .Return("out");
-
-        //    var value = mock.MessageOut;
-        //    Assert.Equal("out", value);
-
-        //    mock.VerifyExpectations();
-        //}
-
-        //[Fact]
-        //public void Can_Create_Expectation_On_A_WriteOnly_Property()
-        //{
-        //    var mock = Repository.Mock<IScenarioArgument>();
-
-        //    mock.ExpectProperty(x => x.MessageIn = "in");
-
-        //    mock.MessageIn = "in";
-        //    mock.VerifyExpectations();
-        //}
-
         [Fact]
         public void Setting_A_Return_Value_For_Write_Only_Property_Throws_Exception()
         {

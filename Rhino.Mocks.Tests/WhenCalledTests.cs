@@ -11,7 +11,7 @@ namespace Rhino.Mocks.Tests
 		{
 			// minor hack to get this to work reliably, we reset the arg manager,
 			// and restore on in the MockRepository ctor, so we do it this way
-			new MockRepository();
+			new Repository();
 			Assert.Equal(Arg.Is(1), Arg<int>.Is.Equal(1));
 		}
 
@@ -19,10 +19,12 @@ namespace Rhino.Mocks.Tests
 		public void Can_use_when_called_to_exceute_code_when_exceptation_is_matched_without_stupid_delegate_sig_overhead()
 		{
 			var wasCalled = false;
-			var stub = MockRepository.GenerateStub<IDemo>();
+			var stub = Repository.Mock<IDemo>();
+
 			stub.Stub(x => x.StringArgString(Arg.Is("")))
 				.Return("blah")
 				.WhenCalled(delegate { wasCalled = true; });
+
 			Assert.Equal("blah", stub.StringArgString(""));
 			Assert.True(wasCalled);
 		}
@@ -30,23 +32,25 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void Can_modify_return_value()
 		{
-			var stub = MockRepository.GenerateStub<IDemo>();
+			var stub = Repository.Mock<IDemo>();
 			stub.Stub(x => x.StringArgString(Arg.Is("")))
 				.Return("blah")
-				.WhenCalled(invocation => invocation.ReturnValue = "arg");
+				.Intercept(x => x.ReturnValue = "arg");
+
 			Assert.Equal("arg", stub.StringArgString(""));
 		}
 
 		[Fact]
 		public void Can_inspect_method_arguments()
 		{
-			var stub = MockRepository.GenerateStub<IDemo>();
+			var stub = Repository.Mock<IDemo>();
+
 			stub.Stub(x => x.StringArgString(null))
 				.IgnoreArguments()
 				.Return("blah")
-				.WhenCalled(invocation => Assert.Equal("foo", invocation.Arguments[0]));
+                .Intercept(x => Assert.Equal("foo", x.Arguments[0]));
+
 			Assert.Equal("blah", stub.StringArgString("foo"));
 		}
-
 	}
 }

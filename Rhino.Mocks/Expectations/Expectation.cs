@@ -94,6 +94,15 @@ namespace Rhino.Mocks.Expectations
         }
 
         /// <summary>
+        /// Indicates whether or not a delegate has been set to
+        /// intercept the invocation
+        /// </summary>
+        public bool HasDelegateToIntercept
+        {
+            get { return (DelegateToIntercept != null); }
+        }
+
+        /// <summary>
         /// Indicates whether or not a delegate has been set against
         /// this expectation
         /// </summary>
@@ -125,7 +134,12 @@ namespace Rhino.Mocks.Expectations
         {
             get { return typeof(void); }
         }
-        
+
+        /// <summary>
+        /// Delegate to intercept the invocation
+        /// </summary>
+        public Action<MethodInvocation> DelegateToIntercept { get; set; }
+
         /// <summary>
         /// Delegate to invoke when expectation has been called
         /// </summary>

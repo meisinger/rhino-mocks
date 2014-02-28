@@ -61,7 +61,9 @@ namespace Rhino.Mocks.Remoting
             this.message = message;
             this.proxy = proxy;
 
-            arguments = (object[])message.Properties["__Arg"];
+            arguments = message.Args;
+            if (arguments == null)
+                arguments = new object[0];
         }
 
         public object GetArgumentValue(int index)

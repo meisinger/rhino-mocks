@@ -14,7 +14,7 @@ namespace Rhino.Mocks.Expectations
     public class ExpectMethod : Expectation, IMethodOptions
     {
         private readonly IRepeatOptions repeatOptions;
-
+        
         internal override ExpectationType Type
         {
             get { return ExpectationType.Method; }
@@ -162,6 +162,17 @@ namespace Rhino.Mocks.Expectations
         }
 
         /// <summary>
+        ///
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        IMethodOptions IMethodOptions.DoInstead(Delegate action)
+        {
+            DelegateToInvoke = action;
+            return this;
+        }
+
+        /// <summary>
         /// Ignores all arguments removing any existing argument constraints
         /// </summary>
         /// <returns>Fluid Interface</returns>
@@ -172,6 +183,17 @@ namespace Rhino.Mocks.Expectations
                 constraints[index] = Is.Anything();
 
             Arguments = constraints;
+            return this;
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        IMethodOptions IMethodOptions.Intercept(Action<MethodInvocation> action)
+        {
+            DelegateToIntercept = action;
             return this;
         }
 
@@ -224,7 +246,7 @@ namespace Rhino.Mocks.Expectations
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        IMethodOptions IMethodOptions.WhenCalled(Action<object[]> action)
+        IMethodOptions IMethodOptions.WhenCalled(Action action)
         {
             DelegateToInvoke = action;
             return this;
@@ -440,6 +462,17 @@ namespace Rhino.Mocks.Expectations
         }
 
         /// <summary>
+        ///
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        IMethodOptions<T> IMethodOptions<T>.DoInstead(Delegate action)
+        {
+            DelegateToInvoke = action;
+            return this;
+        }
+
+        /// <summary>
         /// Ignores all arguments removing any existing argument constraints
         /// </summary>
         /// <returns>Fluid Interface</returns>
@@ -450,6 +483,17 @@ namespace Rhino.Mocks.Expectations
                 constraints[index] = Is.Anything();
 
             Arguments = constraints;
+            return this;
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        IMethodOptions<T> IMethodOptions<T>.Intercept(Action<MethodInvocation> action)
+        {
+            DelegateToIntercept = action;
             return this;
         }
 
@@ -524,7 +568,7 @@ namespace Rhino.Mocks.Expectations
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        IMethodOptions<T> IMethodOptions<T>.WhenCalled(Action<object[]> action)
+        IMethodOptions<T> IMethodOptions<T>.WhenCalled(Action action)
         {
             DelegateToInvoke = action;
             return this;

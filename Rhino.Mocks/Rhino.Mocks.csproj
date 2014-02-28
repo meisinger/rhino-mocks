@@ -132,6 +132,7 @@
     <Compile Include="Loggers\TextWriterLogger.cs" />
     <Compile Include="Loggers\TraceWriterLogger.cs" />
     <Compile Include="Loggers\TraceWriterWithStackTraceLogger.cs" />
+    <Compile Include="MethodInvocation.cs" />
     <Compile Include="MockInstance.cs" />
     <Compile Include="MockInstanceEquality.cs" />
     <Compile Include="Remoting\IRemotingProxyOperation.cs" />
