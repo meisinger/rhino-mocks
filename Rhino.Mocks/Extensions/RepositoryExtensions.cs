@@ -482,7 +482,7 @@ namespace Rhino.Mocks
 
                     var methodName = MethodFormatter.ToString(invocation, actual.Method, actual.Arguments);
                     buffer.Append(methodName)
-                        .Append(" Expected # 0, Actual # 1.")
+                        .Append(" Expected #0, Actual #1.")
                         .AppendLine();
                 }
             }
@@ -493,7 +493,7 @@ namespace Rhino.Mocks
                 var methodName = item.GetDisplayName(invocation);
 
                 buffer.Append(methodName)
-                    .AppendFormat(" Expected # {0}, Actual # {1}.", item.ExpectedCount, item.ActualCount)
+                    .AppendFormat(" Expected #{0}, Actual #{1}.", item.ExpectedCount, item.ActualCount)
                     .AppendLine();
             }
 

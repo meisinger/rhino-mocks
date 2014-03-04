@@ -70,7 +70,7 @@ namespace Rhino.Mocks
             if (actuals.Length == 0)
                 return new Actuals[0];
 
-            var assertion = new ExpectMethod<T>();
+            var assertion = new ExpectMethod();
             container.MarkForAssertion(assertion);
 
             try
@@ -118,7 +118,7 @@ namespace Rhino.Mocks
             if (actuals.Length == 0)
                 return new Actuals[0];
 
-            var assertion = new ExpectMethod();
+            var assertion = new ExpectMethod<TResult>();
             container.MarkForAssertion(assertion);
 
             try
@@ -169,6 +169,58 @@ namespace Rhino.Mocks
 
         /// <summary>
         /// Generates a mock for the given type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TInterface"></typeparam>
+        /// <returns></returns>
+        public static T Mock<T, TInterface>()
+            where T : class
+        {
+            return MockMulti<T>(new Type[] { typeof(TInterface) }, new object[0]);
+        }
+
+        /// <summary>
+        /// Generates a mock for the given type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TInterface"></typeparam>
+        /// <param name="arguments"></param>
+        /// <returns></returns>
+        public static T Mock<T, TInterface>(params object[] arguments)
+            where T : class
+        {
+            return MockMulti<T>(new Type[] { typeof(TInterface) }, arguments);
+        }
+
+        /// <summary>
+        /// Generates a mock for the given type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TInterface1"></typeparam>
+        /// <typeparam name="TInterface2"></typeparam>
+        /// <returns></returns>
+        public static T Mock<T, TInterface1, TInterface2>()
+            where T : class
+        {
+            return MockMulti<T>(new Type[] { typeof(TInterface1), typeof(TInterface2) }, new object[0]);
+        }
+
+        /// <summary>
+        /// Generates a mock for the given type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TInterface1"></typeparam>
+        /// <typeparam name="TInterface2"></typeparam>
+        /// <param name="arguments"></param>
+        /// <returns></returns>
+        public static T Mock<T, TInterface1, TInterface2>(params object[] arguments)
+            where T : class
+        {
+            return MockMulti<T>(new Type[] { typeof(TInterface1), typeof(TInterface2) }, arguments);
+        }
+
+        /// <summary>
+        /// Generates a mock for the given type
         /// with additional types to be included
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -212,6 +264,58 @@ namespace Rhino.Mocks
             where T : class
         {
             return PartialMulti<T>(new Type[0], arguments);
+        }
+
+        /// <summary>
+        /// Generates a partial mock of the given type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TInterface"></typeparam>
+        /// <returns></returns>
+        public static T Partial<T, TInterface>()
+            where T : class
+        {
+            return PartialMulti<T>(new Type[] { typeof(TInterface) }, new object[0]);
+        }
+
+        /// <summary>
+        /// Generates a partial mock of the given type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TInterface"></typeparam>
+        /// <param name="arguments"></param>
+        /// <returns></returns>
+        public static T Partial<T, TInterface>(params object[] arguments)
+            where T : class
+        {
+            return PartialMulti<T>(new Type[] { typeof(TInterface) }, arguments);
+        }
+
+        /// <summary>
+        /// Generates a partial mock of the given type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TInterface1"></typeparam>
+        /// <typeparam name="TInterface2"></typeparam>
+        /// <returns></returns>
+        public static T Partial<T, TInterface1, TInterface2>()
+            where T : class
+        {
+            return PartialMulti<T>(new Type[] { typeof(TInterface1), typeof(TInterface2) }, new object[0]);
+        }
+
+        /// <summary>
+        /// Generates a partial mock of the given type
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TInterface1"></typeparam>
+        /// <typeparam name="TInterface2"></typeparam>
+        /// <param name="arguments"></param>
+        /// <returns></returns>
+        public static T Partial<T, TInterface1, TInterface2>(params object[] arguments)
+            where T : class
+        {
+            return PartialMulti<T>(new Type[] { typeof(TInterface1), typeof(TInterface2) }, arguments);
         }
 
         /// <summary>

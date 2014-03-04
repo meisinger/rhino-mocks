@@ -230,30 +230,49 @@ namespace Rhino.Mocks
 
                 var callback = expectation.DelegateToInvoke;
                 var callbackParameters = callback.Method.GetParameters();
-
-                if (callbackParameters.Length == 0)
-                    callback.DynamicInvoke(new object[0]);
-                else
+                
+                try
                 {
-                    var invokeCallback = true;
-                    var invokeArguments = new object[callbackParameters.Length];
-                    for (int index = 0; index < callbackParameters.Length; index++)
+                    if (callbackParameters.Length == 0)
                     {
-                        var parameter = callbackParameters[index];
-                        var parameterType = parameter.ParameterType;
+                        var value = callback.DynamicInvoke(new object[0]);
 
-                        var argument = methodParameters[index];
-                        var argumentType = argument.ParameterType;
-
-                        if (!parameterType.IsAssignableFrom(argumentType))
+                        if (callback.Method.ReturnType != (typeof(void)) &&
+                            expectation.DelegateReturnsValue)
+                            expectation.SetReturnValue(value);
+                    }
+                    else
+                    {
+                        var invokeCallback = true;
+                        var invokeArguments = new object[callbackParameters.Length];
+                        for (int index = 0; index < callbackParameters.Length; index++)
                         {
-                            invokeCallback = false;
-                            break;
+                            var parameter = callbackParameters[index];
+                            var parameterType = parameter.ParameterType;
+
+                            var argument = methodParameters[index];
+                            var argumentType = argument.ParameterType;
+
+                            if (!parameterType.IsAssignableFrom(argumentType))
+                            {
+                                invokeCallback = false;
+                                break;
+                            }
+                        }
+
+                        if (invokeCallback)
+                        {
+                            var value = callback.DynamicInvoke(arguments);
+
+                            if (callback.Method.ReturnType != (typeof(void)) &&
+                                expectation.DelegateReturnsValue)
+                                expectation.SetReturnValue(value);
                         }
                     }
-
-                    if (invokeCallback)
-                        callback.DynamicInvoke(arguments);
+                }
+                catch (TargetInvocationException ex)
+                {
+                    throw ex.InnerException;
                 }
             }
 
@@ -392,9 +411,6 @@ namespace Rhino.Mocks
 
                 if (methodName.StartsWith("get_", StringComparison.Ordinal))
                     return expectation.ReturnValue;
-
-                //if (methodName.StartsWith("set_", StringComparison.Ordinal))
-                //    expectedProperties[propertyKey] = expectation;
 
                 if (expectation.ForceProceed)
                 {

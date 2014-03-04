@@ -44,14 +44,14 @@ namespace Rhino.Mocks.Tests
 
 		public DoHanlderTests()
         {
-            demo = (IDemo)MockRepository.GenerateStrictMock(typeof(IDemo));
+            demo = Repository.Mock<IDemo>();
         }
 
         [Fact]
         public void CanModifyReturnValue()
         {
             demo.Expect(x => x.EnumNoArgs())
-                .Do(new GetDay(GetSunday));
+                .DoInstead(new GetDay(GetSunday));
 
             Assert.Equal(DayOfWeek.Sunday, demo.EnumNoArgs());
 
@@ -61,11 +61,11 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void SayHelloWorld()
         {
-            INameSource nameSource = (INameSource)MockRepository.GenerateStrictMock(typeof(INameSource));
+            INameSource nameSource = Repository.Mock<INameSource>();
 
             nameSource.Expect(x => x.CreateName(null, null))
                 .IgnoreArguments()
-                .Do(new NameSourceDelegate(Formal));
+                .DoInstead(new NameSourceDelegate(Formal));
             
             string expected = "Hi, my name is Ayende Rahien";
             string actual = new Speaker("Ayende", "Rahien", nameSource)
@@ -78,7 +78,7 @@ namespace Rhino.Mocks.Tests
         public void CanThrow()
         {
             demo.Expect(x => x.EnumNoArgs())
-                .Do(new GetDay(ThrowDay));
+                .DoInstead(new GetDay(ThrowDay));
 
             try
             {
@@ -98,7 +98,7 @@ namespace Rhino.Mocks.Tests
         	Assert.Throws<InvalidOperationException>(
         		"The delegate return value should be assignable from System.Int32",
         		() => demo.Expect(x => x.ReturnIntNoArgs())
-                    .Do(new GetDay(GetSunday)));
+                    .DoInstead(new GetDay(GetSunday)));
         }
 
         [Fact]
@@ -107,7 +107,7 @@ namespace Rhino.Mocks.Tests
         	Assert.Throws<InvalidOperationException>(
                 "Callback arguments didn't match the method arguments",
                 () => demo.Expect(x => x.ReturnIntNoArgs())
-                    .Do(new IntDelegate(IntMethod)));
+                    .DoInstead(new IntDelegate(IntMethod)));
         }
 
         [Fact]
@@ -117,7 +117,7 @@ namespace Rhino.Mocks.Tests
                 "Can set only a single return value or exception to throw or delegate to execute on the same method call.",
                 () => demo.Expect(x => x.EnumNoArgs())
                     .Return(DayOfWeek.Saturday)
-                    .Do(new GetDay(ThrowDay)));
+                    .DoInstead(new GetDay(ThrowDay)));
         }
 
         private DayOfWeek GetSunday()

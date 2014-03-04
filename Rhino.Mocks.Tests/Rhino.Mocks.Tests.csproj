@@ -139,6 +139,7 @@
     <Compile Include="Constraints\StringConstraintsTests.cs" />
     <Compile Include="Core\RepositoryScenarios.cs" />
     <Compile Include="CustomAttributesOnMocks.cs" />
+    <Compile Include="DoHanlderTests.cs" />
     <Compile Include="DoNotExpectTests.cs" />
     <Compile Include="DotNet2Tests.cs" />
     <Compile Include="DotNet35Tests.cs" />
@@ -160,12 +161,14 @@
     <Compile Include="MockRepositoryTests.cs" />
     <Compile Include="MockWithRefAndOutParams.cs" />
     <Compile Include="MultiMocks.cs" />
+    <Compile Include="MultiMocksWithAAA.cs" />
     <Compile Include="PartialMockTests.cs" />
     <Compile Include="PartialMockTestsAAA.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertySetterFixture.cs" />
     <Compile Include="RecursiveMocks.cs" />
     <Compile Include="RefOutParameters.cs" />
+    <Compile Include="RemotingMockTests.cs" />
     <Compile Include="Remoting\ContextSwitcher.cs" />
     <Compile Include="Remoting\ContextSwitchTests.cs" />
     <Compile Include="Remoting\IDemo.cs" />

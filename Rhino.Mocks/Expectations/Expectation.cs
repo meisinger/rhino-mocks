@@ -146,6 +146,12 @@ namespace Rhino.Mocks.Expectations
         public Delegate DelegateToInvoke { get; set; }
 
         /// <summary>
+        /// Indicates the given delegate should replace
+        /// the return value
+        /// </summary>
+        public bool DelegateReturnsValue { get; set; }
+
+        /// <summary>
         /// Expectation to throw if method is called
         /// </summary>
         public Exception ExceptionToThrow { get; set; }
@@ -161,8 +167,7 @@ namespace Rhino.Mocks.Expectations
         public object[] ReturnArguments { get; set; }
 
         /// <summary>
-        /// Indicates whether or not an
-        /// exception should be thrown
+        /// Indicates whether or not an exception should be thrown
         /// </summary>
         public bool ThrowsException { get; set; }
 

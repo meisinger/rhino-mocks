@@ -168,6 +168,15 @@ namespace Rhino.Mocks.Expectations
         /// <returns></returns>
         IMethodOptions IMethodOptions.DoInstead(Delegate action)
         {
+            var targetMethod = action.Method;
+            var targetParameters = targetMethod.GetParameters();
+            
+            if (targetParameters.Length != Arguments.Length)
+            {
+                var message = "The delegate arguments don't match the method arguments";
+                throw new InvalidOperationException(message);
+            }
+
             DelegateToInvoke = action;
             return this;
         }
@@ -222,6 +231,10 @@ namespace Rhino.Mocks.Expectations
         /// <returns>Fluid Interface</returns>
         IMethodOptions IMethodOptions.Throws<TException>()
         {
+            if (ThrowsException)
+                throw new InvalidOperationException(
+                    "Can set only a single exception to throw on the same method call.");
+            
             ThrowsException = true;
             ExceptionToThrow = new TException();
             return this;
@@ -236,6 +249,10 @@ namespace Rhino.Mocks.Expectations
         /// <returns>Fluid Interface</returns>
         IMethodOptions IMethodOptions.Throws<TException>(TException exception)
         {
+            if (ThrowsException)
+                throw new InvalidOperationException(
+                    "Can set only a single exception to throw on the same method call.");
+
             ThrowsException = true;
             ExceptionToThrow = exception;
             return this;
@@ -468,7 +485,28 @@ namespace Rhino.Mocks.Expectations
         /// <returns></returns>
         IMethodOptions<T> IMethodOptions<T>.DoInstead(Delegate action)
         {
+            var targetMethod = action.Method;
+            var targetParameters = targetMethod.GetParameters();
+            var targetReturnType = targetMethod.ReturnType;
+
+            if (targetParameters.Length != Arguments.Length)
+            {
+                var message = "The delegate arguments don't match the method arguments";
+                throw new InvalidOperationException(message);
+            }
+
+            if (!ReturnType.IsAssignableFrom(targetReturnType))
+            {
+                var message = string.Format("The delegate return value should be assignable from {0}", ReturnType.Name);
+                throw new InvalidOperationException(message);
+            }
+
+            if (HasReturnValue || ThrowsException || (HasDelegateToInvoke && DelegateReturnsValue))
+                throw new InvalidOperationException(
+                    "Can set only a single return value or exception to throw or delegate to execute on the same method call.");
+
             DelegateToInvoke = action;
+            DelegateReturnsValue = true;
             return this;
         }
 
@@ -521,6 +559,10 @@ namespace Rhino.Mocks.Expectations
         /// <returns>Fluid Interface</returns>
         IMethodOptions<T> IMethodOptions<T>.Return(T value)
         {
+            if (HasReturnValue || ThrowsException || (HasDelegateToInvoke && DelegateReturnsValue))
+                throw new InvalidOperationException(
+                    "Can set only a single return value or exception to throw or delegate to execute on the same method call.");
+            
             SetReturnValue(value);
             return this;
         }
@@ -532,6 +574,10 @@ namespace Rhino.Mocks.Expectations
         /// <returns>Fluid Interface</returns>
         IMethodOptions<T> IMethodOptions<T>.Returns(Func<T> func)
         {
+            if (HasReturnValue || ThrowsException || (HasDelegateToInvoke && DelegateReturnsValue))
+                throw new InvalidOperationException(
+                    "Can set only a single return value or exception to throw or delegate to execute on the same method call.");
+
             SetReturnValue(func());
             return this;
         }
@@ -544,6 +590,10 @@ namespace Rhino.Mocks.Expectations
         /// <returns>Fluid Interface</returns>
         IMethodOptions<T> IMethodOptions<T>.Throws<TException>()
         {
+            if (HasReturnValue || ThrowsException || (HasDelegateToInvoke && DelegateReturnsValue))
+                throw new InvalidOperationException(
+                    "Can set only a single return value or exception to throw or delegate to execute on the same method call.");
+
             ThrowsException = true;
             ExceptionToThrow = new TException();
             return this;
@@ -558,6 +608,10 @@ namespace Rhino.Mocks.Expectations
         /// <returns>Fluid Interface</returns>
         IMethodOptions<T> IMethodOptions<T>.Throws<TException>(TException exception)
         {
+            if (HasReturnValue || ThrowsException || (HasDelegateToInvoke && DelegateReturnsValue))
+                throw new InvalidOperationException(
+                    "Can set only a single return value or exception to throw or delegate to execute on the same method call.");
+
             ThrowsException = true;
             ExceptionToThrow = exception;
             return this;
