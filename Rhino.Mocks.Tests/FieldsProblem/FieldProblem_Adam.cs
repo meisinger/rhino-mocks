@@ -15,9 +15,10 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void ShouldRaiseEventWhenEverPropIsSet()
         {
-            var foo = MockRepository.GenerateMock<IFoo>();
+            var foo = Repository.Mock<IFoo>();
+
             foo.Stub(x => x.Str = Arg<string>.Is.Anything)
-                .WhenCalled(x => foo.Raise(y => y.Event += null, foo, EventArgs.Empty));
+                .WhenCalled(() => foo.Raise(y => y.Event += null, foo, EventArgs.Empty));
 
             int calls = 0;
             foo.Event += delegate

@@ -26,7 +26,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void MockInterfaceWithGenericMethodWithConstraints()
 		{
-			ITestInterface mockObj = MockRepository.GenerateStrictMockWithRemoting<ITestInterface>();
+			ITestInterface mockObj = Repository.MockWithRemoting<ITestInterface>();
 
             mockObj.Expect(x => x.AddService<IDisposable, SqlConnection>())
                 .Return(mockObj);
@@ -38,7 +38,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void MockInterfaceWithGenericMethodWithConstraints_WhenNotValid()
 		{
-			ITestInterface mockObj = MockRepository.GenerateStrictMockWithRemoting<ITestInterface>();
+            ITestInterface mockObj = Repository.MockWithRemoting<ITestInterface>();
 
             mockObj.Expect(x => x.AddService<IDisposable, SqlConnection>())
                 .Return(mockObj);
@@ -51,7 +51,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void MockInterfaceWithGenericMethodWithConstraints_WhenNotValid_UsingDynamicMock()
 		{
-			ITestInterface mockObj = MockRepository.GenerateDynamicMockWithRemoting<ITestInterface>();
+            ITestInterface mockObj = Repository.MockWithRemoting<ITestInterface>();
 
             mockObj.Expect(x => x.AddService<IDisposable, SqlConnection>())
                 .Return(mockObj);
@@ -64,7 +64,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void MockInterfaceWithGenericMethodWithConstraints_UsingDynamicMock()
 		{
-			ITestInterface mockObj = MockRepository.GenerateDynamicMockWithRemoting<ITestInterface>();
+            ITestInterface mockObj = Repository.MockWithRemoting<ITestInterface>();
 			
 			mockObj.AddService<IDisposable, SqlConnection>();
             mockObj.VerifyAllExpectations();

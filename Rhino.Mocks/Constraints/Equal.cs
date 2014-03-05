@@ -40,21 +40,7 @@ namespace Rhino.Mocks.Constraints
         /// <returns></returns>
         public override bool Eval(object arg)
         {
-            if (arg == null)
-                return (arg1 == null);
-
-            if (arg1 == null)
-                return false;
-
-            var expected = arg1 as IMockInstance;
-            var actual = arg as IMockInstance;
-            if (expected != null && actual != null)
-                return MockInstanceEquality.Instance.AreEqual(expected, actual);
-
-            if (arg1 is ICollection)
-                return CollectionsAreEqual(arg1 as ICollection, arg as ICollection);
-
-            return arg1.Equals(arg);
+            return CollectionsAreEqual(new[] { arg1 }, new[] { arg });
         }
 
         /// <summary>
@@ -89,19 +75,32 @@ namespace Rhino.Mocks.Constraints
                     return false;
                 }
 
+                if (SafeEquals(expectedItem, actualItem))
+                    continue;
+
                 if (expectedItem is ICollection)
                 {
-                    if (CollectionsAreEqual(expectedItem as ICollection, actualItem as ICollection))
-                        continue;
+                    if (!CollectionsAreEqual(expectedItem as ICollection, actualItem as ICollection))
+                        return false;
 
-                    return false;
+                    continue;
                 }
 
-                if (!expectedItem.Equals(actualItem))
-                    return false;
+                return false;
             }
 
             return true;
+        }
+
+        private static bool SafeEquals(object expected, object actual)
+        {
+            var expcetedMock = expected as IMockInstance;
+            var actualMock = actual as IMockInstance;
+
+            if (expcetedMock == null && actualMock == null)
+                return expected.Equals(actual);
+
+            return MockInstanceEquality.Instance.AreEqual(expected, actual);
         }
     }
 }

@@ -456,23 +456,38 @@ namespace Rhino.Mocks
 
             if (method.IsSpecialName)
             {
-                RhinoMocks.Logger.LogUnexpectedMethodCall(invocation,
-                    "Property: Dynamic handling of property.");
-
-                var propertyKey = GeneratePropertyKey(method, arguments);
-                if (expectedProperties.ContainsKey(propertyKey))
-                    expectedProperties.Remove(propertyKey);
-
                 var methodName = method.Name;
-                if (methodName.StartsWith("get_", StringComparison.Ordinal))
+                if (methodName.StartsWith("get_", StringComparison.Ordinal) ||
+                    methodName.StartsWith("set_", StringComparison.Ordinal))
                 {
-                    if (dynamicProperties.ContainsKey(propertyKey))
-                        return dynamicProperties[propertyKey];
+                    RhinoMocks.Logger.LogUnexpectedMethodCall(invocation,
+                        "Property: Dynamic handling of property.");
+
+                    var propertyKey = GeneratePropertyKey(method, arguments);
+                    if (expectedProperties.ContainsKey(propertyKey))
+                        expectedProperties.Remove(propertyKey);
+
+
+                    if (methodName.StartsWith("get_", StringComparison.Ordinal))
+                    {
+                        if (dynamicProperties.ContainsKey(propertyKey))
+                            return dynamicProperties[propertyKey];
+                    }
+                    else if (methodName.StartsWith("set_", StringComparison.Ordinal))
+                    {
+                        dynamicProperties[propertyKey] = arguments.Last();
+                        return null;
+                    }
                 }
-                else if (methodName.StartsWith("set_", StringComparison.Ordinal))
+
+                if (methodName.StartsWith("add_", StringComparison.Ordinal) ||
+                    methodName.StartsWith("remove_", StringComparison.Ordinal))
                 {
-                    dynamicProperties[propertyKey] = arguments.Last();
-                    return null;
+                    RhinoMocks.Logger.LogUnexpectedMethodCall(invocation,
+                        "Event: Dynamic handling of event.");
+
+                    var subscription = (Delegate)arguments[0];
+                    HandleEventSubscription(method, subscription);
                 }
             }
 

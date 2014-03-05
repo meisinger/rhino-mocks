@@ -49,47 +49,44 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void TestExpectCall()
 		{
-			ICache<string, int> mockCache = MockRepository.GenerateStrictMock<ICache<string, int>>();
+			ICache<string, int> mockCache = Repository.Mock<ICache<string, int>>();
 
             mockCache.Expect(x => x.GetValue("a"))
-                .Do((Func<string, int>)delegate
+                .DoInstead((Func<string, int>)delegate
                 {
                     return 1;
                 });
 
 			int i = mockCache.GetValue("a");
-			Assert.Equal(1,i );
+			Assert.Equal(1, i);
 
-            mockCache.VerifyAllExpectations();
+            mockCache.VerifyExpectations(true);
 		}
 
 		[Fact]
 		public void TestLastCall()
 		{
-            ICache<string, int> mockCache = MockRepository.GenerateStrictMock<ICache<string, int>>();
+            ICache<string, int> mockCache = Repository.Mock<ICache<string, int>>();
 
             mockCache.Expect(x => x.Add("a", 1))
-                .Do((Proc<string, int>)delegate
-                {
-                });
+                .DoInstead((Proc<string, int>)delegate { });
 
 			mockCache.Add("a", 1);
-            mockCache.VerifyAllExpectations();
+            mockCache.VerifyExpectations(true);
 		}
 
 		[Fact]
 		public void TestExpectCallWithNonGenericDelegate()
 		{
-			ICache<string, int> mockCache = MockRepository.GenerateStrictMock<ICache<string, int>>();
+			ICache<string, int> mockCache = Repository.Mock<ICache<string, int>>();
 
-            IMethodOptions<int> opts = mockCache.Expect(x => x.GetValue("a"));
-			opts.Do(new StringInt(GetValue));
+            mockCache.Expect(x => x.GetValue("a"))
+                .DoInstead(new StringInt(GetValue));
 			
-
 			int i = mockCache.GetValue("a");
             Assert.Equal(2, i);
 
-            mockCache.VerifyAllExpectations();
+            mockCache.VerifyExpectations(true);
 		}
 
 		private int GetValue(string s)

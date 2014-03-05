@@ -514,7 +514,10 @@ namespace Rhino.Mocks
                 var instanceDelegate = (Delegate)instance;
                 instance = instanceDelegate.Target;
             }
-            
+
+            if (instance is IMockExpectationContainer)
+                return instance as IMockExpectationContainer;
+
             if (RepositoryForRemoting.IsRemotingProxy(instance))
             {
                 var proxiedInstance = RepositoryForRemoting
@@ -523,7 +526,7 @@ namespace Rhino.Mocks
                 return proxiedInstance as IMockExpectationContainer;
             }
 
-            return instance as IMockExpectationContainer;
+            return null;
         }
     }
 }

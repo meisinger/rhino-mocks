@@ -39,19 +39,19 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void MockWebUIPageClass()
         {
-            Page page = (Page)MockRepository.GenerateStrictMock(typeof(Page));
+            Page page = Repository.Mock<Page>();
 
             page.Expect(x => x.Validate());
 
             page.Validate();
-            page.VerifyAllExpectations();
+            page.VerifyExpectations(true);
         }
 
         [Fact]
         public void MockClassWithVirtualMethodCallFromConstructor()
         {
-            ClassWithVirtualMethodCallFromConstructor cwvmcfc = (ClassWithVirtualMethodCallFromConstructor)
-                MockRepository.GenerateStrictMock(typeof(ClassWithVirtualMethodCallFromConstructor));
+            ClassWithVirtualMethodCallFromConstructor cwvmcfc = 
+                Repository.Mock<ClassWithVirtualMethodCallFromConstructor>();
 
             Assert.NotNull(cwvmcfc);
 
@@ -59,7 +59,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
                 .Return("Success");
 
             Assert.Equal("Success", cwvmcfc.ToString());
-            cwvmcfc.VerifyAllExpectations();
+            cwvmcfc.VerifyExpectations(true);
         }
 
         public class ClassWithVirtualMethodCallFromConstructor

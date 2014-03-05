@@ -40,7 +40,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void SetExpectationOnNullableValue()
 		{
-			IFoo foo = MockRepository.GenerateStrictMock<IFoo>();
+			IFoo foo = Repository.Mock<IFoo>();
 
 			int? id = 2;
 
@@ -59,7 +59,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 			Assert.False(foo.Id.HasValue);
 			Assert.Equal(1, foo.Id.Value);
 
-            foo.VerifyAllExpectations();
+            foo.VerifyExpectations(true);
 		}
 
 		[Fact]
@@ -71,7 +71,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 			string testMethod = testClass.TestMethod();
 			string testProperty = testClass.TestProperty;
 
-			TestClass mockTestClass = MockRepository.GenerateStrictMock<TestClass>();
+			TestClass mockTestClass = Repository.Mock<TestClass>();
 
             mockTestClass.Expect(x => x.TestMethod())
                 .Return("MockTestMethod");
@@ -82,7 +82,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 			Assert.Equal("MockTestMethod", mockTestClass.TestMethod());
 			Assert.Equal("MockTestProperty", mockTestClass.TestProperty);
 
-            mockTestClass.VerifyAllExpectations();
+            mockTestClass.VerifyExpectations(true);
 		}
 
 		public interface IFoo

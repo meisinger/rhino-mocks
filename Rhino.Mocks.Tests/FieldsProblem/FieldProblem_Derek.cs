@@ -38,12 +38,12 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
 		public FieldProblem_Derek()
 		{
-            mockedInterface = MockRepository.GenerateStrictMock<IMockInterface>();
+            mockedInterface = Repository.Mock<IMockInterface>();
 		}
         
 		public void Dispose()
 		{
-            mockedInterface.VerifyAllExpectations();
+            mockedInterface.VerifyExpectations(true);
 		}
         
 		[Fact]

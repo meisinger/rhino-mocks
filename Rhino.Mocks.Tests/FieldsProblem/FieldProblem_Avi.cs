@@ -38,8 +38,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void CallNonThrowingProtectedCtor()
         {
-            ClassWithThrowingCtor mockClass1 = (ClassWithThrowingCtor)MockRepository
-                .GenerateStrictMock(typeof(ClassWithThrowingCtor), CallOptions.DontCallCtor);
+            ClassWithThrowingCtor mockClass1 = Repository
+                .Mock<ClassWithThrowingCtor>(CallOptions.DontCallCtor);
         }
     }
 
@@ -67,20 +67,20 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void createDynamicMockOfGeneric()
         {
-            genericClass<int> mockA = MockRepository.GenerateDynamicMock<genericClass<int>>();
+            genericClass<int> mockA = Repository.Mock<genericClass<int>>();
         }
 
         [Fact]
         public void TestMockOnGenericWithDifferentTypes()
         {
-            IComparable<int> mock1 = MockRepository.GenerateStrictMock<IComparable<int>>();
-            IComparable<bool> mock2 = MockRepository.GenerateStrictMock<IComparable<bool>>();
+            IComparable<int> mock1 = Repository.Mock<IComparable<int>>();
+            IComparable<bool> mock2 = Repository.Mock<IComparable<bool>>();
         }
 
         [Fact]
         public void createDynamicMockOfGenericAgain()
         {
-            genericClass<int> mockA = MockRepository.GenerateDynamicMock<genericClass<int>>();
+            genericClass<int> mockA = Repository.Mock<genericClass<int>>();
         }
 
         public class genericClass<T>

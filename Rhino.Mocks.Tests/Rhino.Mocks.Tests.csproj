@@ -146,6 +146,33 @@
     <Compile Include="DynamicMockTests.cs" />
     <Compile Include="ExpectTests.cs" />
     <Compile Include="ExtendingRhinoMocks2.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_ Sean.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_75_MockingExpcetion.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Adam.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Aharon.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FieldsProblem\FieldProblem_Alex.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Alexey.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Andrew.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Andy.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Avi.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_AviOrdering.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Benjamin.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Bill.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Blaz.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Brian.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Bruce.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Bruno.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Chompers.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Christian.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Daniel.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Dave.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_David.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_DavidG.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Derek.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_dyowee.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Fabian.cs" />
     <Compile Include="GenericMethods.cs" />
     <Compile Include="HandlingProperties.cs" />
     <Compile Include="IDemo.cs" />

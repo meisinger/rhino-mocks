@@ -30,7 +30,11 @@ namespace Rhino.Mocks.Interceptors
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void Intercept(IInvocation invocation)
         {
-            instance.ProxyInstance = invocation.Proxy;
+            if (instance.ProxyInstance == null)
+            {
+                invocation.Proceed();
+                return;
+            }
 
             var container = instance as IMockExpectationContainer;
             if (container == null)

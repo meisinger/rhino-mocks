@@ -51,14 +51,13 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void MockClassWithEquals()
         {
-            MockRepository mocks = new MockRepository();
-            ClassThatOverrideEquals c = (ClassThatOverrideEquals)MockRepository.GenerateStrictMock(typeof(ClassThatOverrideEquals));
+            ClassThatOverrideEquals c = Repository.Mock<ClassThatOverrideEquals>();
 
             c.Expect(x => x.Equals(c))
                 .Return(false);
 
             Assert.False(c.Equals(c));
-            c.VerifyAllExpectations();
+            c.VerifyExpectations(true);
         }
     }
 }

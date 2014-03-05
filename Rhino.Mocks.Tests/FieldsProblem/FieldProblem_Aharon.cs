@@ -39,7 +39,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void CanCreateInterfaceWithGuid()
 		{
-			IUniqueID bridgeRemote = MockRepository.GenerateStrictMock<IUniqueID>();
+			IUniqueID bridgeRemote = Repository.Mock<IUniqueID>();
 			Assert.NotNull(bridgeRemote);
 		}
 
@@ -47,19 +47,23 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void MockingDataset()
 		{
-			MyDataSet controller = MockRepository.GenerateStrictMock<MyDataSet>();
+			MyDataSet controller = Repository.Mock<MyDataSet>();
 			Assert.NotNull(controller);
 		}
 
 		[Fact]
 		public void PassingMockToMock_WhenErrorOccurs()
 		{
-			Accepter accepter = MockRepository.GenerateStrictMock<Accepter>();
+			Accepter accepter = Repository.Mock<Accepter>();
 
-			Assert.Throws<ExpectationViolationException>(
-				"Accepter.Accept(Rhino.Mocks.Tests.FieldsProblem.Accepter); Expected #0, Actual #1.",
-				() => accepter.Accept(accepter));
+            //Assert.Throws<ExpectationViolationException>(
+            //    "Accepter.Accept(Rhino.Mocks.Tests.FieldsProblem.Accepter); Expected #0, Actual #1.",
+            //    () => accepter.Accept(accepter));
 
+            accepter.Accept(accepter);
+            Assert.Throws<ExpectationViolationException>(
+                "Accepter.Accept(Rhino.Mocks.Tests.FieldsProblem.Accepter); Expected #0, Actual #1.",
+                () => accepter.VerifyExpectations(true));
 		}
 	}
 

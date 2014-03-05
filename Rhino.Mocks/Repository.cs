@@ -244,6 +244,20 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
+        /// Generates a mock for the given type
+        /// with remoting
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T MockWithRemoting<T>()
+        {
+            var type = typeof(T);
+            var repository = new Repository();
+
+            return (T)repository.CreateMockRemoted(type);
+        }
+
+        /// <summary>
         /// Generates a partial mock of the given type
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -443,6 +457,7 @@ namespace Rhino.Mocks
 
                 GC.SuppressFinalize(proxy);
 
+                instance.ProxyInstance = proxy;
                 return proxy;
             }
             catch (MissingMethodException ex)
@@ -480,6 +495,7 @@ namespace Rhino.Mocks
 
             var proxy = Delegate.CreateDelegate(type, target, "Invoke");
 
+            instance.ProxyInstance = proxy;
             return proxy;
         }
 
@@ -500,6 +516,7 @@ namespace Rhino.Mocks
             var proxy = generator.CreateInterfaceProxyWithoutTarget(type, interfaces.ToArray(), 
                 generatorOptions, mockInterceptor, proxyInterceptor, objectInterceptor);
 
+            instance.ProxyInstance = proxy;
             return proxy;
         }
 
@@ -509,8 +526,9 @@ namespace Rhino.Mocks
             var proxyInterceptor = new ProxyInterceptor(instance);
 
             var generator = new RepositoryForRemoting();
-            var proxy = generator.CreateMockRemoting(type, proxyInterceptor, instance);  
+            var proxy = generator.CreateMockRemoting(type, proxyInterceptor, instance);
 
+            instance.ProxyInstance = proxy;
             return proxy;
         }
 

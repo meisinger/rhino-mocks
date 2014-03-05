@@ -45,7 +45,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         {
             ServiceDomain.Enter(new ServiceConfig());
 
-            ISomething something = (ISomething)MockRepository.GenerateStrictMock(typeof(ISomething));
+            ISomething something = Repository.Mock<ISomething>();
             something.VerifyAllExpectations();
 
             ContextUtil.SetAbort();

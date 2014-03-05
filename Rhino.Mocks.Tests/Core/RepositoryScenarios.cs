@@ -148,12 +148,12 @@ namespace Rhino.Mocks.Tests.Core
         }
 
         [Fact]
-        public void Mock_Instance_Is_Assigned_Invocation_Proxy_When_Expectation_Is_Set_On_Method_From_A_Mock_Class()
+        public void Mock_Instance_Is_Assigned_Invocation_Proxy_Once_Proxy_For_A_Mock_Class_Is_Created()
         {
             var mock = Repository.Partial<ScenarioObject>();
 
             var instance = mock as IMockInstance;
-            Assert.Null(instance.ProxyInstance);
+            Assert.NotNull(instance.ProxyInstance);
 
             mock.Expect(x => x.StringMethod())
                 .Return("meisinger");
@@ -230,12 +230,12 @@ namespace Rhino.Mocks.Tests.Core
         }
 
         [Fact]
-        public void Mock_Instance_Is_Assigned_Invocation_Proxy_When_Expectation_Is_Set_On_Method_From_A_Mock_Interface()
+        public void Mock_Instance_Is_Assigned_Invocation_Proxy_Once_Proxy_For_A_Mock_Interface_Is_Created()
         {
             var mock = Repository.Mock<IScenarioObject>();
             
             var instance = mock as IMockInstance;
-            Assert.Null(instance.ProxyInstance);
+            Assert.NotNull(instance.ProxyInstance);
 
             mock.Expect(x => x.StringMethod())
                 .Return("meisinger");
