@@ -52,7 +52,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
                 .Return(retval);
 			
 			IList<Foo<int>> listOfFoo = mapper.FindAllFoo();
-            mapper.VerifyExpectations();
+            mapper.VerifyExpectations(true);
 		}
 
 		[Fact]
@@ -65,7 +65,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
                 .Return(retval);
 
 			Foo<int> oneFoo = mapper.FindOneFoo();
-            mapper.VerifyExpectations();
+            mapper.VerifyExpectations(true);
 		}
 
 		[Fact]

@@ -39,59 +39,17 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void CallOriginalMethodProblem2()
 		{
-			MockedClass mock = MockRepository.GenerateStrictMock<MockedClass>();
+			MockedClass mock = Repository.Mock<MockedClass>();
 
-            mock.Expect(x => x.Method(null))
-                .Constraints(Is.Equal("parameter"))
-                .CallOriginalMethod(OriginalCallOptions.CreateExpectation);
+            mock.Expect(x => x.Method(Arg.Is("parameter")))
+                .CallOriginalMethod();
 
 			mock.Method("parameter");
 
             mock.VerifyAllExpectations();
 		}
 
-		[Fact]
-		public void CanUseBackToRecordOnMethodsThatCallToCallOriginalMethod()
-		{
-            TestClass mock = MockRepository.GenerateStrictMock<TestClass>();
-
-            mock.Expect(x => x.Method())
-                .CallOriginalMethod(OriginalCallOptions.NoExpectation);
-
-			mock.Method();
-            mock.VerifyAllExpectations();
-
-            mock.BackToRecord(BackToRecordOptions.All);
-            mock.Expect(x => x.Method())
-                .Throw(new ApplicationException());
-            mock.Replay();
-
-            Assert.Throws<ApplicationException>(() => mock.Method());
-            mock.VerifyAllExpectations();
-		}
-
-		[Fact]
-		public void CanUseBackToRecordOnMethodsThatCallPropertyBehavior()
-		{
-            TestClass mock = MockRepository.GenerateStrictMock<TestClass>();
-
-            mock.Expect(x => x.Id)
-                .PropertyBehavior();
-
-			mock.Id = 4;
-			int d = mock.Id;
-
-			Assert.Equal(4,d );
-            mock.VerifyAllExpectations();
-
-            mock.BackToRecord(BackToRecordOptions.All);
-            mock.Expect(x => x.Id)
-                .Return(5);
-            mock.Replay();
-
-			Assert.Equal(5, mock.Id);
-			mock.VerifyAllExpectations();
-		}
+        // back to record unit tests have been removed
 	}
 
 	public class TestClass

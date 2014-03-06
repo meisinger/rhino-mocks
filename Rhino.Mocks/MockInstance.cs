@@ -334,7 +334,7 @@ namespace Rhino.Mocks
             Expectation expectation = null;
             for (int entryIndex = 0; entryIndex < eventCollection.Length; entryIndex++)
             {
-                var entry = container[entryIndex];
+                var entry = eventCollection[entryIndex];
                 if (!entry.MatchesCall(method, arguments))
                     continue;
 

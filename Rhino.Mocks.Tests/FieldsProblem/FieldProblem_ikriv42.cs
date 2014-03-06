@@ -15,13 +15,13 @@ namespace Rhino.Mocks.Tests.FieldsProblem
        [Fact]
        public void GenerateMock_Works_With_MarshalByRef()
        {
-           MockRepository.GenerateMock<D>();
+           Repository.Mock<D>();
        }
 
         [Fact]
         public void GenerateStub_Works_With_MarshalByRef()
         {
-            MockRepository.GenerateStub<D>();
+            Repository.Mock<D>();
         }
     }
 }

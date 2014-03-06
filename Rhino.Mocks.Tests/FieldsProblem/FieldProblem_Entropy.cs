@@ -46,11 +46,11 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void NestedOrderedAndAtLeastOnce()
 		{
-			IMyObject myObject = MockRepository.GenerateStrictMock(typeof(IMyObject)) as IMyObject;
+			IMyObject myObject = Repository.Mock<IMyObject>();
 
-			myObject.Expect(x => x.SomeProperty)
+            myObject.Expect(x => x.SomeProperty)
                 .Return(null)
-                .Repeat.AtLeastOnce();
+                .Repeat.AtLeast(1);
 
             myObject.Expect(x => x.DoSomething());
 
@@ -65,27 +65,27 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void ShouldFailInNestedOrderringIfMethodWasNotCalled()
 		{
-			IMyObject myObject = MockRepository.GenerateStrictMock(typeof(IMyObject)) as IMyObject;
+			IMyObject myObject = Repository.Mock<IMyObject>();
 
             myObject.Expect(x => x.DoSomethingElse())
-                .Repeat.AtLeastOnce();
+                .Repeat.AtLeast(1);
 
             myObject.Expect(x => x.DoSomething());
 
 			myObject.DoSomethingElse();
 			Assert.Throws<ExpectationViolationException>(
 				"IMyObject.DoSomething(); Expected #1, Actual #0.",
-				() => myObject.VerifyAllExpectations());
+				() => myObject.VerifyExpectations(true));
 		}
 
 		[Fact]
 		public void NestedInorderedAndAtLeastOnce()
 		{
-			IMyObject myObject = MockRepository.GenerateStrictMock(typeof(IMyObject)) as IMyObject;
+			IMyObject myObject = Repository.Mock<IMyObject>();
 
             myObject.Expect(x => x.SomeProperty)
                 .Return(null)
-                .Repeat.AtLeastOnce();
+                .Repeat.AtLeast(1);
 
             myObject.Expect(x => x.DoSomething());
 			
@@ -94,47 +94,51 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 			Assert.Null(myObject.SomeProperty);
 			myObject.DoSomething();
 
-            myObject.VerifyAllExpectations();
+            myObject.VerifyExpectations(true);
 		}
 
 		[Fact]
 		public void UnorderedAndAtLeastOnce_CallingAnExtraMethod()
 		{
-			IMyObject myObject = MockRepository.GenerateStrictMock(typeof(IMyObject)) as IMyObject;
+			IMyObject myObject = Repository.Mock<IMyObject>();
 
             myObject.Expect(x => x.SomeProperty)
                 .Return(null)
-                .Repeat.AtLeastOnce();
+                .Repeat.AtLeast(1);
 
             myObject.Expect(x => x.DoSomethingElse());
 
 			Assert.Null(myObject.SomeProperty);
 			Assert.Null(myObject.SomeProperty);
 			Assert.Null(myObject.SomeProperty);
-			
+
+            myObject.DoSomething();
+
 			Assert.Throws<ExpectationViolationException>(
 				@"IMyObject.DoSomething(); Expected #0, Actual #1.",
-				() => myObject.DoSomething());
+				() => myObject.VerifyExpectations(true));
 		}
 
 		[Fact]
 		public void OrderedAndAtLeastOnce_CallingAnExtraMethod()
 		{
-			IMyObject myObject = MockRepository.GenerateStrictMock(typeof(IMyObject)) as IMyObject;
+			IMyObject myObject = Repository.Mock<IMyObject>();
 
             myObject.Expect(x => x.SomeProperty)
                 .Return(null)
-                .Repeat.AtLeastOnce();
+                .Repeat.AtLeast(1);
 
             myObject.Expect(x => x.DoSomethingElse());
 
 			Assert.Null(myObject.SomeProperty);
 			Assert.Null(myObject.SomeProperty);
 			Assert.Null(myObject.SomeProperty);
-			
+
+            myObject.DoSomething();
+
 			Assert.Throws<ExpectationViolationException>(
 				@"IMyObject.DoSomething(); Expected #0, Actual #1.",
-				() => myObject.DoSomething());
+				() => myObject.VerifyExpectations(true));
 		}
 	}
 }

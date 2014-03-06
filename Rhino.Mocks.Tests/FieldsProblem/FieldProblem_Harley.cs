@@ -14,17 +14,16 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void TestSampleMatrixChanged()
         {
-            var mockTestClass = MockRepository.GenerateDynamicMock<ClassToMock>();
+            var mockTestClass = Repository.Mock<ClassToMock>();
 
             var fireChangeTestProperty = mockTestClass
-                .Expect(x => x.ChangeTestProperty += null)
-                .IgnoreArguments()
-                .GetEventRaiser();
+                .ExpectEvent(x => x.ChangeTestProperty += null)
+                .IgnoreArguments();
 
             new ClassRaisingException(mockTestClass);
 
-			Assert.Throws<ArgumentOutOfRangeException>(
-                () => fireChangeTestProperty.Raise(true));
+            Assert.Throws<ArgumentOutOfRangeException>(
+                () => mockTestClass.Raise(x => x.ChangeTestProperty += null, true));
         }
     }
 

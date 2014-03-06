@@ -47,7 +47,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		{
 		    Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 			
-            IDaSchedulerView m_view = (IDaSchedulerView)MockRepository.GenerateStrictMock(typeof(IDaSchedulerView));
+            IDaSchedulerView m_view = Repository.Mock<IDaSchedulerView>();
 //			DaSchedulerPresenter presenter = new DaSchedulerPresenter(m_view, new TestScheduleLoader(0)); 
 
             m_view.Expect(x => x.DateOf = new DateTime(2006, 8, 8));
@@ -55,7 +55,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 			//presenter.Initialize(); 
             Assert.Throws<ExpectationViolationException>(
                 "IDaSchedulerView.set_DateOf(08/08/2006 00:00:00); Expected #1, Actual #0.",
-                () => m_view.VerifyAllExpectations());
+                () => m_view.VerifyExpectations(true));
 		}
 	}
 }

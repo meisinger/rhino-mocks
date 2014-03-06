@@ -177,6 +177,22 @@ namespace Rhino.Mocks.Expectations
                 throw new InvalidOperationException(message);
             }
 
+            var methodParameters = Method.GetParameters();
+            for (int index = 0; index < targetParameters.Length; index++)
+            {
+                var parameter = targetParameters[index];
+                var parameterType = parameter.ParameterType;
+
+                var argument = methodParameters[index];
+                var argumentType = argument.ParameterType;
+
+                if (!parameterType.IsAssignableFrom(argumentType))
+                {
+                    var message = "The delegate arguments don't match the method arguments";
+                    throw new InvalidOperationException(message);
+                }
+            }
+
             DelegateToInvoke = action;
             return this;
         }
@@ -493,6 +509,22 @@ namespace Rhino.Mocks.Expectations
             {
                 var message = "The delegate arguments don't match the method arguments";
                 throw new InvalidOperationException(message);
+            }
+
+            var methodParameters = Method.GetParameters();
+            for (int index = 0; index < targetParameters.Length; index++)
+            {
+                var parameter = targetParameters[index];
+                var parameterType = parameter.ParameterType;
+
+                var argument = methodParameters[index];
+                var argumentType = argument.ParameterType;
+
+                if (!parameterType.IsAssignableFrom(argumentType))
+                {
+                    var message = "The delegate arguments don't match the method arguments";
+                    throw new InvalidOperationException(message);
+                }
             }
 
             if (!ReturnType.IsAssignableFrom(targetReturnType))

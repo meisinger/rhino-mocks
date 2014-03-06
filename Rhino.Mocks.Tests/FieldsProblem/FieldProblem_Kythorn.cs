@@ -34,30 +34,13 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 {
 	public class FieldProblem_Kythorn
 	{
-		[Fact]
-		public void CallingAssertWasCalledOnAnObjectThatIsInRecordModeShouldResultInFailure()
-		{
-            var service = MockRepository.GenerateStub<IService>();
-            var view = MockRepository.GenerateStub<IView>();
-
-            service.Stub(x => x.GetString())
-                .Return("Test");
-
-            view.BackToRecord();
-
-            var presenter = new Presenter(view, service);
-            presenter.OnViewLoaded();
-
-            Assert.Throws<InvalidOperationException>(
-                "Cannot assert on an object that is not in replay mode. Did you forget to call ReplayAll() ?",
-                () => view.AssertWasCalled(x => x.Message = "Test"));
-		}
+		// back to record unit test has been removed
 
 		[Fact]
 		public void CanUseStubSyntaxOnMocksInRecordMode()
 		{
-			var service = MockRepository.GenerateStub<IService>();
-            var view = MockRepository.GenerateStub<IView>();
+			var service = Repository.Mock<IService>();
+            var view = Repository.Mock<IView>();
 
 			service.Stub(x => x.GetString())
                 .Return("Test");
@@ -71,8 +54,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void Success()
 		{
-			var service = MockRepository.GenerateStub<IService>();
-			var view = MockRepository.GenerateStub<IView>();
+            var service = Repository.Mock<IService>();
+            var view = Repository.Mock<IView>();
 
 			service.Stub(x => x.GetString())
                 .Return("Test");

@@ -41,32 +41,29 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void DelegateToGenericMock()
 		{
-			MockRepository mocks = new MockRepository();
-            IEMailFormatter<string> formatterMock = MockRepository.GenerateStrictMock<IEMailFormatter<string>>();
-			SmtpEMailSenderBase<string> senderMock = (SmtpEMailSenderBase<string>)MockRepository
-                .GenerateStrictMock(typeof(SmtpEMailSenderBase<string>));
+			IEMailFormatter<string> formatterMock = Repository.Mock<IEMailFormatter<string>>();
+			SmtpEMailSenderBase<string> senderMock = Repository.Mock<SmtpEMailSenderBase<string>>();
 
             senderMock.Expect(x => x.SetFormatter(formatterMock))
-                .Do((Action<IEMailFormatter<string>>)delegate(IEMailFormatter<string> formatter)
+                .DoInstead((Action<IEMailFormatter<string>>)delegate(IEMailFormatter<string> formatter)
                 {
                     Assert.NotNull(formatter);
                 });
 
             senderMock.SetFormatter(formatterMock);
-            senderMock.VerifyAllExpectations();
+            senderMock.VerifyExpectations(true);
 		}
 
 		[Fact]
 		public void Invalid_DelegateToGenericMock()
 		{
-            IEMailFormatter<string> formatterMock = MockRepository.GenerateStrictMock<IEMailFormatter<string>>();
-            SmtpEMailSenderBase<string> senderMock = (SmtpEMailSenderBase<string>)MockRepository
-                .GenerateStrictMock(typeof(SmtpEMailSenderBase<string>));
+            IEMailFormatter<string> formatterMock = Repository.Mock<IEMailFormatter<string>>();
+            SmtpEMailSenderBase<string> senderMock = Repository.Mock<SmtpEMailSenderBase<string>>();
             
 			Assert.Throws<InvalidOperationException>(
                 "Callback arguments didn't match the method arguments",
                 () => senderMock.Expect(x => x.SetFormatter(formatterMock))
-                    .Do((Action<IEMailFormatter<int>>)delegate(IEMailFormatter<int> formatter)
+                    .DoInstead((Action<IEMailFormatter<int>>)delegate(IEMailFormatter<int> formatter)
                     {
                         Assert.NotNull(formatter);
                     }));

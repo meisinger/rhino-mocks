@@ -38,8 +38,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void StrictMockWithIndexedProp()
         {
-            IWithIndexedProperty index = (IWithIndexedProperty)MockRepository
-                .GenerateStrictMock(typeof(IWithIndexedProperty));
+            IWithIndexedProperty index = Repository.Mock<IWithIndexedProperty>();
 
             index.Expect(x => x.get_Foo("Blah"))
                 .Return(5);
@@ -49,7 +48,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             Assert.Equal(5, index.get_Foo("Blah"));
             index.set_Foo("Foo", 2);
 
-            index.VerifyAllExpectations();
+            index.VerifyExpectations(true);
         }
     }
 

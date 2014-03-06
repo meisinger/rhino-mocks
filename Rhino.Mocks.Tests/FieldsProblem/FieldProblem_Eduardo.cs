@@ -8,11 +8,10 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void CanSetExpectationOnReadWritePropertyUsingRecordPlaybackSyntax()
 		{
-			var demo = MockRepository.GenerateDynamicMock<IDemo>();
+			var demo = Repository.Mock<IDemo>();
 
-			demo.Expect(x => x.Prop)
-                .SetPropertyWithArgument("Eduardo");
-
+            demo.Expect(x => x.Prop = "Eduardo");
+            
             demo.Prop = "Eduardo";
             demo.VerifyAllExpectations();
 		}
@@ -20,11 +19,10 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void CanSetExpectationOnReadWritePropertyUsingAAASyntax()
 		{
-			var demo = MockRepository.GenerateMock<IDemo>();
+			var demo = Repository.Mock<IDemo>();
 
-			demo.Expect(x => x.Prop)
-                .SetPropertyWithArgument("Eduardo");
-
+            demo.Expect(x => x.Prop = "Eduardo");
+            
 			demo.Prop = "Eduardo";
 			demo.VerifyAllExpectations();
 		}

@@ -47,7 +47,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void Test_View_Events_WiredUp()
 		{
-			IView view = MockRepository.GenerateStrictMock<IView>();
+			IView view = Repository.Mock<IView>();
 
 			// expect that the model is set on the view
 			// NOTE: if I move this Expect.Call above
@@ -58,10 +58,14 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
 			// expect the event ClickButton to be wired up
 
-            IEventRaiser clickButtonEvent = view
-                .Expect(x => x.ClickButton += null)
-                .IgnoreArguments()
-                .GetEventRaiser();
+            //IEventRaiser clickButtonEvent = view
+            //    .Expect(x => x.ClickButton += null)
+            //    .IgnoreArguments()
+            //    .GetEventRaiser();
+
+            view.ExpectEvent(x => x.ClickButton += null)
+                .IgnoreArguments();
+
             
 			// Q: How do i set an expectation that checks that the controller
 			// correctly updates the model in the event handler.
@@ -72,9 +76,9 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 			// Expect.Call(view.Model.UserName = Arg<String>.Is.Anything);
 
 			Controller controller = new Controller(view);
-			clickButtonEvent.Raise(null, null);
+            view.Raise(x => x.ClickButton += null, new EventArgs());
 
-            view.VerifyAllExpectations();
+            view.VerifyExpectations(true);
 		}
 	}
 }

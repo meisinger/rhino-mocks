@@ -45,9 +45,9 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void MockAClassWithFinalizer()
 		{
-			ClassWithFinalizer withFinalizer = (ClassWithFinalizer)MockRepository.GenerateStrictMock(typeof(ClassWithFinalizer));
+			ClassWithFinalizer withFinalizer = Repository.Mock<ClassWithFinalizer>();
 
-            withFinalizer.VerifyAllExpectations();
+            withFinalizer.VerifyExpectations(true);
 			withFinalizer = null; // abandon the variable, will make it avialable for GC.
 
 			GC.WaitForPendingFinalizers();
@@ -58,13 +58,11 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 			[Fact]
 			public void ThisWorks()
 			{
-                IFoo mockFoo = MockRepository.GenerateStrictMock<IFoo>();
+                IFoo mockFoo = Repository.Mock<IFoo>();
 
 				int junk = 3;
-                mockFoo.Expect(x => x.foo(ref junk))
+                mockFoo.Expect(x => x.foo(ref Arg<int>.Ref(3).Dummy))
                     .IgnoreArguments()
-                    .Constraints(Is.Anything())
-                    .OutRef(3)
                     .Repeat.Once()
                     .Return(true);
 
@@ -75,13 +73,11 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 			[Fact]
 			public void ThisDoesnt()
 			{
-				IFoo mockFoo = MockRepository.GenerateStrictMock<IFoo>();
+				IFoo mockFoo = Repository.Mock<IFoo>();
 
 				int junk = 3;
-                mockFoo.Expect(x => x.foo(ref junk))
+                mockFoo.Expect(x => x.foo(ref Arg<int>.Ref(3).Dummy))
                     .IgnoreArguments()
-                    .OutRef(3)
-                    .Constraints(Is.Anything())
                     .Repeat.Once()
                     .Return(true);
 
