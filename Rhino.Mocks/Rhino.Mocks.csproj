@@ -105,7 +105,6 @@
     <Compile Include="Expectations\ExpectProperty.cs" />
     <Compile Include="Expectations\Range.cs" />
     <Compile Include="Expectations\RepeatOptions.cs" />
-    <Compile Include="Extensions\RepositoryExtensions.cs" />
     <Compile Include="Helpers\ArgumentManager.cs" />
     <Compile Include="Helpers\ByRefDummy.cs" />
     <Compile Include="Helpers\EventRaiser.cs" />
@@ -141,6 +140,7 @@
     <Compile Include="Remoting\RemotingProxy.cs" />
     <Compile Include="Remoting\RemotingProxyDetector.cs" />
     <Compile Include="Repository.cs" />
+    <Compile Include="RepositoryExtensions.cs" />
     <Compile Include="RepositoryForDelegates.cs" />
     <Compile Include="RepositoryForRemoting.cs" />
     <Compile Include="RhinoSelector.cs" />
