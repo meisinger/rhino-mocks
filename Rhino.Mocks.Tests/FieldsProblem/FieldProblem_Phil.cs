@@ -62,17 +62,15 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
 		public void VerifyingThatEventWasAttached()
 		{
-            IWithEvent events = (IWithEvent)MockRepository.GenerateStrictMock(typeof(IWithEvent));
+            IWithEvent events = Repository.Mock<IWithEvent>();
 
-            IEventRaiser raiser = events
-                .Expect(x => x.Load += null)
-                .IgnoreArguments()
-                .GetEventRaiser();
+            events.ExpectEvent(x => x.Load += null)
+                .IgnoreArguments();
 			
 			EventConsumer consumerMock = new EventConsumer(events);
 			
             //Next line invokes Load event.
-			raiser.Raise(this, EventArgs.Empty);
+            events.Raise(x => x.Load += null, EventArgs.Empty);
 			
 			Assert.True(consumerMock.OnLoadCalled);
             events.VerifyAllExpectations();

@@ -14,10 +14,12 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void PropertyBehaviorForSinglePropertyTypeOfString()
 		{
-            GenericContainer<string> stringContainer = MockRepository.GenerateStrictMock<GenericContainer<string>>();
+            GenericContainer<string> stringContainer = Repository.Mock<GenericContainer<string>>();
 
-            stringContainer.Expect(x => x.Item)
-                .PropertyBehavior();
+            stringContainer.ExpectProperty(x => x.Item);
+            // in order to make this work "strickly"
+            // an expectation for the set operation will be needed
+            // dateTimeContainer.ExpectProperty(x => x.Item = Arg<string>.Is.Anything);
 			
 			for (int i = 1; i < 49; ++i)
 			{
@@ -27,16 +29,18 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 				Assert.Equal(newItem, stringContainer.Item);
 			}
 
-            stringContainer.VerifyAllExpectations();
+            stringContainer.VerifyExpectations();
 		}
 
         [Fact]
 		public void PropertyBehaviourForSinglePropertyTypeOfDateTime()
 		{
-            GenericContainer<DateTime> dateTimeContainer = MockRepository.GenerateStrictMock<GenericContainer<DateTime>>();
+            GenericContainer<DateTime> dateTimeContainer = Repository.Mock<GenericContainer<DateTime>>();
 
-            dateTimeContainer.Expect(x => x.Item)
-                .PropertyBehavior();
+            dateTimeContainer.ExpectProperty(x => x.Item);
+            // in order to make this work "strickly"
+            // an expectation for the set operation will be needed
+            // dateTimeContainer.ExpectProperty(x => x.Item = Arg<DateTime>.Is.Anything);
 
 			for (int i = 1; i < 12; i++)
 			{
@@ -46,16 +50,18 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 				Assert.Equal(date, dateTimeContainer.Item);
 			}
 
-            dateTimeContainer.VerifyAllExpectations();
+            dateTimeContainer.VerifyExpectations();
 		}
 
         [Fact]
 		public void PropertyBehaviourForSinglePropertyTypeOfInteger()
 		{
-            GenericContainer<int> dateTimeContainer = MockRepository.GenerateStrictMock<GenericContainer<int>>();
+            GenericContainer<int> dateTimeContainer = Repository.Mock<GenericContainer<int>>();
 
-            dateTimeContainer.Expect(x => x.Item)
-                .PropertyBehavior();
+            dateTimeContainer.ExpectProperty(x => x.Item);
+            // in order to make this work "strickly"
+            // an expectation for the set operation will be needed
+            // dateTimeContainer.ExpectProperty(x => x.Item = Arg<int>.Is.Anything);
 
 			for (int i = 1; i < 49; i++)
 			{
@@ -64,7 +70,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 				Assert.Equal(i, dateTimeContainer.Item);
 			}
 
-            dateTimeContainer.VerifyAllExpectations();
+            dateTimeContainer.VerifyExpectations();
 		}
 	}
 }

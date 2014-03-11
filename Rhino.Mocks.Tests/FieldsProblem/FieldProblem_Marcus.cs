@@ -34,7 +34,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 {
     public class FieldProblem_ByMarcus : IDisposable
     {
-        public  FieldProblem_ByMarcus()
+        public FieldProblem_ByMarcus()
         {
         }
 
@@ -53,13 +53,13 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         {
             try
             {
-                ClassWithThrowingCtor c = MockRepository.GenerateStrictMock(typeof(ClassWithThrowingCtor)) as ClassWithThrowingCtor;
+                ClassWithThrowingCtor c = Repository.Mock<ClassWithThrowingCtor>();
                 Assert.NotNull(c);
                 Assert.False(true, "Exception expected");
             }
             catch (Exception e)
             {
-                string expectedExceptionStartsWith = @"Exception in constructor: System.Exception: I'm a ctor that throws";
+                string expectedExceptionStartsWith = @"Exception was thrown in constructor: System.Exception: I'm a ctor that throws";
                 string actualExceptionStartString = e.Message.Substring(0,expectedExceptionStartsWith.Length);
                 Assert.Equal(expectedExceptionStartsWith, actualExceptionStartString);
             }

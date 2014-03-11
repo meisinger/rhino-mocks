@@ -9,23 +9,19 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 	{
 		private IAddAlbumPresenter viewMock;
 		private IAlbum albumMock;
-		private IEventRaiser saveRaiser;
-
+		
 		public FieldProblem_leftend()
 		{
-            viewMock = (IAddAlbumPresenter)MockRepository.GenerateDynamicMock(typeof(IAddAlbumPresenter));
-            albumMock = MockRepository.GenerateStrictMock<IAlbum>();
+            viewMock = Repository.Mock<IAddAlbumPresenter>();
+            albumMock = Repository.Mock<IAlbum>();
 
-            saveRaiser = viewMock.Expect(x => x.Save += null)
-                .IgnoreArguments()
-                .Constraints(Is.NotNull())
-                .GetEventRaiser();
+            viewMock.ExpectEvent(x => x.Save += Arg<EventHandler<EventArgs>>.Is.NotNull);
 		}
 
 		public void Dispose()
 		{
-            viewMock.VerifyAllExpectations();
-            albumMock.VerifyAllExpectations();
+            viewMock.VerifyExpectations();
+            albumMock.VerifyExpectations(true);
 		}
 
 		[Fact]
@@ -44,7 +40,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             viewMock.Expect(x => x.ProcessSaveComplete());
 
 			AddAlbumPresenter presenter = new AddAlbumPresenter(viewMock);
-			saveRaiser.Raise(null, null);
+            viewMock.Raise(x => x.Save += null, EventArgs.Empty);
 		}
 
 		public interface IAlbum

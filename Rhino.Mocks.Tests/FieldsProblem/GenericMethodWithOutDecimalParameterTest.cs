@@ -16,7 +16,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             IMyInterface mock = Repository.Mock<IMyInterface>();
 
 			decimal expectedOutParameter = 1.234M;
-            decimal emptyOutParameter;
+            //decimal emptyOutParameter;
 
             mock.Expect(x => x.GenericMethod(out Arg<decimal>.Out(expectedOutParameter).Dummy));
 

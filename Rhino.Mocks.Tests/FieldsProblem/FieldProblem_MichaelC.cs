@@ -13,26 +13,23 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             int countOne = 0;
             int countTwo = 0;
 
-            IWithEvent mock = MockRepository.GenerateStrictMock<IWithEvent>();
+            IWithEvent mock = Repository.Mock<IWithEvent>();
 
-            IEventRaiser raiser = mock
-                .Expect(x => x.Load += null)
-                .IgnoreArguments()
-                .Repeat.Twice()
-                .GetEventRaiser();
+            mock.ExpectEvent(x => x.Load += null)
+                .IgnoreArguments();
 
 			mock.Load += delegate { countOne++; };
 			mock.Load += delegate { countTwo++; };
 
-			raiser.Raise(this, EventArgs.Empty);
+			mock.Raise(x => x.Load += null, EventArgs.Empty);
 			Assert.Equal(1, countOne);
 			Assert.Equal(1, countTwo);
 
-			raiser.Raise(this, EventArgs.Empty);
+			mock.Raise(x => x.Load += null, EventArgs.Empty);
 			Assert.Equal(2, countOne);
 			Assert.Equal(2, countTwo);
 
-			raiser.Raise(this, EventArgs.Empty);
+			mock.Raise(x => x.Load += null, EventArgs.Empty);
 			Assert.Equal(3, countOne);
 			Assert.Equal(3, countTwo);
 		}

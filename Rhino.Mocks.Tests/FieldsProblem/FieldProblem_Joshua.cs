@@ -12,13 +12,12 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
             ServiceBeingCalled service = Repository.Mock<ServiceBeingCalled>();
 
-            int uninitialized;
-
             // Uncommenting the following line will make the test pass, because the expectation constraints will match up with the actual call.
             // However, the value of an out parameter cannot be used within a method value before it is set within the method value,
             // so the value going in really is irrelevant, and should therefore be ignored when evaluating constraints.
             // Even ReSharper will tell you "Value assigned is not used in any execution path" for the following line.
 
+            //int uninitialized;
             //uninitialized = 42;
 
             // I understand I can do an IgnoreArguments() or Contraints(Is.Equal("key"), Is.Anything()), but I think the framework should take care of that for me

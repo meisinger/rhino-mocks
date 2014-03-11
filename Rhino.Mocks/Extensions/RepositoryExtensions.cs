@@ -26,11 +26,30 @@ namespace Rhino.Mocks
         public static void AssertWasCalled<T>(this T instance, Action<T> action)
             where T : class
         {
-            var actuals = Repository.GetMethodCallArguments(instance, action);
-            if (actuals.Any())
-                return;
+            if (instance == null)
+                throw new ArgumentNullException("instance", "Assertion cannot be performed on a null object or instance.");
 
-            throw new Exception("Nope");
+            var invocation = instance as IInvocation;
+            var container = GetExpectationContainer(instance);
+            if (container == null)
+                throw new ArgumentOutOfRangeException("instance", "Assertion can only be performed on a mocked object or instance.");
+
+            var assertion = Repository.GetMethodCallArguments(instance, action);
+            var methodName = assertion.GetDisplayName(invocation);
+
+            var actuals = container.ListActuals();
+            if (actuals.Any())
+            {
+                for (int index = 0; index < actuals.Length; index++)
+                {
+                    var actual = actuals[index];
+                    if (assertion.MatchesCall(actual.Method, actual.Arguments))
+                        return;
+                }
+            }
+
+            throw new ExpectationViolationException(
+                string.Format("{0} Expected #1, Actual #0.", methodName));
         }
 
         /// <summary>
@@ -44,11 +63,30 @@ namespace Rhino.Mocks
         public static void AssertWasCalled<T, TResult>(this T instance, Func<T, TResult> func)
             where T : class
         {
-            var actuals = Repository.GetMethodCallArguments(instance, func);
-            if (actuals.Any())
-                return;
+            if (instance == null)
+                throw new ArgumentNullException("instance", "Assertion cannot be performed on a null object or instance.");
 
-            throw new Exception("Nope");
+            var invocation = instance as IInvocation;
+            var container = GetExpectationContainer(instance);
+            if (container == null)
+                throw new ArgumentOutOfRangeException("instance", "Assertion can only be performed on a mocked object or instance.");
+
+            var assertion = Repository.GetMethodCallArguments(instance, func);
+            var methodName = assertion.GetDisplayName(invocation);
+
+            var actuals = container.ListActuals();
+            if (actuals.Any())
+            {
+                for (int index = 0; index < actuals.Length; index++)
+                {
+                    var actual = actuals[index];
+                    if (assertion.MatchesCall(actual.Method, actual.Arguments))
+                        return;
+                }
+            }
+
+            throw new ExpectationViolationException(
+                string.Format("{0} Expected #1, Actual #0.", methodName));
         }
 
         /// <summary>
@@ -61,11 +99,28 @@ namespace Rhino.Mocks
         public static void AssertWasNotCalled<T>(this T instance, Action<T> action)
             where T : class
         {
-            var actuals = Repository.GetMethodCallArguments(instance, action);
+            if (instance == null)
+                throw new ArgumentNullException("instance", "Assertion cannot be performed on a null object or instance.");
+
+            var invocation = instance as IInvocation;
+            var container = GetExpectationContainer(instance);
+            if (container == null)
+                throw new ArgumentOutOfRangeException("instance", "Assertion can only be performed on a mocked object or instance.");
+
+            var assertion = Repository.GetMethodCallArguments(instance, action);
+            var methodName = assertion.GetDisplayName(invocation);
+
+            var actuals = container.ListActuals();
             if (!actuals.Any())
                 return;
 
-            throw new Exception("Nope");
+            for (int index = 0; index < actuals.Length; index++)
+            {
+                var actual = actuals[index];
+                if (assertion.MatchesCall(actual.Method, actual.Arguments))
+                    throw new ExpectationViolationException(
+                        string.Format("{0} Expected #0, Actual #1.", methodName));
+            }
         }
 
         /// <summary>
@@ -79,11 +134,28 @@ namespace Rhino.Mocks
         public static void AssertWasNotCalled<T, TResult>(this T instance, Func<T, TResult> func)
             where T : class
         {
-            var actuals = Repository.GetMethodCallArguments(instance, func);
+            if (instance == null)
+                throw new ArgumentNullException("instance", "Assertion cannot be performed on a null object or instance.");
+
+            var invocation = instance as IInvocation;
+            var container = GetExpectationContainer(instance);
+            if (container == null)
+                throw new ArgumentOutOfRangeException("instance", "Assertion can only be performed on a mocked object or instance.");
+
+            var assertion = Repository.GetMethodCallArguments(instance, func);
+            var methodName = assertion.GetDisplayName(invocation);
+
+            var actuals = container.ListActuals();
             if (!actuals.Any())
                 return;
 
-            throw new Exception("Nope");
+            for (int index = 0; index < actuals.Length; index++)
+            {
+                var actual = actuals[index];
+                if (assertion.MatchesCall(actual.Method, actual.Arguments))
+                    throw new ExpectationViolationException(
+                        string.Format("{0} Expected #0, Actual #1.", methodName));
+            }
         }
 
         /// <summary>
@@ -384,6 +456,7 @@ namespace Rhino.Mocks
                 throw new ArgumentOutOfRangeException("instance", "Stubs can only be set on a mocked object or instance.");
 
             var expectation = new ExpectMethod();
+            expectation.SetExpectedCount(new Range(int.MaxValue, int.MaxValue));
             container.MarkForExpectation(expectation);
 
             try

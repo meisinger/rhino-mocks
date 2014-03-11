@@ -72,22 +72,20 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void ClearedModelSetsItemsOnView()
         {
-            IModel model = MockRepository.GenerateStrictMock<IModel>();
-            IView view = MockRepository.GenerateStrictMock<IView>();
+            IModel model = Repository.Mock<IModel>();
+            IView view = Repository.Mock<IView>();
 
-            IEventRaiser eventRaiser = model
-                .Expect(x => x.ModelChanged += null)
-                .IgnoreArguments()
-                .GetEventRaiser();
+            model.ExpectEvent(x => x.ModelChanged += null)
+                .IgnoreArguments();
 
             view.Expect(x => x.SetList(null))
                 .IgnoreArguments();
 
             Presenter subject = new Presenter(view, model);
-            eventRaiser.Raise(this, EventArgs.Empty);
-
-            model.VerifyAllExpectations();
-            view.VerifyAllExpectations();
+            model.Raise(x => x.ModelChanged += null, EventArgs.Empty);
+            
+            model.VerifyExpectations(true);
+            view.VerifyExpectations(true);
         }
     }
 }

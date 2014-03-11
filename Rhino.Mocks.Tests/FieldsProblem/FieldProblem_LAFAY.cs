@@ -26,6 +26,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
             demo.ReturnMarshalByRefNoArgs();
             demo.ReturnMarshalByRefNoArgs();
+
+            demo.VerifyExpectations(true);
         }
 
         public interface IDemo

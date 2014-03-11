@@ -591,6 +591,10 @@ namespace Rhino.Mocks.Expectations
         /// <returns>Fluid Interface</returns>
         IMethodOptions<T> IMethodOptions<T>.Return(T value)
         {
+            if (ExpectedCount.Minimum.Equals(0) && ExpectedCount.Maximum.Equals(0))
+                throw new InvalidOperationException(
+                    "After specifying Repeat.Never(), you cannot specify a return value, exception to throw or an action to execute.");
+
             if (HasReturnValue || ThrowsException || (HasDelegateToInvoke && DelegateReturnsValue))
                 throw new InvalidOperationException(
                     "Can set only a single return value or exception to throw or delegate to execute on the same method call.");
@@ -606,6 +610,10 @@ namespace Rhino.Mocks.Expectations
         /// <returns>Fluid Interface</returns>
         IMethodOptions<T> IMethodOptions<T>.Returns(Func<T> func)
         {
+            if (ExpectedCount.Minimum.Equals(0) && ExpectedCount.Maximum.Equals(0))
+                throw new InvalidOperationException(
+                    "After specifying Repeat.Never(), you cannot specify a return value, exception to throw or an action to execute.");
+
             if (HasReturnValue || ThrowsException || (HasDelegateToInvoke && DelegateReturnsValue))
                 throw new InvalidOperationException(
                     "Can set only a single return value or exception to throw or delegate to execute on the same method call.");

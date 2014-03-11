@@ -49,14 +49,7 @@ namespace Rhino.Mocks
             ArgumentManager.Clear();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="instance"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        public static Actuals[] GetMethodCallArguments<T>(T instance, Action<T> action)
+        internal static ExpectMethod GetMethodCallArguments<T>(T instance, Action<T> action)
             where T : class
         {
             if (instance == null)
@@ -65,10 +58,6 @@ namespace Rhino.Mocks
             var container = GetExpectationContainer(instance);
             if (container == null)
                 throw new ArgumentOutOfRangeException("instance", "Assertions can only be made on a mocked object or instance.");
-
-            var actuals = container.ListActuals();
-            if (actuals.Length == 0)
-                return new Actuals[0];
 
             var assertion = new ExpectMethod();
             container.MarkForAssertion(assertion);
@@ -85,26 +74,10 @@ namespace Rhino.Mocks
             if (container.ExpectationMarked)
                 throw new InvalidOperationException();
 
-            var results = new List<Actuals>();
-            for (int index = 0; index < actuals.Length; index++)
-            {
-                var actual = actuals[index];
-                if (assertion.MatchesCall(actual.Method, actual.Arguments))
-                    results.Add(actual);
-            }
-
-            return results.ToArray();
+            return assertion;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="instance"></param>
-        /// <param name="func"></param>
-        /// <returns></returns>
-        public static Actuals[] GetMethodCallArguments<T, TResult>(T instance, Func<T, TResult> func)
+        internal static ExpectMethod<TResult> GetMethodCallArguments<T, TResult>(T instance, Func<T, TResult> func)
             where T : class
         {
             if (instance == null)
@@ -113,10 +86,6 @@ namespace Rhino.Mocks
             var container = GetExpectationContainer(instance);
             if (container == null)
                 throw new ArgumentOutOfRangeException("instance", "Assertions can only be made on a mocked object or instance.");
-
-            var actuals = container.ListActuals();
-            if (actuals.Length == 0)
-                return new Actuals[0];
 
             var assertion = new ExpectMethod<TResult>();
             container.MarkForAssertion(assertion);
@@ -133,15 +102,7 @@ namespace Rhino.Mocks
             if (container.ExpectationMarked)
                 throw new InvalidOperationException();
 
-            var results = new List<Actuals>();
-            for (int index = 0; index < actuals.Length; index++)
-            {
-                var actual = actuals[index];
-                if (assertion.MatchesCall(actual.Method, actual.Arguments))
-                    results.Add(actual);
-            }
-
-            return results.ToArray();
+            return assertion;
         }
 
         /// <summary>

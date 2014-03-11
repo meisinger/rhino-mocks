@@ -95,7 +95,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
 		public PresenterBaseTestFixture()
 		{
-			viewMocks = (IView)MockRepository.GenerateDynamicMock(typeof (IView));
+            viewMocks = Repository.Mock<IView>();
 		}
 
 		public void Dispose()
@@ -106,23 +106,20 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void TestEventInitialization()
 		{
-			IEventRaiser init = viewMocks.Expect(x => x.Init += null)
-                .IgnoreArguments()
-                .GetEventRaiser();
+			viewMocks.ExpectEvent(x => x.Init += null)
+                .IgnoreArguments();
 
 			viewMocks.Load += null; //also set expectation
-            IEventRaiser load = viewMocks.Expect(x => x.Load += null)
-                .IgnoreArguments()
-                .GetEventRaiser();
+            viewMocks.ExpectEvent(x => x.Load += null)
+                .IgnoreArguments();
 
-            PresenterBase<IView> presenterBase = MockRepository
-                .GenerateStrictMock<PresenterBase<IView>>(viewMocks);
+            PresenterBase<IView> presenterBase = Repository.Mock<PresenterBase<IView>>(viewMocks);
 
             presenterBase.Expect(x => x.Initialize());
             presenterBase.Expect(x => x.Load());
-			
-			init.Raise(viewMocks, EventArgs.Empty); //raise Init method
-			load.Raise(viewMocks, EventArgs.Empty); //raise Load method
+
+            viewMocks.Raise(x => x.Init += null, EventArgs.Empty);
+            viewMocks.Raise(x => x.Load += null, EventArgs.Empty);
 		}
 	}
 }

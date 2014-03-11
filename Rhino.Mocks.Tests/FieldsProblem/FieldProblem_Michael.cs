@@ -44,7 +44,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void TestChar()
 		{
-			IProvider mockProvider = (IProvider)MockRepository.GenerateStrictMock(typeof(IProvider));
+			IProvider mockProvider = Repository.Mock<IProvider>();
 
             mockProvider.Expect(x => x.GetChar())
                 .Return('X');
@@ -56,7 +56,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void TestInt32()
 		{
-            IProvider mockProvider = (IProvider)MockRepository.GenerateStrictMock(typeof(IProvider));
+            IProvider mockProvider = Repository.Mock<IProvider>();
 
             mockProvider.Expect(x => x.GetInt32())
                 .Return(100);

@@ -61,7 +61,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
                 IFoo mockFoo = Repository.Mock<IFoo>();
 
 				int junk = 3;
-                mockFoo.Expect(x => x.foo(ref Arg<int>.Ref(3).Dummy))
+                mockFoo.Expect(x => x.foo(ref Arg<int>.Ref(junk).Dummy))
                     .IgnoreArguments()
                     .Repeat.Once()
                     .Return(true);
@@ -76,7 +76,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 				IFoo mockFoo = Repository.Mock<IFoo>();
 
 				int junk = 3;
-                mockFoo.Expect(x => x.foo(ref Arg<int>.Ref(3).Dummy))
+                mockFoo.Expect(x => x.foo(ref Arg<int>.Ref(junk).Dummy))
                     .IgnoreArguments()
                     .Repeat.Once()
                     .Return(true);

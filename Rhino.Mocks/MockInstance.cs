@@ -206,7 +206,7 @@ namespace Rhino.Mocks
             Expectation expectation = null;
             for (int entryIndex = 0; entryIndex < methodCollection.Length; entryIndex++)
             {
-                var entry = container[entryIndex];
+                var entry = methodCollection[entryIndex];
                 if (!entry.MatchesCall(method, arguments))
                     continue;
 
@@ -386,7 +386,7 @@ namespace Rhino.Mocks
             Expectation expectation = null;
             for (int entryIndex = 0; entryIndex < propertyCollection.Length; entryIndex++)
             {
-                var entry = container[entryIndex];
+                var entry = propertyCollection[entryIndex];
                 if (!entry.MatchesCall(method, arguments))
                     continue;
 
@@ -409,13 +409,16 @@ namespace Rhino.Mocks
                 if (expectation.ThrowsException)
                     throw expectation.ExceptionToThrow;
 
-                if (methodName.StartsWith("get_", StringComparison.Ordinal))
-                    return expectation.ReturnValue;
-
                 if (expectation.ForceProceed)
                 {
                     invocation.Proceed();
                     return invocation.ReturnValue;
+                }
+
+                if (methodName.StartsWith("get_", StringComparison.Ordinal))
+                {
+                    if (expectation.HasReturnValue)
+                        return expectation.ReturnValue;
                 }
             }
 
