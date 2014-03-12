@@ -15,10 +15,11 @@ namespace Rhino.Mocks.Tests.FieldsProblem
                 .Return(4);
 
             interfaceMock.GetMyIntValue();
+            interfaceMock.GetMyIntValue();
 
             Assert.Throws<ExpectationViolationException>(
                 "IRepeatsWithGenerate.GetMyIntValue(); Expected #1, Actual #2.",
-                () => interfaceMock.GetMyIntValue());
+                () => interfaceMock.VerifyExpectations());
         }
 
 		[Fact]

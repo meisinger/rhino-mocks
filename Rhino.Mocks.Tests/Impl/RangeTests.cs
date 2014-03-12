@@ -28,19 +28,18 @@
 
 
 using Xunit;
-using Rhino.Mocks.Impl;
+using Rhino.Mocks.Expectations;
 
 namespace Rhino.Mocks.Tests.Impl
 {
-	
 	public class RangeTests
 	{
 		[Fact]
 		public void RangePropetiesReturnTheSameValuesAsThosePassedInCtor()
 		{
 			Range range = new Range(30, 50);
-			Assert.Equal(30, range.Min);
-			Assert.Equal(50, range.Max);
+			Assert.Equal(30, range.Minimum);
+			Assert.Equal(50, range.Maximum);
 		}
 
 		[Fact]

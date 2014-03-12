@@ -18,12 +18,12 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
 		public FieldProblem_oblomov()
 		{
-            service = MockRepository.GenerateStrictMock<IMyService>();
+            service = Repository.Mock<IMyService>();
 		}
 
 		public void Dispose()
 		{
-            service.VerifyAllExpectations();
+            service.VerifyExpectations(true);
 		}
 
 		[Fact]

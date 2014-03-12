@@ -22,14 +22,14 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
         public StubDemoTestFixture()
         {
-            _mockBase = MockRepository.GenerateStub<IBase>();
-            _mockChild = MockRepository.GenerateStub<IChild>();
+            _mockBase = Repository.Mock<IBase>();
+            _mockChild = Repository.Mock<IChild>();
         }
 
         public void Dispose()
         {
-            _mockBase.VerifyAllExpectations();
-            _mockChild.VerifyAllExpectations();
+            _mockBase.VerifyExpectations();
+            _mockChild.VerifyExpectations();
         }
 
         [Fact]

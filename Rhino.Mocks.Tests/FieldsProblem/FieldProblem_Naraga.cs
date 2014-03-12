@@ -15,7 +15,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void MultiThreadedReplay()
 		{
-			var service = MockRepository.GenerateStrictMock<IService>();
+			var service = Repository.Mock<IService>();
 			for (int i = 0; i < 100; i++)
 			{
 				int i1 = i;
@@ -35,6 +35,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
             while (counter != 100)
                 Thread.Sleep(100);
+
+            service.VerifyExpectations(true);
 		}
 	}
 }

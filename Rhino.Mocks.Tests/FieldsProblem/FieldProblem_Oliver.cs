@@ -18,51 +18,49 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void StubGenericInterface_CanReadWriteProperties()
 		{
-            ITestGen<int> test = MockRepository.GenerateStub<ITestGen<int>>();
+            ITestGen<int> test = Repository.Mock<ITestGen<int>>();
 
 			test.Foo = 10;
 			Assert.Equal(10, test.Foo);
 
-            test.VerifyAllExpectations();
+            test.VerifyExpectations();
 		}
 
 		[Fact]
 		public void StubInterface_CanReadWriteProperties()
 		{
-			ITestNormal test = MockRepository.GenerateStub<ITestNormal>();
+			ITestNormal test = Repository.Mock<ITestNormal>();
 
 			test.Foo = 10;
 			Assert.Equal(10, test.Foo);
 
-            test.VerifyAllExpectations();
+            test.VerifyExpectations();
 		}
 
 		[Fact]
 		public void MockGenericInterface_CanSetProperties()
 		{
-			ITestGen<int> test = MockRepository.GenerateStrictMock<ITestGen<int>>();
+			ITestGen<int> test = Repository.Mock<ITestGen<int>>();
 
-            test.Expect(x => x.Foo)
-                .PropertyBehavior();
+            test.ExpectProperty(x => x.Foo);
 
 			test.Foo = 10;
 			Assert.Equal(10, test.Foo);
 
-            test.VerifyAllExpectations();
+            test.VerifyExpectations();
 		}
 
 		[Fact]
 		public void MockNormalInterface_CanSetProperties()
 		{
-			ITestNormal test = MockRepository.GenerateStrictMock<ITestNormal>();
+			ITestNormal test = Repository.Mock<ITestNormal>();
 
-            test.Expect(x => x.Foo)
-                .PropertyBehavior();
+            test.ExpectProperty(x => x.Foo);
 
 			test.Foo = 10;
 			Assert.Equal(10, test.Foo);
 
-            test.VerifyAllExpectations();
+            test.VerifyExpectations();
 		}
 	}
 }

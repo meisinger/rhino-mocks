@@ -219,7 +219,22 @@ namespace Rhino.Mocks
 
             //NOTE: this could be where a "strict" mock call would throw an exception
             if (expectation == null)
+            {
+                for (int entryIndex = 0; entryIndex < methodCollection.Length; entryIndex++)
+                {
+                    var entry = methodCollection[entryIndex];
+                    if (!entry.MatchesCall(method, arguments))
+                        continue;
+
+                    if (entry.ExpectationSatisfied)
+                    {
+                        entry.AddActualCall(actual);
+                        continue;
+                    }
+                }
+
                 return HandleUnexpectedMethodCall(invocation, method, arguments);
+            }
             
             RhinoMocks.Logger.LogExpectedMethodCall(invocation);
             expectation.AddActualCall(actual);
@@ -399,7 +414,7 @@ namespace Rhino.Mocks
 
             //NOTE: this could be where a "strict" mock call would throw an exception
             if (expectation == null)
-                RhinoMocks.Logger.LogUnexpectedMethodCall(invocation, 
+                RhinoMocks.Logger.LogUnexpectedMethodCall(invocation,
                     "Property: Dynamic handling of property.");
             else
             {

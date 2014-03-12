@@ -212,7 +212,19 @@
     <Compile Include="FieldsProblem\FieldProblem_MichaelR.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Mike.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Mithresh.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Naraga.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Nolan.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Nolan2.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_oblomov.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Oliver.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_OrenEl.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Phil.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Rabashani.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Raju.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_RepeatsWithGenerate.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Roger.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Ross.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Roy.cs" />
     <Compile Include="FieldsProblem\GenericMethodWithOutDecimalParameterTest.cs" />
     <Compile Include="FieldsProblem\InterfaceInheritance.cs" />
     <Compile Include="FieldsProblem\UsingEvents.cs" />
@@ -220,6 +232,7 @@
     <Compile Include="HandlingProperties.cs" />
     <Compile Include="IDemo.cs" />
     <Compile Include="Impl\MockedObjectsComparerTests.cs" />
+    <Compile Include="Impl\RangeTests.cs" />
     <Compile Include="Impl\ValidateTests.cs" />
     <Compile Include="IndexerTests.cs" />
     <Compile Include="IntegrationTests.cs" />

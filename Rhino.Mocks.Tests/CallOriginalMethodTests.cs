@@ -38,25 +38,10 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CallOriginalMethodOnPropGetAndSet()
         {
-            //MockRepository mocks = new MockRepository();
-            //MockingClassesTests.DemoClass demo = (MockingClassesTests.DemoClass)
-            //    mocks.StrictMock(typeof(MockingClassesTests.DemoClass));
-
-            //SetupResult.For(demo.Prop).CallOriginalMethod(OriginalCallOptions.NoExpectation);
-            //SetupResult.For(demo.Prop = 0).CallOriginalMethod(OriginalCallOptions.NoExpectation);
-
-            //mocks.ReplayAll();
-
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    demo.Prop = i;
-            //    Assert.Equal(i, demo.Prop);
-            //}
-            //mocks.VerifyAll();
-
             MockingClassesTests.DemoClass demo = Repository.Partial<MockingClassesTests.DemoClass>();
 
             demo.Expect(x => x.Prop)
+                .Repeat.Any()
                 .CallOriginalMethod();
 
             demo.Expect(x => x.Prop = Arg<int>.Is.Anything)
