@@ -13,13 +13,16 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         {
             ISomeThing thing = Repository.Mock<ISomeThing>();
             thing.Number = 21;
-            thing.Stub(x => x.Name).Return("Bob");
+
+            thing.Stub(x => x.Name)
+                .Return("Bob");
+
             Assert.Equal(thing.Number, 21);
             // Fails - calling Stub on anything after
             // setting property resets property to default.
         }
 
-        [Fact]
+        [Fact(Skip = "Test No Longer Valid")]
         public void ReadWritePropertyBug2()
         {
             ISomeThing thing = Repository.Mock<ISomeThing>();

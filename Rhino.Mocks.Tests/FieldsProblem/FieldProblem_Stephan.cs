@@ -17,7 +17,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		public void ShouldIgnoreArgumentsOnGenericCallWhenTypeIsStruct()
 		{
 			// setup
-			ISomeService m_SomeServiceMock = MockRepository.GenerateStrictMock<ISomeService>();
+			ISomeService m_SomeServiceMock = Repository.Mock<ISomeService>();
 			SomeClient sut = new SomeClient(m_SomeServiceMock);
 
             m_SomeServiceMock.Expect(x => x.DoSomething<string>(null, null))
@@ -30,7 +30,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 			sut.DoSomething();
 
 			// verification
-            m_SomeServiceMock.VerifyAllExpectations();
+            m_SomeServiceMock.VerifyExpectations(true);
 
 			// cleanup
 			m_SomeServiceMock = null;
@@ -40,14 +40,16 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void UnexpectedCallToGenericMethod()
 		{
-			ISomeService m_SomeServiceMock = MockRepository.GenerateStrictMock<ISomeService>();
+			ISomeService m_SomeServiceMock = Repository.Mock<ISomeService>();
 
             m_SomeServiceMock.Expect(x => x.DoSomething<string>(null, "foo"));
+
+            m_SomeServiceMock.DoSomething<int>(null, 5);
 
             Assert.Throws<ExpectationViolationException>(
 				@"ISomeService.DoSomething<System.Int32>(null, 5); Expected #0, Actual #1.
 ISomeService.DoSomething<System.String>(null, ""foo""); Expected #1, Actual #0.",
-				() => m_SomeServiceMock.DoSomething<int>(null, 5));
+				() => m_SomeServiceMock.VerifyExpectations(true));
 		}
 
 		[Fact]
@@ -55,10 +57,10 @@ ISomeService.DoSomething<System.String>(null, ""foo""); Expected #1, Actual #0."
 		{
             bool didDo = false;
 
-			IDemo demo = MockRepository.GenerateDynamicMock<IDemo>();
+			IDemo demo = Repository.Mock<IDemo>();
             demo.Expect(x => x.VoidNoArgs())
                 .IgnoreArguments()
-                .Do(SetToTrue(out didDo));
+                .DoInstead(SetToTrue(out didDo));
 			
 			demo.VoidNoArgs();
 			Assert.True(didDo, "Do has not been executed!");

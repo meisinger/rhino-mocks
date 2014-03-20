@@ -50,7 +50,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void InitClass()
 		{
-			EmployeeInfo info = (EmployeeInfo)MockRepository.GenerateStrictMock(typeof(EmployeeInfo), "ID001");
+			EmployeeInfo info = Repository.Mock<EmployeeInfo>("ID001");
 			Assert.NotNull(info);
 		}
 

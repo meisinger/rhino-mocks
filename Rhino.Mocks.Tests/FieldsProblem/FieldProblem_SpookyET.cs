@@ -51,9 +51,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             byte[] responseData = Encoding.UTF8.GetBytes("200 OK");
             Stream stream = new MemoryStream(responseData);
 
-
-            WebRequest request = (WebRequest)MockRepository.GenerateStrictMock(typeof(WebRequest));
-            WebResponse response = (WebResponse)MockRepository.GenerateStrictMock(typeof(WebResponse));
+            WebRequest request = Repository.Mock<WebRequest>();
+            WebResponse response = Repository.Mock<WebResponse>();
 
             request.Expect(x => x.GetResponse())
                 .Return(response);
@@ -67,8 +66,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             string returnedString = new StreamReader(returnedStream).ReadToEnd();
             Assert.Equal("200 OK", returnedString);
 
-            request.VerifyAllExpectations();
-            response.VerifyAllExpectations();
+            request.VerifyExpectations(true);
+            response.VerifyExpectations(true);
         }
 
         /// <summary>
@@ -78,24 +77,21 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void UsingReturnAndThenIgnoreArgs()
         {
-            IDemo demo = (IDemo)MockRepository.GenerateStrictMock(typeof(IDemo));
+            IDemo demo = Repository.Mock<IDemo>();
 
             demo.Expect(x => x.StringArgString(null))
                 .IgnoreArguments()
                 .Return("ayende");
 
             Assert.Equal("ayende", demo.StringArgString("rahien"));
-            demo.VerifyAllExpectations();
+            demo.VerifyExpectations(true);
         }
 
         [Fact]
         public void WebRequestWhenDisposing()
         {
-            WebRequest webRequestMock = (WebRequest)MockRepository
-                .GenerateStrictMock(typeof(WebRequest));
-
-            WebResponse webResponseMock = (WebResponse)MockRepository
-                .GenerateStrictMock(typeof(WebResponse));
+            WebRequest webRequestMock = Repository.Mock<WebRequest>();
+            WebResponse webResponseMock = Repository.Mock<WebResponse>();
 
             webRequestMock.Expect(x => x.GetResponse())
                 .Return(webResponseMock);
@@ -109,8 +105,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             response.GetResponseStream();
             webResponseMock.Close();
 
-            webRequestMock.VerifyAllExpectations();
-            webResponseMock.VerifyAllExpectations();
+            webRequestMock.VerifyExpectations(true);
+            webResponseMock.VerifyExpectations(true);
         }
 
         private Stream GetResponseStream(WebRequest request)

@@ -130,6 +130,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArgConstraintTests.cs" />
+    <Compile Include="Callbacks\CallbackTests.cs" />
     <Compile Include="CallOriginalMethodTests.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -146,6 +147,7 @@
     <Compile Include="DynamicMockTests.cs" />
     <Compile Include="ExpectTests.cs" />
     <Compile Include="ExtendingRhinoMocks2.cs" />
+    <Compile Include="FieldsProblem\ClassThatImplementsGetHashCodeAndEquals.cs" />
     <Compile Include="FieldsProblem\FieldProblem_ Sean.cs" />
     <Compile Include="FieldsProblem\FieldProblem_75_MockingExpcetion.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Adam.cs" />
@@ -225,8 +227,23 @@
     <Compile Include="FieldsProblem\FieldProblem_Roger.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Ross.cs" />
     <Compile Include="FieldsProblem\FieldProblem_Roy.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Sam.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_SamW.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Sander.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Shane.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_SpookyET.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Stephan.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_StevenS.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Thierry.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Tim.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_TrueWill.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Wade.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Wendy.cs" />
+    <Compile Include="FieldsProblem\FieldProblem_Will.cs" />
+    <Compile Include="FieldsProblem\FieldsProblem_Royston.cs" />
     <Compile Include="FieldsProblem\GenericMethodWithOutDecimalParameterTest.cs" />
     <Compile Include="FieldsProblem\InterfaceInheritance.cs" />
+    <Compile Include="FieldsProblem\SetupResultAndIgnoreArguments.cs" />
     <Compile Include="FieldsProblem\UsingEvents.cs" />
     <Compile Include="GenericMethods.cs" />
     <Compile Include="HandlingProperties.cs" />
@@ -261,6 +278,7 @@
     <Compile Include="StubTest.cs" />
     <Compile Include="TestInfo.cs" />
     <Compile Include="TraceWriterWithStackTraceExpectationWriterFixture.cs" />
+    <Compile Include="UsingComObject.cs" />
     <Compile Include="Utilities\MethodCallTests.cs" />
     <Compile Include="VerifyTests.cs" />
     <Compile Include="WhenCalledTests.cs" />

@@ -51,7 +51,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
         private void Verify(ISearchPatternBuilder builder)
         {
-            builder.VerifyAllExpectations();
+            builder.VerifyExpectations(true);
         }
 
         public string FindImagePath(string directoryToSearch)

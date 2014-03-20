@@ -16,8 +16,10 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             test.Expect(x => x.ArrayWithOut(Arg<string[]>.List.IsIn("data"), out Arg<string>.Out("SuccessWithOut2").Dummy))
                 .Return("SuccessWithOut1");
 
-            Console.WriteLine(test.ArrayWithOut(new string[] { "data" }, out b));
-            Console.WriteLine(b);
+            string result = test.ArrayWithOut(new string[] { "data" }, out b);
+
+            Assert.Equal("SuccessWithOut2", b);
+            Assert.Equal("SuccessWithOut1", result);
         }
 
 

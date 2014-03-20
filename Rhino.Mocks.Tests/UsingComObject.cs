@@ -46,13 +46,13 @@ namespace Rhino.Mocks.Tests
             Type fsoType = Type.GetTypeFromProgID("Scripting.FileSystemObject");
             Scripting.FileSystemObject fso = (Scripting.FileSystemObject)Activator.CreateInstance(fsoType);
 
-            IMockTest test = MockRepository.GenerateStrictMock(typeof(IMockTest)) as IMockTest;
+            IMockTest test = Repository.Mock<IMockTest>();
             test.Expect(x => x.GetFileSystemObject())
                 .Return(fso);
 
             Assert.Same(fso, test.GetFileSystemObject());
 
-            test.VerifyAllExpectations();
+            test.VerifyExpectations(true);
         }
     }
 }

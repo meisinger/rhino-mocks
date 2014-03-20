@@ -37,11 +37,11 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void ReproducedWithOutArraysContainingMockedObject2()
 		{
-			IPlugin plugin = MockRepository.GenerateStrictMock<IPlugin>();
+			IPlugin plugin = Repository.Mock<IPlugin>();
 			IPlugin[] allPlugins;
 
 			// PluginMng
-			IPluginMng pluginMng = (IPluginMng)MockRepository.GenerateStrictMock(typeof (IPluginMng));
+			IPluginMng pluginMng = Repository.Mock<IPluginMng>();
             pluginMng.Expect(x => x.GetPlugins(out allPlugins))
                 .IgnoreArguments()
                 .OutRef(new object[] { new IPlugin[] { plugin } });
@@ -50,6 +50,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
 			Assert.Equal(1, allPlugins.Length);
 			Assert.Same(plugin, allPlugins[0]);
+
+            pluginMng.VerifyExpectations(true);
 		}
 
 		[Fact]
@@ -58,14 +60,14 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             byte myValue = 3;
             int returnedValue = 3;
 
-			IWithGeneric1 stubbed = MockRepository.GenerateStrictMock<IWithGeneric1>();
+			IWithGeneric1 stubbed = Repository.Mock<IWithGeneric1>();
             stubbed.Expect(s => s.DoNothing<byte>(myValue))
                 .Return(returnedValue);
 			
 			int x = stubbed.DoNothing<byte>(myValue);
 			Assert.Equal(myValue, x);
 
-            stubbed.VerifyAllExpectations();
+            stubbed.VerifyExpectations(true);
 		}
 
 		[Fact]
@@ -73,14 +75,14 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		{
             byte myValue = 4;
 
-			IWithGeneric2 stubbed = MockRepository.GenerateStrictMock<IWithGeneric2>();
+			IWithGeneric2 stubbed = Repository.Mock<IWithGeneric2>();
             stubbed.Expect(s => s.DoNothing<byte>(myValue))
                 .Return(myValue);
 			
 			byte x = stubbed.DoNothing<byte>(myValue);
 			Assert.Equal(myValue, x);
 
-            stubbed.VerifyAllExpectations();
+            stubbed.VerifyExpectations(true);
 		}
 
 		[Fact]
@@ -90,14 +92,14 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             List<byte> bytes = new List<byte>();
             bytes.Add(myValue);
 
-            IWithGeneric2 stubbed = MockRepository.GenerateStrictMock<IWithGeneric2>();
+            IWithGeneric2 stubbed = Repository.Mock<IWithGeneric2>();
             stubbed.Expect(x => x.DoNothing<IList<byte>>(null))
                 .Return(bytes);
 
 			IList<byte> bytesResult = stubbed.DoNothing<IList<byte>>(null);
 			Assert.Equal(bytes, bytesResult);
 
-            stubbed.VerifyAllExpectations();
+            stubbed.VerifyExpectations(true);
 		}
 	}
 

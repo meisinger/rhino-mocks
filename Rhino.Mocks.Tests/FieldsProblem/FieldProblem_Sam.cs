@@ -27,17 +27,11 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             interfaceWithThreeMethods.Expect(x => x.C());
 
 			interfaceWithThreeMethods.A();
-			try
-			{
-				interfaceWithThreeMethods.B();
-			}
-			catch { /* valid for code under test to catch all */ }
+            interfaceWithThreeMethods.B();
+            interfaceWithThreeMethods.C();
 
-			interfaceWithThreeMethods.C();
-
-            Assert.Throws<ExpectationViolationException>(
-                "Unordered method call! The expected call is: 'Ordered: { IInterfaceWithThreeMethods.C(); }' but was: 'IInterfaceWithThreeMethods.B();'",
-                () => interfaceWithThreeMethods.VerifyExpectations());
+			Assert.Throws<ExpectationViolationException>(() => 
+                interfaceWithThreeMethods.VerifyExpectations(true));
 		}
 	}
 

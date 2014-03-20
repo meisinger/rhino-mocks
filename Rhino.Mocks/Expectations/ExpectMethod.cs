@@ -142,6 +142,34 @@ namespace Rhino.Mocks.Expectations
             return true;
         }
 
+        private void ValidateDelegateArguments(Delegate action)
+        {
+            var targetMethod = action.Method;
+            var targetParameters = targetMethod.GetParameters();
+
+            if (targetParameters.Length != Arguments.Length)
+            {
+                var message = "The delegate arguments don't match the method arguments";
+                throw new InvalidOperationException(message);
+            }
+
+            var methodParameters = Method.GetParameters();
+            for (int index = 0; index < targetParameters.Length; index++)
+            {
+                var parameter = targetParameters[index];
+                var parameterType = parameter.ParameterType;
+
+                var argument = methodParameters[index];
+                var argumentType = argument.ParameterType;
+
+                if (!parameterType.IsAssignableFrom(argumentType))
+                {
+                    var message = "The delegate arguments don't match the method arguments";
+                    throw new InvalidOperationException(message);
+                }
+            }
+        }
+
         /// <summary>
         /// Call original method
         /// </summary>
@@ -168,30 +196,7 @@ namespace Rhino.Mocks.Expectations
         /// <returns></returns>
         IMethodOptions IMethodOptions.DoInstead(Delegate action)
         {
-            var targetMethod = action.Method;
-            var targetParameters = targetMethod.GetParameters();
-            
-            if (targetParameters.Length != Arguments.Length)
-            {
-                var message = "The delegate arguments don't match the method arguments";
-                throw new InvalidOperationException(message);
-            }
-
-            var methodParameters = Method.GetParameters();
-            for (int index = 0; index < targetParameters.Length; index++)
-            {
-                var parameter = targetParameters[index];
-                var parameterType = parameter.ParameterType;
-
-                var argument = methodParameters[index];
-                var argumentType = argument.ParameterType;
-
-                if (!parameterType.IsAssignableFrom(argumentType))
-                {
-                    var message = "The delegate arguments don't match the method arguments";
-                    throw new InvalidOperationException(message);
-                }
-            }
+            ValidateDelegateArguments(action);
 
             DelegateToInvoke = action;
             return this;
@@ -293,6 +298,8 @@ namespace Rhino.Mocks.Expectations
         /// <returns></returns>
         IMethodOptions IMethodOptions.WhenCalled<TArg>(Action<TArg> action)
         {
+            ValidateDelegateArguments(action);
+
             DelegateToInvoke = action;
             return this;
         }
@@ -306,6 +313,8 @@ namespace Rhino.Mocks.Expectations
         /// <returns></returns>
         IMethodOptions IMethodOptions.WhenCalled<TArg1, TArg2>(Action<TArg1, TArg2> action)
         {
+            ValidateDelegateArguments(action);
+
             DelegateToInvoke = action;
             return this;
         }
@@ -320,6 +329,8 @@ namespace Rhino.Mocks.Expectations
         /// <returns></returns>
         IMethodOptions IMethodOptions.WhenCalled<TArg1, TArg2, TArg3>(Action<TArg1, TArg2, TArg3> action)
         {
+            ValidateDelegateArguments(action);
+
             DelegateToInvoke = action;
             return this;
         }
@@ -335,6 +346,8 @@ namespace Rhino.Mocks.Expectations
         /// <returns></returns>
         IMethodOptions IMethodOptions.WhenCalled<TArg1, TArg2, TArg3, TArg4>(Action<TArg1, TArg2, TArg3, TArg4> action)
         {
+            ValidateDelegateArguments(action);
+
             DelegateToInvoke = action;
             return this;
         }
@@ -475,31 +488,7 @@ namespace Rhino.Mocks.Expectations
             return true;
         }
 
-        /// <summary>
-        /// Call original method
-        /// </summary>
-        /// <returns>Fluid Interface</returns>
-        IMethodOptions<T> IMethodOptions<T>.CallOriginalMethod()
-        {
-            if (Method.IsAbstract)
-            {
-                var message = string.Format(
-                    "Can't use CallOriginalMethod on method {0} because the method is abstract.",
-                        Method.Name);
-
-                throw new InvalidOperationException(message);
-            }
-
-            ForceProceed = true;
-            return this;
-        }
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        IMethodOptions<T> IMethodOptions<T>.DoInstead(Delegate action)
+        private void ValidateDelegateArguments(Delegate action)
         {
             var targetMethod = action.Method;
             var targetParameters = targetMethod.GetParameters();
@@ -526,12 +515,49 @@ namespace Rhino.Mocks.Expectations
                     throw new InvalidOperationException(message);
                 }
             }
+        }
+
+        private void ValidateDelegateReturnType(Delegate action)
+        {
+            var targetMethod = action.Method;
+            var targetParameters = targetMethod.GetParameters();
+            var targetReturnType = targetMethod.ReturnType;
 
             if (!ReturnType.IsAssignableFrom(targetReturnType))
             {
                 var message = string.Format("The delegate return value should be assignable from {0}", ReturnType.Name);
                 throw new InvalidOperationException(message);
             }
+        }
+
+        /// <summary>
+        /// Call original method
+        /// </summary>
+        /// <returns>Fluid Interface</returns>
+        IMethodOptions<T> IMethodOptions<T>.CallOriginalMethod()
+        {
+            if (Method.IsAbstract)
+            {
+                var message = string.Format(
+                    "Can't use CallOriginalMethod on method {0} because the method is abstract.",
+                        Method.Name);
+
+                throw new InvalidOperationException(message);
+            }
+
+            ForceProceed = true;
+            return this;
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        IMethodOptions<T> IMethodOptions<T>.DoInstead(Delegate action)
+        {
+            ValidateDelegateArguments(action);
+            ValidateDelegateReturnType(action);
 
             if (HasReturnValue || ThrowsException || (HasDelegateToInvoke && DelegateReturnsValue))
                 throw new InvalidOperationException(
@@ -676,6 +702,8 @@ namespace Rhino.Mocks.Expectations
         /// <returns></returns>
         IMethodOptions<T> IMethodOptions<T>.WhenCalled<TArg>(Action<TArg> action)
         {
+            ValidateDelegateArguments(action);
+
             DelegateToInvoke = action;
             return this;
         }
@@ -689,6 +717,8 @@ namespace Rhino.Mocks.Expectations
         /// <returns></returns>
         IMethodOptions<T> IMethodOptions<T>.WhenCalled<TArg1, TArg2>(Action<TArg1, TArg2> action)
         {
+            ValidateDelegateArguments(action);
+
             DelegateToInvoke = action;
             return this;
         }
@@ -703,6 +733,8 @@ namespace Rhino.Mocks.Expectations
         /// <returns></returns>
         IMethodOptions<T> IMethodOptions<T>.WhenCalled<TArg1, TArg2, TArg3>(Action<TArg1, TArg2, TArg3> action)
         {
+            ValidateDelegateArguments(action);
+
             DelegateToInvoke = action;
             return this;
         }
@@ -718,6 +750,8 @@ namespace Rhino.Mocks.Expectations
         /// <returns></returns>
         IMethodOptions<T> IMethodOptions<T>.WhenCalled<TArg1, TArg2, TArg3, TArg4>(Action<TArg1, TArg2, TArg3, TArg4> action)
         {
+            ValidateDelegateArguments(action);
+
             DelegateToInvoke = action;
             return this;
         }
