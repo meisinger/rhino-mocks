@@ -4,8 +4,8 @@ properties {
   $build_dir = "$base_dir\Build" 
   
   $sln_file = "$base_dir\Rhino.Mocks.sln" 
-  $version = "3.6.0.0"
-  $humanReadableversion = "3.6"
+  $version = "4.0.0.0"
+  $humanReadableversion = "4.0"
   $tools_dir = "$base_dir\Tools"
   $release_dir = "$base_dir\Release"
 } 
@@ -28,7 +28,7 @@ task Init -depends Clean {
 		-company "Hibernating Rhinos" `
 		-product "Rhino Mocks $version" `
 		-version $version `
-		-copyright "Hibernating Rhinos & Ayende Rahien 2004 - 2009"
+		-copyright "Hibernating Rhinos & Ayende Rahien 2004-2009, Mike Meisinger 2013-2014"
 		
 	Generate-Assembly-Info `
 		-file "$base_dir\Rhino.Mocks.Tests\Properties\AssemblyInfo.cs" `
@@ -38,7 +38,7 @@ task Init -depends Clean {
 		-product "Rhino Mocks Tests $version" `
 		-version $version `
 		-clsCompliant "false" `
-		-copyright "Hibernating Rhinos & Ayende Rahien 2004 - 2009"
+		-copyright "Hibernating Rhinos & Ayende Rahien 2004-2009, Mike Meisinger 2013-2014"
 		
 	Generate-Assembly-Info `
 		-file "$base_dir\Rhino.Mocks.Tests.Model\Properties\AssemblyInfo.cs" `
@@ -48,7 +48,7 @@ task Init -depends Clean {
 		-product "Rhino Mocks Tests Model $version" `
 		-version $version `
 		-clsCompliant "false" `
-		-copyright "Hibernating Rhinos & Ayende Rahien 2004 - 2009"
+		-copyright "Hibernating Rhinos & Ayende Rahien 2004-2009, Mike Meisinger 2013-2014"
 	
 	new-item $release_dir -itemType directory 
 	new-item $build_dir -itemType directory 

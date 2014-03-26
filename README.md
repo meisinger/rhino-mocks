@@ -10,7 +10,9 @@ Rhino Mocks is built using [psake](https://github.com/psake/psake). It is import
 
 In order to build this project, execute the [psake](https://github.com/psake/psake) build script from a Powershell console. This can be done using the following command from the root project directory:
 
-*.\psake.ps1 .\default.ps1*
+*.\psake.ps1*
+
+Two tasks are available beyond the default task: *Compile* and *Test*
 
 You make need to allow script execution by running the following command as administrator:
 
