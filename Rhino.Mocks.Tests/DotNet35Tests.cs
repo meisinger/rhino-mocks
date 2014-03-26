@@ -36,7 +36,6 @@ namespace Rhino.Mocks.Tests
 			demo.Expect(x => x.VoidStringArg("blah"));
 			
             Assert.Throws<ExpectationViolationException>(
-                "IDemo.VoidStringArg(\"blah\"); Expected #1, Actual #0.",
                 () => demo.VerifyExpectations());
 		}
 
@@ -49,8 +48,6 @@ namespace Rhino.Mocks.Tests
             demo.VoidStringArg("arg");
             
             Assert.Throws<ExpectationViolationException>(
-                @"IDemo.VoidStringArg(""arg""); Expected #0, Actual #1.
-IDemo.VoidStringArg(""blah""); Expected #1, Actual #0.",
                () => demo.VerifyExpectations(true));
 		}
 

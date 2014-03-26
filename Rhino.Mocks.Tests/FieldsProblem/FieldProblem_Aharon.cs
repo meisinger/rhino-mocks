@@ -56,13 +56,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		{
 			Accepter accepter = Repository.Mock<Accepter>();
 
-            //Assert.Throws<ExpectationViolationException>(
-            //    "Accepter.Accept(Rhino.Mocks.Tests.FieldsProblem.Accepter); Expected #0, Actual #1.",
-            //    () => accepter.Accept(accepter));
-
             accepter.Accept(accepter);
             Assert.Throws<ExpectationViolationException>(
-                "Accepter.Accept(Rhino.Mocks.Tests.FieldsProblem.Accepter); Expected #0, Actual #1.",
                 () => accepter.VerifyExpectations(true));
 		}
 	}

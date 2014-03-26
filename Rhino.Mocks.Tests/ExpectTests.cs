@@ -68,7 +68,7 @@ namespace Rhino.Mocks.Tests
             demo.Expect(x => x.VoidNoArgs())
                 .Throws<ArgumentNullException>();
 
-			Assert.Throws<ArgumentNullException>(demo.VoidNoArgs);
+			Assert.Throws<ArgumentNullException>(() => demo.VoidNoArgs());
 		}
 
 		[Fact]
@@ -77,7 +77,7 @@ namespace Rhino.Mocks.Tests
             demo.Expect(x => x.VoidNoArgs())
                 .Throws<ArgumentNullException>();
 
-			Assert.Throws<ArgumentNullException>(demo.VoidNoArgs);
+			Assert.Throws<ArgumentNullException>(() => demo.VoidNoArgs());
 		}
 
         [Fact(Skip = "Test No Longer Valid (Expect removed)")]

@@ -310,6 +310,71 @@ namespace Rhino.Mocks
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="instance"></param>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public static Actuals[] GetArgumentsForCallsMadeOn<T>(this T instance, Action<T> action)
+            where T : class
+        {
+            if (instance == null)
+                throw new ArgumentNullException("instance", "Assertion cannot be performed on a null object or instance.");
+
+            var invocation = instance as IInvocation;
+            var container = GetExpectationContainer(instance);
+            if (container == null)
+                throw new ArgumentOutOfRangeException("instance", "Assertion can only be performed on a mocked object or instance.");
+
+            var assertion = Repository.GetMethodCallArguments(instance, action);
+            var methodName = assertion.GetDisplayName(invocation);
+
+            var actuals = container.ListActuals();
+            if (actuals.Any())
+            {
+                return actuals
+                    .Where(x => assertion.MatchesCall(x.Method, x.Arguments))
+                    .ToArray();
+            }
+
+            return new Actuals[0];
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="instance"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        public static Actuals[] GetArgumentsForCallsMadeOn<T, TResult>(this T instance, Func<T, TResult> func)
+            where T : class
+        {
+            if (instance == null)
+                throw new ArgumentNullException("instance", "Assertion cannot be performed on a null object or instance.");
+
+            var invocation = instance as IInvocation;
+            var container = GetExpectationContainer(instance);
+            if (container == null)
+                throw new ArgumentOutOfRangeException("instance", "Assertion can only be performed on a mocked object or instance.");
+
+            var assertion = Repository.GetMethodCallArguments(instance, func);
+            var methodName = assertion.GetDisplayName(invocation);
+
+            var actuals = container.ListActuals();
+            if (actuals.Any())
+            {
+                return actuals
+                    .Where(x => assertion.MatchesCall(x.Method, x.Arguments))
+                    .ToArray();
+            }
+
+            return new Actuals[0];
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="instance"></param>
         /// <param name="eventSubscription"></param>
         /// <param name="args"></param>
         public static void Raise<T>(this T instance, Action<T> eventSubscription, params object[] args)

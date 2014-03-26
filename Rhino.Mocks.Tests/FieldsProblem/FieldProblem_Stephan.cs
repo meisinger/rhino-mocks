@@ -47,8 +47,6 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             m_SomeServiceMock.DoSomething<int>(null, 5);
 
             Assert.Throws<ExpectationViolationException>(
-				@"ISomeService.DoSomething<System.Int32>(null, 5); Expected #0, Actual #1.
-ISomeService.DoSomething<System.String>(null, ""foo""); Expected #1, Actual #0.",
 				() => m_SomeServiceMock.VerifyExpectations(true));
 		}
 

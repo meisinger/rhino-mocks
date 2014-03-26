@@ -49,7 +49,6 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 			var subject = Repository.Partial<SUT>();
 			
 			Assert.Throws<ExpectationViolationException>(
-				"SUT.NestedVirtualMethod(); Expected #1, Actual #0.",
 				() => subject.AssertWasCalled(it => it.NestedVirtualMethod()));
 		}
 

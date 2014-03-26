@@ -128,7 +128,6 @@ namespace Rhino.Mocks.Tests
             demo.ReturnIntNoArgs();
 
             Assert.Throws<ExpectationViolationException>(
-                "IDemo.ReturnIntNoArgs(); Expected #0, Actual #1.",
                 () => demo.VerifyExpectations(true));
 		}
 
@@ -139,7 +138,6 @@ namespace Rhino.Mocks.Tests
                 .Repeat.Never();
 
             Assert.Throws<InvalidOperationException>(
-                "The result for IDemo.ReturnStringNoArgs(); has already been setup.",
                 () => demo.Expect(x => x.ReturnStringNoArgs())
                     .Repeat.Never());
 		}

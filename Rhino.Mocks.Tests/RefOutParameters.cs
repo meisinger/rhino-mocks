@@ -75,7 +75,6 @@ namespace Rhino.Mocks.Tests
             string s2;
 
             Assert.Throws<InvalidOperationException>(
-                "Output and ref parameters has already been set for this expectation",
                 () => myClass.Expect(x => x.MyMethod(out i, ref s, 1, out s2))
                         .OutRef(100, "s", "b")
                         .OutRef(100, "s", "b"));

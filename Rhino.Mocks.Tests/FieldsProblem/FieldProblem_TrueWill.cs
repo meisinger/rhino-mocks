@@ -27,9 +27,6 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         {
             ISomeThing thing = Repository.Mock<ISomeThing>();
         	Assert.Throws<InvalidOperationException>(
-        		@"You are trying to set an expectation on a property that was defined to use PropertyBehavior.
-Instead of writing code such as this: mockObject.Stub(x => x.SomeProperty).Return(42);
-You can use the property directly to achieve the same result: mockObject.SomeProperty = 42;",
         		() => thing.Stub(x => x.Number).Return(21));
             // InvalidOperationException :
             // Invalid call, the last call has been used...

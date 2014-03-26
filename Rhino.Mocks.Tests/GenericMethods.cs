@@ -66,8 +66,6 @@ namespace Rhino.Mocks.Tests
             factory.Create<int>();
 
 			Assert.Throws<ExpectationViolationException>(
-				@"IFactory.Create<System.Int32>(); Expected #1, Actual #1.
-IFactory.Create<System.String>(); Expected #1, Actual #0.",
 				() => factory.VerifyExpectations(true));
 		}
 
@@ -80,7 +78,6 @@ IFactory.Create<System.String>(); Expected #1, Actual #0.",
                 .Return("working?");
 
 			Assert.Throws<ExpectationViolationException>(
-				"IFactory.Create<System.String>(); Expected #1, Actual #0.",
 				() => factory.VerifyAllExpectations());
 		}
 	}

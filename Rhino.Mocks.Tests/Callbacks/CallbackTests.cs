@@ -76,7 +76,6 @@ namespace Rhino.Mocks.Tests.Callbacks
 		public void DifferentArgumentsFromMethodThrows()
 		{
             Assert.Throws<InvalidOperationException>(
-                "Callback arguments didn't match the method arguments",
                 () => demo.Expect(x => x.VoidThreeArgs(0, "", 0f))
                         .WhenCalled<int, string, string>((x, y, z) => OtherThreeArgs(x, y, z)));
 		}
@@ -107,7 +106,6 @@ namespace Rhino.Mocks.Tests.Callbacks
 		public void CallbackWithDifferentSignatureFails()
 		{
             Assert.Throws<InvalidOperationException>(
-                "Callback arguments didn't match the method arguments",
                 () => demo.Expect(x => x.VoidThreeArgs(0, "", 0f))
                         .WhenCalled<string>(x => StringMethod(x)));
 		}
@@ -119,7 +117,6 @@ namespace Rhino.Mocks.Tests.Callbacks
                 .WhenCalled<int, string, float>((x, y, z) => ThreeArgsAreSame(x, y, z));
 
             Assert.Throws<ExpectationViolationException>(
-                "IDemo.VoidThreeArgs(callback method: CallbackTests.ThreeArgsAreSame); Expected #1, Actual #0.",
                 () => demo.VerifyExpectations(true));
 		}
 
@@ -134,7 +131,6 @@ namespace Rhino.Mocks.Tests.Callbacks
             demo.VoidThreeArgs(1, "Ayende", 3.14f);
 
             Assert.Throws<ExpectationViolationException>(
-                "IDemo.VoidThreeArgs(1, \"Ayende\", 3.14); Expected #1, Actual #2.",
                 () => demo.VerifyExpectations(true));
 		}
         
@@ -145,7 +141,6 @@ namespace Rhino.Mocks.Tests.Callbacks
                 .WhenCalled(() => NoArgsMethod());
 
             Assert.Throws<InvalidOperationException>(
-                "Previous method 'IDemo.ReturnIntNoArgs(callback method: CallbackTests.NoArgsMethod);' requires a return value or an exception to throw.",
                 () => demo.ReturnIntNoArgs());
 		}
         
@@ -153,7 +148,6 @@ namespace Rhino.Mocks.Tests.Callbacks
 		public void CallbackAndConstraintsOnSameMethod()
 		{
             Assert.Throws<InvalidOperationException>(
-                "This method has already been set to CallbackExpectation.",
                 () => demo.Expect(x => x.StringArgString(Arg<string>.Is.Anything))
                     .WhenCalled<string>(x => StringMethod(x)));
 		}
@@ -166,7 +160,6 @@ namespace Rhino.Mocks.Tests.Callbacks
                 .Return(5);
 
 			Assert.Throws<ExternalException>(
-                "I'm not guilty, is was /him/",
                 () => Assert.Equal(5, demo.ReturnIntNoArgs()));
 		}
 
@@ -179,7 +172,6 @@ namespace Rhino.Mocks.Tests.Callbacks
             demo.VoidThreeArgs(1, "Ayende", 3.14f);
 
 			Assert.Throws<ExpectationViolationException>(
-                "IDemo.VoidThreeArgs(1, \"Ayende\", 3.14); Expected #0, Actual #1.",
                 () => demo.VerifyExpectations(true));
 		}
 

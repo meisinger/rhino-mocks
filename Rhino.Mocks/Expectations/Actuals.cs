@@ -16,7 +16,7 @@ namespace Rhino.Mocks.Expectations
         /// Hash code of the actual call that uniquely
         /// identifies the call (not the same as GetHashCode())
         /// </summary>
-        public int HashCode
+        internal int HashCode
         {
             get { return hashcode; }
         }

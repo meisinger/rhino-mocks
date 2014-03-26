@@ -51,7 +51,6 @@ namespace Rhino.Mocks.Tests
             demo.StringArgString("Ayende");
 
             Assert.Throws<ExpectationViolationException>(
-                "IDemo.StringArgString(\"Ayende\"); Expected #0, Actual #1.",
                 () => demo.VerifyExpectations());
         }
 
@@ -64,7 +63,6 @@ namespace Rhino.Mocks.Tests
             demo.VoidNoArgs();
 
             Assert.Throws<ExpectationViolationException>(
-                "IDemo.VoidNoArgs(); Expected #0, Actual #1.",
                 () => demo.VerifyExpectations());
         }
 
@@ -77,7 +75,6 @@ namespace Rhino.Mocks.Tests
             demo.VoidStringArg("Ayende");
 
             Assert.Throws<ExpectationViolationException>(
-                "IDemo.VoidStringArg(\"Ayende\"); Expected #0, Actual #1.",
                 () => demo.VerifyExpectations());
         }
 
@@ -90,7 +87,6 @@ namespace Rhino.Mocks.Tests
             demo.VoidNoArgs();
 
             Assert.Throws<ExpectationViolationException>(
-                "IDemo.VoidNoArgs(); Expected #0, Actual #1.",
                 () => demo.VerifyExpectations());
         }
 
@@ -103,7 +99,6 @@ namespace Rhino.Mocks.Tests
             demo.StringArgString("Ayende");
 
             Assert.Throws<ExpectationViolationException>(
-                "IDemo.StringArgString(\"Ayende\"); Expected #0, Actual #1.",
                 () => demo.VerifyExpectations());
         }
 
@@ -117,7 +112,6 @@ namespace Rhino.Mocks.Tests
             demo.StringArgString("Sneal");
 
             Assert.Throws<ExpectationViolationException>(
-                "IDemo.StringArgString(\"Ayende\"); Expected #0, Actual #1.",
                 () => demo.VerifyExpectations());
         }
 
@@ -130,7 +124,6 @@ namespace Rhino.Mocks.Tests
             demo.Prop = "Ayende";
 
             Assert.Throws<ExpectationViolationException>(
-                "IDemo.set_Prop(\"Ayende\"); Expected #0, Actual #1.",
                 () => demo.VerifyExpectations());
         }
 
@@ -143,7 +136,6 @@ namespace Rhino.Mocks.Tests
             var soItCompiles = demo.Prop;
 
             Assert.Throws<ExpectationViolationException>(
-                "IDemo.get_Prop(); Expected #0, Actual #1.",
                 () => demo.VerifyExpectations());
         }
     }

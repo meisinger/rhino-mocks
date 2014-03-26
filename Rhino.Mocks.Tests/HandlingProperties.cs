@@ -58,20 +58,10 @@ namespace Rhino.Mocks.Tests
             demo.VerifyAllExpectations();
         }
 
-        //[Fact]
-        //public void ExceptionIfLastMethodCallIsNotProperty()
-        //{
-        //    Assert.Throws<InvalidOperationException>(
-        //        "Last method call was not made on a setter or a getter",
-        //        () => demo.Expect(x => x.EnumNoArgs())
-        //                .PropertyBehavior());
-        //}
-
         [Fact]
         public void ExceptionIfPropHasOnlyGetter()
         {
             Assert.Throws<InvalidOperationException>(
-                "Property must be read/write",
                 () => demo.ExpectProperty(x => x.ReadOnly));
         }
 
@@ -79,7 +69,6 @@ namespace Rhino.Mocks.Tests
         public void ExceptionIfPropHasOnlySetter()
         {
         	Assert.Throws<InvalidOperationException>(
-                "Property must be read/write",
                 () => demo.ExpectProperty(x => x.WriteOnly));
         }
 
@@ -115,7 +104,6 @@ namespace Rhino.Mocks.Tests
             with.ExpectProperty(x => x[1]);
 
             Assert.Throws<InvalidOperationException>(
-                "Can't return a value for property Item because no value was set and the Property return a value type.",
                 () => GC.KeepAlive(with[1]));
         }
 

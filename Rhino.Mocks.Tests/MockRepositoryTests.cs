@@ -62,7 +62,6 @@ namespace Rhino.Mocks.Tests
                 .Return(string.Empty);
 
             Assert.Throws<ExpectationViolationException>(
-                "IDemo.ReturnStringNoArgs(); Expected #1, Actual #0.",
                 () => demo.VerifyAllExpectations());
 		}
 
@@ -76,7 +75,6 @@ namespace Rhino.Mocks.Tests
 			demo.ReturnStringNoArgs();
 
 			Assert.Throws<ExpectationViolationException>(
-				"IDemo.ReturnStringNoArgs(); Expected #2, Actual #1.",
 				() => demo.VerifyAllExpectations());
 		}
 
@@ -86,7 +84,6 @@ namespace Rhino.Mocks.Tests
             demo.VerifyAllExpectations();
 
 			Assert.Throws<InvalidOperationException>(
-				"This action is invalid when the mock object is in verified state.",
 				() => demo.ReturnIntNoArgs());
 		}
 
@@ -123,7 +120,6 @@ namespace Rhino.Mocks.Tests
                 .Throws<ArgumentException>();
 
 			Assert.Throws<ArgumentException>(
-                "Reserved value, must be zero",
                 () => demo.VoidStringArg("test"));
 		}
 
@@ -165,7 +161,6 @@ namespace Rhino.Mocks.Tests
             demo.Expect(x => x.ReturnIntNoArgs());
 
             Assert.Throws<InvalidOperationException>(
-                "Previous method 'IDemo.ReturnIntNoArgs();' requires a return value or an exception to throw.",
                 () => demo.ReturnIntNoArgs());
 		}
 
@@ -205,7 +200,6 @@ namespace Rhino.Mocks.Tests
             demo.EnumNoArgs();
 
             Assert.Throws<ExpectationViolationException>(
-                "IDemo.EnumNoArgs(); Expected #1, Actual #2.",
                 () => demo.VerifyExpectations(true));
 		}
 
@@ -230,7 +224,6 @@ namespace Rhino.Mocks.Tests
             demo.VoidStringArg("World");
 
 			Assert.Throws<ExpectationViolationException>(
-				"IDemo.VoidStringArg(\"World\"); Expected #0, Actual #1.\r\nIDemo.VoidStringArg(\"Hello\"); Expected #1, Actual #0.",
 				() => demo.VerifyExpectations(true));
 		}
 
@@ -310,7 +303,6 @@ namespace Rhino.Mocks.Tests
                 .Throws<Exception>();
 			
 			Assert.Throws<Exception>(
-                "Ugh! It's alive!",
                 () => demo.StringArgString(null));
 		}
 
@@ -322,7 +314,6 @@ namespace Rhino.Mocks.Tests
                 .Throws<Exception>();
 
             Assert.Throws<Exception>(
-                "Ugh! It's alive!",
                 () => demo.StringArgString(null));
 		}
 
@@ -332,7 +323,6 @@ namespace Rhino.Mocks.Tests
             demo.VoidNoArgs();
 
 			Assert.Throws<ExpectationViolationException>(
-				"IDemo.VoidNoArgs(); Expected #0, Actual #1.",
 				() => demo.VerifyExpectations(true));
 		}
 
@@ -344,7 +334,6 @@ namespace Rhino.Mocks.Tests
             demo.VoidNoArgs();
 
             Assert.Throws<ExpectationViolationException>(
-                "IDemo.VoidNoArgs(); Expected #0, Actual #1.",
                 () => demo.VerifyExpectations(true));
 		}
         
@@ -360,7 +349,6 @@ namespace Rhino.Mocks.Tests
 			catch (Exception) { }
 
 			Assert.Throws<ExpectationViolationException>(
-				"IDemo.VoidNoArgs(); Expected #0, Actual #1.",
 				() => demo.VerifyExpectations(true));
 		}
 

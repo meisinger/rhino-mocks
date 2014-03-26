@@ -62,7 +62,6 @@ namespace Rhino.Mocks.Tests
             IDemo demo = Repository.Mock<IDemo>();
 
             Assert.Throws<InvalidOperationException>(
-                "Can't use CallOriginalMethod on method ReturnIntNoArgs because the method is abstract.",
                 () => demo.Expect(x => x.ReturnIntNoArgs())
                         .CallOriginalMethod());
         }
@@ -73,7 +72,6 @@ namespace Rhino.Mocks.Tests
             MockingClassesTests.AbstractDemo demo = Repository.Partial<MockingClassesTests.AbstractDemo>();
 
             Assert.Throws<InvalidOperationException>(
-                "Can't use CallOriginalMethod on method Six because the method is abstract.",
                 () => demo.Expect(x => x.Six())
                         .CallOriginalMethod());
         }

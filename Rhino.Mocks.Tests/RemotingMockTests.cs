@@ -126,7 +126,6 @@ namespace Rhino.Mocks.Tests
             t.Method();
 
         	Assert.Throws<ExpectationViolationException>(
-        		"TestClass.Method(); Expected #0, Actual #1.",
 				() => t.VerifyExpectations(true));
         }
 
@@ -177,7 +176,6 @@ namespace Rhino.Mocks.Tests
             t.MethodGettingParameters(19, "foo");
 
             Assert.Throws<ExpectationViolationException>(
-                "TestClass.MethodGettingParameters(19, \"foo\"); Expected #0, Actual #1.\r\nTestClass.MethodGettingParameters(42, \"foo\"); Expected #1, Actual #0.",
                 () => t.VerifyExpectations(true));
         }
 
@@ -214,7 +212,6 @@ namespace Rhino.Mocks.Tests
             t.StringProperty = "bar";
 
             Assert.Throws<ExpectationViolationException>(
-        		"TestClass.set_StringProperty(\"bar\"); Expected #0, Actual #1.\r\nTestClass.set_StringProperty(\"foo\"); Expected #1, Actual #0.",
 				() => t.VerifyExpectations(true));
         }
 
@@ -254,8 +251,6 @@ namespace Rhino.Mocks.Tests
             t.GenericMethod<int>("foo");
 
 			Assert.Throws<ExpectationViolationException>(
-				@"TestClass.GenericMethod<System.Int32>(""foo""); Expected #0, Actual #1.
-TestClass.GenericMethod<System.String>(""foo""); Expected #1, Actual #0.",
 				() => t.VerifyExpectations(true));
 		}
 
@@ -316,7 +311,6 @@ TestClass.GenericMethod<System.String>(""foo""); Expected #1, Actual #0.",
                 .Return("/home/user/ayende");
 
             Assert.Throws<ExpectationViolationException>(
-                @"AppDomain.get_BaseDirectory(); Expected #1, Actual #0.",
                 () => appDomain.VerifyAllExpectations());
     	}
 

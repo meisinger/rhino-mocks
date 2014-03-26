@@ -81,7 +81,6 @@ namespace Rhino.Mocks.Tests.Constraints
             demo.VoidStringArg("cc");
 
 			Assert.Throws<ExpectationViolationException>(
-				"IDemo.VoidStringArg(\"cc\"); Expected #0, Actual #1.\r\nIDemo.VoidStringArg(Predicate (ConstraintTests.JustPredicate(obj);)); Expected #1, Actual #0.",
 				() => demo.VerifyExpectations(true));
 		}
 		
@@ -150,45 +149,16 @@ namespace Rhino.Mocks.Tests.Constraints
             demo.VoidStringArg("Hello, world");
 
 			Assert.Throws<ExpectationViolationException>(
-				"IDemo.VoidStringArg(\"Hello, world\"); Expected #0, Actual #1.\r\nIDemo.VoidStringArg(contains \"World\"); Expected #1, Actual #0.",
 				() => demo.VerifyExpectations(true));
 		}
 
-        //[Fact]
-        //public void ConstraintWithTooMuchForArguments()
-        //{
-        //    Assert.Throws<InvalidOperationException>(
-        //        "The number of constraints is not the same as the number of the method's parameters!",
-        //        () => demo.Expect(x => x.VoidStringArg("Ayende"))
-        //                .Constraints(Text.Contains("World"), Is.Equal("Rahien")));
-        //}
-
-        //[Fact]
-        //public void ConstraintWithTooFewForArguments()
-        //{
-        //    Assert.Throws<InvalidOperationException>(
-        //        "The number of constraints is not the same as the number of the method's parameters!",
-        //        () => demo.Expect(x => x.VoidThreeArgs(1, "Ayende", 3.14f))
-        //                .Constraints(Text.Contains("World"), Is.Equal("Rahien")));
-        //}
-
-		[Fact]
+        [Fact]
 		public void ConstraintsThatWerentCallCauseVerifyFailure()
 		{
             demo.Expect(x => x.VoidStringArg(Arg.Text.Contains("World")));
 
             Assert.Throws<ExpectationViolationException>(
-                "IDemo.VoidStringArg(contains \"World\"); Expected #1, Actual #0.",
                 () => demo.VerifyExpectations());
 		}
-
-        //[Fact]
-        //public void AddConstraintAndThenTryToIgnoreArgs()
-        //{
-        //    Assert.Throws<InvalidOperationException>(
-        //        "This method has already been set to ConstraintsExpectation.",
-        //        () => demo.Expect(x => x.VoidStringArg("Ayende"))
-        //            .Constraints(Text.Contains("World")).Callback<string>("".StartsWith));
-        //}
 	}
 }

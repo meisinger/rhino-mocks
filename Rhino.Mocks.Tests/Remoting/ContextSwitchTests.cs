@@ -108,7 +108,6 @@ namespace Rhino.Mocks.Tests.Remoting
                 .Throws<InvalidOperationException>();
 
 			Assert.Throws<InvalidOperationException>(
-				"That was expected.",
 				() => contextSwitcher.DoStuff(demo));
 		}
 
@@ -124,7 +123,6 @@ namespace Rhino.Mocks.Tests.Remoting
             contextSwitcher.DoStuff(demo);
 			
 			Assert.Throws<ExpectationViolationException>(
-				"IDemo.VoidStringArg(\"34\"); Expected #0, Actual #1.\r\nIDemo.VoidStringArg(\"bang\"); Expected #1, Actual #0.",
 				() => demo.VerifyExpectations(true));
 		}
 
@@ -148,7 +146,6 @@ namespace Rhino.Mocks.Tests.Remoting
                 .Throws<InvalidOperationException>();
 
 			Assert.Throws<InvalidOperationException>(
-				"That was expected for class.",
 				() => contextSwitcher.DoStuff(demo));
 		}
 
@@ -163,7 +160,6 @@ namespace Rhino.Mocks.Tests.Remoting
             contextSwitcher.DoStuff(demo);
 
 			Assert.Throws<ExpectationViolationException>(
-				"RemotableDemoClass.Two(); Expected #0, Actual #1.",
 				() => demo.VerifyExpectations(true));
 		}
 	}

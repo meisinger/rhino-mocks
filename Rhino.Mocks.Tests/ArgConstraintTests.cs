@@ -101,7 +101,6 @@ namespace Rhino.Mocks.Tests
             demoMock.Expect(x => x.VoidStringArg(Arg.Text.Contains("World")));
 
             Assert.Throws<ExpectationViolationException>(
-                "IDemo.VoidStringArg(contains \"World\"); Expected #1, Actual #0.",
                 () => demoMock.VerifyExpectations());
 		}
 
@@ -147,7 +146,6 @@ namespace Rhino.Mocks.Tests
             testMock.VoidList(new List<string>(new string[] { "1", "3" }));
 
             Assert.Throws<ExpectationViolationException>(
-                "ITestInterface.VoidList(System.Collections.Generic.List`1[System.String]); Expected #0, Actual #1.",
                 () => testMock.VerifyExpectations());
 		}
 		
@@ -155,7 +153,6 @@ namespace Rhino.Mocks.Tests
 		public void ConstraintWithTooFewArguments_ThrowsException()
 		{
             Assert.Throws<InvalidOperationException>(
-                "When using Arg<T>, all arguments must be defined using Arg<T>.Is, Arg<T>.Text, Arg<T>.List, Arg<T>.Ref or Arg<T>.Out. 3 arguments expected, 2 have been defined.",
                 () => demoMock.Expect(x => x.VoidThreeArgs(
                         Arg<int>.Is.Equal(4), Arg.Text.Contains("World"), 3.14f)));
 		}
@@ -165,7 +162,6 @@ namespace Rhino.Mocks.Tests
 		{
             Arg<int>.Is.Equal(4);
             Assert.Throws<InvalidOperationException>(
-                "Use Arg<T> ONLY within a mock method call while recording. 3 arguments expected, 4 have been defined.",
                 () => demoMock.Expect(x => 
                     x.VoidThreeArgs(Arg<int>.Is.Equal(4), Arg.Text.Contains("World"), Arg<float>.Is.Equal(3.14f))));
 		}
@@ -188,7 +184,6 @@ namespace Rhino.Mocks.Tests
 			int iout = 2;
 
             Assert.Throws<InvalidOperationException>(
-                "When using Arg<T>, all arguments must be defined using Arg<T>.Is, Arg<T>.Text, Arg<T>.List, Arg<T>.Ref or Arg<T>.Out. 5 arguments expected, 4 have been defined.",
                 () => testMock.Expect(x => x.RefOut(
                         Arg<string>.Is.Anything, out iout,
                         Arg.Text.Contains("Steinegger"), ref Arg<int>.Ref(Is.Equal(2), 7).Dummy,
@@ -199,7 +194,6 @@ namespace Rhino.Mocks.Tests
 		public void RefInsteadOfOutArg()
 		{
             Assert.Throws<InvalidOperationException>(
-                "Argument 1 must be defined as: out Arg<T>.Out(returnvalue).Dummy",
                 () => testMock.Expect(x => x.RefOut(
                         Arg<string>.Is.Anything, out Arg<int>.Ref(Is.Equal(2), 7).Dummy,
                         Arg.Text.Contains("Steinegger"), ref Arg<int>.Ref(Is.Equal(2), 7).Dummy,
@@ -210,7 +204,6 @@ namespace Rhino.Mocks.Tests
 		public void OutInsteadOfRefArg()
 		{
             Assert.Throws<InvalidOperationException>(
-                "Argument 3 must be defined as: ref Arg<T>.Ref(constraint, returnvalue).Dummy",
                 () => testMock.Expect(x => x.RefOut(
                         Arg<string>.Is.Anything, out Arg<int>.Out(7).Dummy,
                         Arg.Text.Contains("Steinegger"), ref Arg<int>.Out(7).Dummy,
@@ -221,7 +214,6 @@ namespace Rhino.Mocks.Tests
 		public void OutInsteadOfInArg()
 		{
             Assert.Throws<InvalidOperationException>(
-                "Argument 0 must be defined using: Arg<T>.Is, Arg<T>.Text or Arg<T>.List",
                 () => testMock.Expect(x => x.VoidObject(Arg<object>.Out(null))));
 		}
 		
@@ -229,7 +221,6 @@ namespace Rhino.Mocks.Tests
 		public void Is_EqualsThrowsException()
 		{
 			Assert.Throws<InvalidOperationException>(
-				"Don't use Equals() to define constraints, use Equal() instead",
 				() => Arg<object>.Is.Equals(null));
 		}
 
@@ -237,7 +228,6 @@ namespace Rhino.Mocks.Tests
 		public void List_EqualsThrowsException()
 		{
 			Assert.Throws<InvalidOperationException>(
-				"Don't use Equals() to define constraints, use Equal() instead",
 				() => Arg<object>.List.Equals(null));
 		}
 
@@ -245,7 +235,6 @@ namespace Rhino.Mocks.Tests
 		public void Text_EqualsThrowsException()
 		{
 			Assert.Throws<InvalidOperationException>(
-				"Don't use Equals() to define constraints, use Equal() instead",
 				() => Arg.Text.Equals(null));
 		}
 		

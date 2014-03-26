@@ -71,7 +71,6 @@ namespace Rhino.Mocks.Tests
             Assert.Null(demo.ReturnStringNoArgs());
 			
 			Assert.Throws<ExpectationViolationException>(
-				"IDemo.ReturnIntNoArgs(); Expected #1, Actual #0.",
 				() => demo.VerifyAllExpectations());	
 		}
 
@@ -105,7 +104,6 @@ namespace Rhino.Mocks.Tests
             demo.ReturnIntNoArgs();
 
 			Assert.Throws<ExpectationViolationException>(
-				"IDemo.ReturnIntNoArgs(); Expected #0, Actual #1.",
 				() => demo.VerifyExpectations());
 		}
 	}

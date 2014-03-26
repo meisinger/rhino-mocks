@@ -61,7 +61,6 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             SmtpEMailSenderBase<string> senderMock = Repository.Mock<SmtpEMailSenderBase<string>>();
             
 			Assert.Throws<InvalidOperationException>(
-                "Callback arguments didn't match the method arguments",
                 () => senderMock.Expect(x => x.SetFormatter(formatterMock))
                     .DoInstead((Action<IEMailFormatter<int>>)delegate(IEMailFormatter<int> formatter)
                     {

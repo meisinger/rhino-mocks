@@ -401,7 +401,6 @@ namespace Rhino.Mocks.Tests.Core
             Assert.Equal("one", second);
 
             Assert.Throws<ExpectationViolationException>(
-                "ScenarioObject.StringMethodEcho(starts with m); Expected # 3, Actual # 2.",
                 () => mock.VerifyExpectations());
         }
 
@@ -595,6 +594,29 @@ namespace Rhino.Mocks.Tests.Core
             Assert.False(someWasCalled);
             Assert.Equal(2, eventValue);
             mock.VerifyExpectations();
+        }
+
+        [Fact]
+        public void Can_Get_Arguments_For_Call_Made_On_Method()
+        {
+            var mock = Repository.Mock<IScenarioObject>();
+            mock.StringMethodEcho("mike");
+            mock.StringMethodEcho("meisinger");
+
+            var actuals = mock.GetArgumentsForCallsMadeOn(x => 
+                x.StringMethodEcho(Arg<string>.Is.Anything));
+
+            Assert.Equal(2, actuals.Length);
+
+            var first = actuals[0];
+            var firstArguments = first.Arguments;
+            Assert.Equal(1, firstArguments.Length);
+            Assert.Equal("mike", firstArguments[0]);
+
+            var second = actuals[1];
+            var secondArguments = second.Arguments;
+            Assert.Equal(1, secondArguments.Length);
+            Assert.Equal("meisinger", secondArguments[0]);
         }
     }
 }
