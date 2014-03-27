@@ -30,11 +30,12 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Security;
 using System.Security.Permissions;
 using Xunit;
 using Rhino.Mocks.Exceptions;
+using System.Security.Policy;
 
-[assembly:EnvironmentPermission(SecurityAction.RequestMinimum)]
 namespace Rhino.Mocks.Tests.Remoting
 {
 
@@ -49,15 +50,18 @@ namespace Rhino.Mocks.Tests.Remoting
 
 		public ContextSwitchTests()
 		{
-			FileInfo assemblyFile = new FileInfo(
-				Assembly.GetExecutingAssembly().Location);
+            var assemblyName = Assembly.GetExecutingAssembly().FullName;
+            var typeName = typeof(ContextSwitcher).FullName;
 
-			otherDomain = AppDomain.CreateDomain("other domain", null,
-				AppDomain.CurrentDomain.BaseDirectory, null, false);
+            var info = new AppDomainSetup();
+            info.ApplicationBase = AppDomain.CurrentDomain.BaseDirectory;
+            info.ApplicationName = Guid.NewGuid().ToString();
 
-			contextSwitcher = (ContextSwitcher)otherDomain.CreateInstanceAndUnwrap(
-				Assembly.GetExecutingAssembly().GetName().Name,
-				typeof(ContextSwitcher).FullName);
+            otherDomain = AppDomain.CreateDomain(info.ApplicationName, null, info, 
+                new PermissionSet(PermissionState.Unrestricted), new StrongName[0]);
+
+            contextSwitcher = (ContextSwitcher)otherDomain.CreateInstanceAndUnwrap(assemblyName,
+                typeName, false, BindingFlags.Default, null, new object[0], null, null, null);
 		}
 
         public void Dispose()
