@@ -25,7 +25,7 @@ task Init -depends Clean {
 		-file "$base_dir\Rhino.Mocks\Properties\AssemblyInfo.cs" `
 		-title "Rhino Mocks $version" `
 		-description "Mocking Framework for .NET" `
-		-company "Hibernating Rhinos" `
+		-company "" `
 		-product "Rhino Mocks $version" `
 		-version $version `
 		-copyright "Hibernating Rhinos & Ayende Rahien 2004-2009, Mike Meisinger 2013-2014"
@@ -34,7 +34,7 @@ task Init -depends Clean {
 		-file "$base_dir\Rhino.Mocks.Tests\Properties\AssemblyInfo.cs" `
 		-title "Rhino Mocks Tests $version" `
 		-description "Mocking Framework for .NET" `
-		-company "Hibernating Rhinos" `
+		-company "" `
 		-product "Rhino Mocks Tests $version" `
 		-version $version `
 		-clsCompliant "false" `
@@ -44,7 +44,7 @@ task Init -depends Clean {
 		-file "$base_dir\Rhino.Mocks.Tests.Model\Properties\AssemblyInfo.cs" `
 		-title "Rhino Mocks Tests Model $version" `
 		-description "Mocking Framework for .NET" `
-		-company "Hibernating Rhinos" `
+		-company "" `
 		-product "Rhino Mocks Tests Model $version" `
 		-version $version `
 		-clsCompliant "false" `
@@ -79,11 +79,12 @@ task Merge {
 	Remove-Item Rhino.Mocks.Partial.dll -ErrorAction SilentlyContinue 
 	Rename-Item $build_dir\Rhino.Mocks.dll Rhino.Mocks.Partial.dll
 	
-	& $tools_dir\ILMerge.exe Rhino.Mocks.Partial.dll `
+	& $tools_dir\ILMerge\ILMerge.exe Rhino.Mocks.Partial.dll `
 		Castle.Core.dll `
 		/out:Rhino.Mocks.dll `
 		/t:library `
-		"/keyfile:$base_dir\ayende-open-source.snk" `
+		/targetplatform:v2 `
+		"/keyfile:$base_dir\meisinger-open-source.snk" `
 		"/internalize:$base_dir\ilmerge.exclude"
 	if ($lastExitCode -ne 0) {
         throw "Error: Failed to merge assemblies!"
@@ -92,8 +93,10 @@ task Merge {
 }
 
 task Release -depends Test, Merge {
-	& $tools_dir\zip.exe -9 -A -j `
-		$release_dir\Rhino.Mocks-$humanReadableversion-Build-$env:ccnetnumericlabel.zip `
+	$buildrev = Get-Git-Commit
+	
+	& $tools_dir\Zip\zip.exe -9 -A -j `
+		$release_dir\Rhino.Mocks-$humanReadableversion-Build-$buildrev.zip `
 		$build_dir\Rhino.Mocks.dll `
 		$build_dir\Rhino.Mocks.xml `
 		license.txt `

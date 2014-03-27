@@ -13,7 +13,7 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\ayende-open-source.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\meisinger-open-source.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -56,20 +56,13 @@
   <ItemGroup>
     <ProjectReference Include="..\Rhino.Mocks\Rhino.Mocks.csproj">
       <Project>{1E8FECC7-9E9B-4275-A938-D956F5E5D4F8}</Project>
-      <Name>Rhino.Mocks 3.5</Name>
+      <Name>Rhino.Mocks 4.0</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\ayende-open-source.snk">
-      <Link>ayende-open-source.snk</Link>
+    <None Include="..\meisinger-open-source.snk">
+      <Link>meisinger-open-source.snk</Link>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

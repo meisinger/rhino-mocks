@@ -31,4 +31,3 @@ using System.Runtime.CompilerServices;
 using Rhino.Mocks;
 
 [assembly: InternalsVisibleTo(RhinoMocks.StrongName)]
-//[assembly: InternalsVisibleTo(RhinoMocks.NormalName)]
