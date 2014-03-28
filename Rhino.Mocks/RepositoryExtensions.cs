@@ -17,12 +17,14 @@ namespace Rhino.Mocks
     public static class RepositoryExtensions
     {
         /// <summary>
-        /// Asserts the given method was called against the 
-        /// mocked object
+        /// Asserts the given method was called against the mocked object
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="instance"></param>
-        /// <param name="action"></param>
+        /// <typeparam name="T">the mocked type</typeparam>
+        /// <param name="instance">the mocked instance</param>
+        /// <param name="action">the method to assert was called</param>
+        /// <exception cref="Rhino.Mocks.Exceptions.ExpectationViolationException">thrown when the method was not called</exception>
+        /// <exception cref="System.ArgumentNullException">thrown when the instance is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">thrown when the instance cannot be identified as a mocked object</exception>
         public static void AssertWasCalled<T>(this T instance, Action<T> action)
             where T : class
         {
@@ -53,13 +55,15 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Asserts the given method was called against the 
-        /// mocked object
+        /// Asserts the given method was called against the mocked object
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="instance"></param>
-        /// <param name="func"></param>
+        /// <typeparam name="T">the mocked type</typeparam>
+        /// <typeparam name="TResult">the return type of the method</typeparam>
+        /// <param name="instance">the mocked instance</param>
+        /// <param name="func">the method to assert was called</param>
+        /// <exception cref="Rhino.Mocks.Exceptions.ExpectationViolationException">thrown when the method was not called</exception>
+        /// <exception cref="System.ArgumentNullException">thrown when the instance is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">thrown when the instance cannot be identified as a mocked object</exception>
         public static void AssertWasCalled<T, TResult>(this T instance, Func<T, TResult> func)
             where T : class
         {
@@ -90,12 +94,14 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Asserts the given method was not called against the 
-        /// mocked object
+        /// Asserts the given method was not called against the mocked object
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="instance"></param>
-        /// <param name="action"></param>
+        /// <typeparam name="T">the mocked type</typeparam>
+        /// <param name="instance">the mocked instance</param>
+        /// <param name="action">the method to assert was called</param>
+        /// <exception cref="Rhino.Mocks.Exceptions.ExpectationViolationException">thrown when the method was called</exception>
+        /// <exception cref="System.ArgumentNullException">thrown when the instance is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">thrown when the instance cannot be identified as a mocked object</exception>
         public static void AssertWasNotCalled<T>(this T instance, Action<T> action)
             where T : class
         {
@@ -124,13 +130,15 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Asserts the given method was not called against the 
-        /// mocked object
+        /// Asserts the given method was not called against the mocked object
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="instance"></param>
-        /// <param name="func"></param>
+        /// <typeparam name="T">the mocked type</typeparam>
+        /// <typeparam name="TResult">the return type of the method</typeparam>
+        /// <param name="instance">the mocked instance</param>
+        /// <param name="func">the method to assert was called</param>
+        /// <exception cref="Rhino.Mocks.Exceptions.ExpectationViolationException">thrown when the method was called</exception>
+        /// <exception cref="System.ArgumentNullException">thrown when the instance is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">thrown when the instance cannot be identified as a mocked object</exception>
         public static void AssertWasNotCalled<T, TResult>(this T instance, Func<T, TResult> func)
             where T : class
         {
@@ -159,11 +167,29 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Set expectation on an object
+        /// Creates an expectation against the mocked object for the given method
+        /// with a return type of void
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="instance"></param>
-        /// <param name="action"></param>
+        /// <example>
+        /// The following is an example of how to setup an expectation against a method:
+        /// <code>
+        /// [Fact]
+        /// public void Test() {
+        ///     var mock = MockRepository.Mock{ILoggingService}();
+        ///     mock.Expect(x => x.Log('User saved.');
+        /// }
+        /// </code>
+        /// </example>
+        /// <remarks>
+        /// Applicable for methods with a return type of void
+        /// </remarks>
+        /// <typeparam name="T">the mocked type</typeparam>
+        /// <param name="instance">the mocked instance</param>
+        /// <param name="action">the method to create the expectation against</param>
+        /// <returns>expectation targeted for methods</returns>
+        /// <exception cref="System.ArgumentNullException">thrown when the instance is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">thrown when the instance cannot be identified as a mocked object</exception>
+        /// <exception cref="System.InvalidOperationException">thrown when the method cannot be resolved</exception>
         public static IMethodOptions Expect<T>(this T instance, Action<T> action)
             where T : class
         {
@@ -193,12 +219,34 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Set expectation on an object
+        /// Creates an expectation against the mocked object for the given method
+        /// with a return type
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="instance"></param>
-        /// <param name="func"></param>
+        /// <example>
+        /// The following is an example of how to setup an expectation against a method:
+        /// <code>
+        /// [Fact]
+        /// public void Test() {
+        ///     var mock = MockRepository.Mock{ICustomerService}();
+        ///     mock.Expect(x => x.FindCustomer(1))
+        ///         .Return(new Customer
+        ///         {
+        ///             Id = 1,
+        ///         });
+        /// }
+        /// </code>
+        /// </example>
+        /// <remarks>
+        /// Applicable for methods with a return type
+        /// </remarks>
+        /// <typeparam name="T">the mocked type</typeparam>
+        /// <typeparam name="TResult">the return type of the method</typeparam>
+        /// <param name="instance">the mocked instance</param>
+        /// <param name="func">the method to create the expectation against</param>
+        /// <returns>expectation targeted for methods</returns>
+        /// <exception cref="System.ArgumentNullException">thrown when the instance is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">thrown when the instance cannot be identified as a mocked object</exception>
+        /// <exception cref="System.InvalidOperationException">thrown when the method cannot be resolved</exception>
         public static IMethodOptions<TResult> Expect<T, TResult>(this T instance, Func<T, TResult> func)
             where T : class
         {
@@ -228,11 +276,30 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Set expectation for an event on an object
+        /// Creates an expectation against the mocked object for an event
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="instance"></param>
-        /// <param name="action"></param>
+        /// <example>
+        /// The following is an example of how to setup an expectation against an event:
+        /// <code>
+        /// [Fact]
+        /// public void Test() {
+        ///     var mock = MockRepository.Mock{Page}();
+        ///     mock.ExpectEvent(x => x.OnLoad += null);
+        /// }
+        /// </code>
+        /// </example>
+        /// <remarks>
+        /// Applicable for events only
+        /// </remarks>
+        /// <typeparam name="T">the mocked type</typeparam>
+        /// <param name="instance">the mocked instance</param>
+        /// <param name="action">the event to create the expectation against</param>
+        /// <returns>expectation targeted for events</returns>
+        /// <exception cref="System.ArgumentNullException">thrown when the instance is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">thrown when the instance cannot be identified as a mocked object</exception>
+        /// <exception cref="System.InvalidOperationException">
+        /// thrown when the event cannot be resolved or the given method is not an event
+        /// </exception>
         public static IEventOptions ExpectEvent<T>(this T instance, Action<T> action)
             where T : class
         {
@@ -270,13 +337,29 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// 
+        /// Creates an expectation against the mocked object for a property
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="instance"></param>
-        /// <param name="func"></param>
-        /// <returns></returns>
+        /// <example>
+        /// The following is an example of how to setup an expectation against a property:
+        /// <code>
+        /// [Fact]
+        /// public void Test() {
+        ///     var mock = MockRepository.Mock{ICustomer}();
+        ///     mock.ExpectPRoperty(x => x.FirstName);
+        /// }
+        /// </code>
+        /// </example>
+        /// <remarks>
+        /// Applicable for properties only
+        /// </remarks>
+        /// <typeparam name="T">the mocked type</typeparam>
+        /// <typeparam name="TResult">the return type of the property</typeparam>
+        /// <param name="instance">the mocked instance</param>
+        /// <param name="func">the property to create the expectation against</param>
+        /// <returns>expectation targeted for properties</returns>
+        /// <exception cref="System.ArgumentNullException">thrown when the instance is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">thrown when the instance cannot be identified as a mocked object</exception>
+        /// <exception cref="System.InvalidOperationException">thrown when the property cannot be resolved</exception>
         public static IPropertyOptions<TResult> ExpectProperty<T, TResult>(this T instance, Func<T, TResult> func)
             where T : class
         {
@@ -306,12 +389,14 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// 
+        /// Returns all of the actual calls made against the given method
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="instance"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">the mocked type</typeparam>
+        /// <param name="instance">the mocked instance</param>
+        /// <param name="action">the method to retrieve the calls for</param>
+        /// <returns>collection of the actual calls</returns>
+        /// <exception cref="System.ArgumentNullException">thrown when the instance is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">thrown when the instance cannot be identified as a mocked object</exception>
         public static Actuals[] GetArgumentsForCallsMadeOn<T>(this T instance, Action<T> action)
             where T : class
         {
@@ -338,13 +423,15 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// 
+        /// Returns all of the actual calls made against the given method
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="instance"></param>
-        /// <param name="func"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">the mocked type</typeparam>
+        /// <typeparam name="TResult">the return type of the method</typeparam>
+        /// <param name="instance">the mocked instance</param>
+        /// <param name="func">the method to retrieve the calls for</param>
+        /// <returns>collection of the actual calls</returns>
+        /// <exception cref="System.ArgumentNullException">thrown when the instance is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">thrown when the instance cannot be identified as a mocked object</exception>
         public static Actuals[] GetArgumentsForCallsMadeOn<T, TResult>(this T instance, Func<T, TResult> func)
             where T : class
         {
@@ -371,13 +458,18 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// 
+        /// Provides the ability to raise an event that has had an expectation created
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="instance"></param>
-        /// <param name="eventSubscription"></param>
-        /// <param name="args"></param>
-        public static void Raise<T>(this T instance, Action<T> eventSubscription, params object[] args)
+        /// <typeparam name="T">the mocked type</typeparam>
+        /// <param name="instance">the mocked instance</param>
+        /// <param name="eventSubscription">the event that has had an expectation created</param>
+        /// <param name="args">arguments used to the raise event</param>
+        /// <returns>collection of the actual calls</returns>
+        /// <exception cref="System.ArgumentNullException">thrown when the instance is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// thrown when the instance cannot be identified as a mocked object or the given method is not an event
+        /// </exception>
+        public static void Raise<T>(this T instance, Action<T> eventSubscription, object[] args)
             where T : class
         {
             if (instance == null)
@@ -419,14 +511,18 @@ namespace Rhino.Mocks
             raiser.Raise(subscription, args);
         }
 
-
         /// <summary>
-        /// 
+        /// Provides the ability to raise an event that has had an expectation created
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="instance"></param>
-        /// <param name="eventSubscription"></param>
-        /// <param name="args"></param>
+        /// <typeparam name="T">the mocked type</typeparam>
+        /// <param name="instance">the mocked instance</param>
+        /// <param name="eventSubscription">the event that has had an expectation created</param>
+        /// <param name="args">event arguments</param>
+        /// <returns>collection of the actual calls</returns>
+        /// <exception cref="System.ArgumentNullException">thrown when the instance is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">
+        /// thrown when the instance cannot be identified as a mocked object or the given method is not an event
+        /// </exception>
         public static void Raise<T>(this T instance, Action<T> eventSubscription, EventArgs args)
             where T : class
         {
@@ -434,11 +530,28 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Set stub on an object
+        /// Creates a stub against the mocked object for the given method with a return type of void
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="instance"></param>
-        /// <param name="action"></param>
+        /// <example>
+        /// The following is an example of how to setup a stub against a method:
+        /// <code>
+        /// [Fact]
+        /// public void Test() {
+        ///     var mock = MockRepository.Mock{ILoggingService}();
+        ///     mock.Stub(x => x.Log('User saved.');
+        /// }
+        /// </code>
+        /// </example>
+        /// <remarks>
+        /// Applicable for methods with a return type of void
+        /// </remarks>
+        /// <typeparam name="T">the mocked type</typeparam>
+        /// <param name="instance">the mocked instance</param>
+        /// <param name="action">the method to create the stub against</param>
+        /// <returns>stub targeted for methods</returns>
+        /// <exception cref="System.ArgumentNullException">thrown when the instance is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">thrown when the instance cannot be identified as a mocked object</exception>
+        /// <exception cref="System.InvalidOperationException">thrown when the method cannot be resolved</exception>
         public static IMethodOptions Stub<T>(this T instance, Action<T> action)
             where T : class
         {
@@ -469,12 +582,33 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Set stub on an object
+        /// Creates a stub against the mocked object for the given method with a return type
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="instance"></param>
-        /// <param name="func"></param>
+        /// <example>
+        /// The following is an example of how to setup a stub against a method:
+        /// <code>
+        /// [Fact]
+        /// public void Test() {
+        ///     var mock = MockRepository.Mock{ICustomerService}();
+        ///     mock.Stub(x => x.FindCustomer(1))
+        ///         .Return(new Customer
+        ///         {
+        ///             Id = 1,
+        ///         });
+        /// }
+        /// </code>
+        /// </example>
+        /// <remarks>
+        /// Applicable for methods with a return type
+        /// </remarks>
+        /// <typeparam name="T">the mocked type</typeparam>
+        /// <typeparam name="TResult">the return type of the method</typeparam>
+        /// <param name="instance">the mocked instance</param>
+        /// <param name="func">the method to create the stub against</param>
+        /// <returns>stub targeted for methods</returns>
+        /// <exception cref="System.ArgumentNullException">thrown when the instance is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">thrown when the instance cannot be identified as a mocked object</exception>
+        /// <exception cref="System.InvalidOperationException">thrown when the method cannot be resolved</exception>
         public static IMethodOptions<TResult> Stub<T, TResult>(this T instance, Func<T, TResult> func)
             where T : class
         {
@@ -505,12 +639,32 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Set stub an event on an object
+        /// Creates an stub against the mocked object for an event to provide
+        /// the ability to raise the event
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="instance"></param>
-        /// <param name="action"></param>
-        public static IMethodOptions StubEvent<T>(this T instance, Action<T> action)
+        /// <example>
+        /// The following is an example of how to setup a stub against an event:
+        /// <code>
+        /// [Fact]
+        /// public void Test() {
+        ///     var mock = MockRepository.Mock{Page}();
+        ///     mock.StubEvent(x => x.OnLoad += null);
+        /// }
+        /// </code>
+        /// </example>
+        /// <remarks>
+        /// Applicable for events only
+        /// </remarks>
+        /// <typeparam name="T">the mocked type</typeparam>
+        /// <param name="instance">the mocked instance</param>
+        /// <param name="action">the event to create the stub against</param>
+        /// <returns>stub targeted for events</returns>
+        /// <exception cref="System.ArgumentNullException">thrown when the instance is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">thrown when the instance cannot be identified as a mocked object</exception>
+        /// <exception cref="System.InvalidOperationException">
+        /// thrown when the event cannot be resolved or the given method is not an event
+        /// </exception>
+        public static IEventOptions StubEvent<T>(this T instance, Action<T> action)
             where T : class
         {
             if (instance == null)
@@ -520,7 +674,7 @@ namespace Rhino.Mocks
             if (container == null)
                 throw new ArgumentOutOfRangeException("instance", "Stubs can only be set on a mocked object or instance.");
 
-            var expectation = new ExpectMethod();
+            var expectation = new ExpectEvent();
             expectation.SetExpectedCount(new Range(int.MaxValue, int.MaxValue));
             container.MarkForExpectation(expectation);
 
@@ -548,34 +702,44 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Verifies all expectations have been met
-        /// for the given mocked object
+        /// Verifies expectations have been met for the given mocked object
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="instance"></param>
+        /// <typeparam name="T">the mocked type</typeparam>
+        /// <param name="instance">the mocked instance to verify</param>
+        /// <exception cref="Rhino.Mocks.Exceptions.ExpectationViolationException">thrown when expectations have not been met</exception>
+        /// <exception cref="System.ArgumentNullException">thrown when the instance is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">thrown when the instance cannot be identified as a mocked object</exception>
         public static void VerifyAllExpectations<T>(this T instance)
         {
             VerifyExpectations(instance);
         }
 
         /// <summary>
-        /// Verifies all expectations have been met
-        /// for the given mocked object
+        /// Verifies expectations have been met for the given mocked object
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="instance"></param>
+        /// <typeparam name="T">the mocked type</typeparam>
+        /// <param name="instance">the mocked instance to verify</param>
+        /// <exception cref="Rhino.Mocks.Exceptions.ExpectationViolationException">thrown when expectations have not been met</exception>
+        /// <exception cref="System.ArgumentNullException">thrown when the instance is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">thrown when the instance cannot be identified as a mocked object</exception>
         public static void VerifyExpectations<T>(this T instance)
         {
             VerifyExpectations(instance, false);
         }
 
         /// <summary>
-        /// Verifies all expectations have been met
-        /// for the given mocked object
+        /// Verifies expectations have been met for the given mocked object.
+        /// When strictly is "true" then methods called without an expectation will fail verification
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="instance"></param>
-        /// <param name="strictly"></param>
+        /// <typeparam name="T">the mocked type</typeparam>
+        /// <param name="instance">the mocked instance to verify</param>
+        /// <param name="strictly">"true" for strict verification, otherwise normal verification</param>
+        /// <exception cref="Rhino.Mocks.Exceptions.ExpectationViolationException">
+        /// thrown when expectations have not been met or (in the case of strict verification)
+        /// if a method was called that was not setup with an expectation
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">thrown when the instance is null</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">thrown when the instance cannot be identified as a mocked object</exception>
         public static void VerifyExpectations<T>(this T instance, bool strictly)
         {
             if (instance == null)

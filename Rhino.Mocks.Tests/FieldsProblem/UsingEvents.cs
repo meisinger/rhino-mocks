@@ -151,7 +151,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             events.Blah += delegate { };
 
             Assert.Throws<InvalidOperationException>(
-                () => events.Raise(x => x.Blah += null, "", 1));
+                () => events.Raise(x => x.Blah += null,
+                    new object[] { "", 1 }));
         }
 
         [Fact]
@@ -165,7 +166,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             eventHolder.Expect(x => x.RaiseEvent())
                 .DoInstead(new System.Threading.ThreadStart(delegate()
                     {
-                        eventHolder.Raise(x => x.Blah += null, this, EventArgs.Empty);
+                        eventHolder.Raise(x => x.Blah += null,
+                            new object[] { this, EventArgs.Empty });
                     }));
 
             IEventSubscriber eventSubscriber = MockRepository.Mock<IEventSubscriber>();

@@ -23,6 +23,9 @@ namespace Rhino.Mocks
         private readonly ProxyGenerationOptions generatorOptions;
         private readonly ProxyGenerationOptions defaultOptions;
         
+        /// <summary>
+        /// Static Constructor
+        /// </summary>
         static MockRepository()
         {
             generators = new Dictionary<Type, ProxyGenerator>();
@@ -30,8 +33,12 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Constructor
+        /// Constructs an instance of the Mock Repository.
         /// </summary>
+        /// <remarks>
+        /// There is very little reason to instantiate an instance of MockRepository.
+        /// This is intended for internal use only.
+        /// </remarks>
         public MockRepository()
         {
             delegateRepository = new RepositoryForDelegates();
@@ -106,10 +113,10 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Generates a mock for the given type
+        /// Creates a mocked instance of the given type
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T">the type to mock</typeparam>
+        /// <returns>a mocked instance of the given type</returns>
         public static T Mock<T>()
             where T : class
         {
@@ -117,11 +124,14 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Generates a mock for the given type
+        /// Creates a mocked instance of the given type
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="arguments"></param>
-        /// <returns></returns>
+        /// <remarks>
+        /// Applicable for Partial mocks
+        /// </remarks>
+        /// <typeparam name="T">the type to mock</typeparam>
+        /// <param name="arguments">constructor arguments</param>
+        /// <returns>a mocked instance of the given type</returns>
         public static T Mock<T>(params object[] arguments)
             where T : class
         {
@@ -129,24 +139,30 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Generates a mock for the given type
+        /// Creates a mocked instance of the given type which implements
+        /// the given interface type
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="TInterface"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T">the type to mock</typeparam>
+        /// <typeparam name="TInterface">the interface implemented by the type</typeparam>
+        /// <returns>a mocked instance of the given type</returns>
         public static T Mock<T, TInterface>()
             where T : class
+            where TInterface : class
         {
             return MockMulti<T>(new Type[] { typeof(TInterface) }, new object[0]);
         }
 
         /// <summary>
-        /// Generates a mock for the given type
+        /// Creates a mocked instance of the given type which implements
+        /// the given interface type
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="TInterface"></typeparam>
-        /// <param name="arguments"></param>
-        /// <returns></returns>
+        /// <remarks>
+        /// Applicable for Partial mocks
+        /// </remarks>
+        /// <typeparam name="T">the type to mock</typeparam>
+        /// <typeparam name="TInterface">the interface implemented by the type</typeparam>
+        /// <param name="arguments">constructor arguments</param>
+        /// <returns>a mocked instance of the given type</returns>
         public static T Mock<T, TInterface>(params object[] arguments)
             where T : class
         {
@@ -154,12 +170,13 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Generates a mock for the given type
+        /// Creates a mocked instance of the given type which implements
+        /// the given interface types
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="TInterface1"></typeparam>
-        /// <typeparam name="TInterface2"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T">the type to mock</typeparam>
+        /// <typeparam name="TInterface1">the interface implemented by the type</typeparam>
+        /// <typeparam name="TInterface2">additional interface implemented by the type</typeparam>
+        /// <returns>a mocked instance of the given type</returns>
         public static T Mock<T, TInterface1, TInterface2>()
             where T : class
         {
@@ -167,13 +184,17 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Generates a mock for the given type
+        /// Creates a mocked instance of the given type which implements
+        /// the given interface types
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="TInterface1"></typeparam>
-        /// <typeparam name="TInterface2"></typeparam>
-        /// <param name="arguments"></param>
-        /// <returns></returns>
+        /// <remarks>
+        /// Applicable for Partial mocks
+        /// </remarks>
+        /// <typeparam name="T">the type to mock</typeparam>
+        /// <typeparam name="TInterface1">the interface implemented by the type</typeparam>
+        /// <typeparam name="TInterface2">additional interface implemented by the type</typeparam>
+        /// <param name="arguments">constructor arguments</param>
+        /// <returns>a mocked instance of the given type</returns>
         public static T Mock<T, TInterface1, TInterface2>(params object[] arguments)
             where T : class
         {
@@ -181,13 +202,16 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Generates a mock for the given type
-        /// with additional types to be included
+        /// Creates a mocked instance of the given type which implements
+        /// the collection of types
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="extraTypes"></param>
-        /// <param name="arguments"></param>
-        /// <returns></returns>
+        /// <remarks>
+        /// Applicable for Partial mocks
+        /// </remarks>
+        /// <typeparam name="T">the type to mock</typeparam>
+        /// <param name="extraTypes">array of types implemented by the type</param>
+        /// <param name="arguments">constructor arguments</param>
+        /// <returns>a mocked instance of the given type</returns>
         public static T MockMulti<T>(Type[] extraTypes, params object[] arguments)
             where T : class
         {
@@ -205,11 +229,11 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Generates a mock for the given type
-        /// with remoting
+        /// Creates a mocked instance of the given type capable of being used
+        /// for remoting purposes
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T">the type to mock</typeparam>
+        /// <returns>a remotable mocked instance of the given type</returns>
         public static T MockWithRemoting<T>()
         {
             var type = typeof(T);
@@ -219,10 +243,11 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Generates a partial mock of the given type
+        /// Creates a mocked instance of the given type targeting classes 
+        /// with abstract or virtual members
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T">the class to mock</typeparam>
+        /// <returns>a mocked instance of the given type</returns>
         public static T Partial<T>()
             where T : class
         {
@@ -230,11 +255,12 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Generates a partial mock of the given type
+        /// Creates a mocked instance of the given type targeting classes
+        /// with abstract or virtual members
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="arguments"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">the class to mock</typeparam>
+        /// <param name="arguments">constructor arguments</param>
+        /// <returns>a mocked instance of the given type</returns>
         public static T Partial<T>(params object[] arguments)
             where T : class
         {
@@ -242,11 +268,12 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Generates a partial mock of the given type
+        /// Creates a mocked instance of the given type which implements
+        /// the given interface targeting classes with abstract or virtual members
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="TInterface"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T">the class to mock</typeparam>
+        /// <typeparam name="TInterface">the interface implemented by the type</typeparam>
+        /// <returns>a mocked instance of the given type</returns>
         public static T Partial<T, TInterface>()
             where T : class
         {
@@ -254,12 +281,13 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Generates a partial mock of the given type
+        /// Creates a mocked instance of the given type which implements
+        /// the given interface targeting classes with abstract or virtual members
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="TInterface"></typeparam>
-        /// <param name="arguments"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">the class to mock</typeparam>
+        /// <typeparam name="TInterface">the interface implemented by the type</typeparam>
+        /// <param name="arguments">constructor arguments</param>
+        /// <returns>a mocked instance of the given type</returns>
         public static T Partial<T, TInterface>(params object[] arguments)
             where T : class
         {
@@ -267,12 +295,13 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Generates a partial mock of the given type
+        /// Creates a mocked instance of the given type which implements
+        /// the given interface types targeting classes with abstract or virtual members
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="TInterface1"></typeparam>
-        /// <typeparam name="TInterface2"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T">the class to mock</typeparam>
+        /// <typeparam name="TInterface1">the interface implemented by the type</typeparam>
+        /// <typeparam name="TInterface2">additional interface implemented by the type</typeparam>
+        /// <returns>a mocked instance of the given type</returns>
         public static T Partial<T, TInterface1, TInterface2>()
             where T : class
         {
@@ -280,13 +309,14 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Generates a partial mock of the given type
+        /// Creates a mocked instance of the given type which implements
+        /// the given interface types targeting classes with abstract or virtual members
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="TInterface1"></typeparam>
-        /// <typeparam name="TInterface2"></typeparam>
-        /// <param name="arguments"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">the class to mock</typeparam>
+        /// <typeparam name="TInterface1">the interface implemented by the type</typeparam>
+        /// <typeparam name="TInterface2">additional interface implemented by the type</typeparam>
+        /// <param name="arguments">constructor arguments</param>
+        /// <returns>a mocked instance of the given type</returns>
         public static T Partial<T, TInterface1, TInterface2>(params object[] arguments)
             where T : class
         {
@@ -294,13 +324,13 @@ namespace Rhino.Mocks
         }
 
         /// <summary>
-        /// Generates a partial mock of the given type
-        /// with additional types to be included
+        /// Creates a mocked instance of the given type which implements
+        /// the collection of types targeting classes with abstract or virtual members
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="extraTypes"></param>
-        /// <param name="arguments"></param>
-        /// <returns></returns>
+        /// <typeparam name="T">the class to mock</typeparam>
+        /// <param name="extraTypes">array of types implemented by the type</param>
+        /// <param name="arguments">constructor arguments</param>
+        /// <returns>a mocked instance of the given type</returns>
         public static T PartialMulti<T>(Type[] extraTypes, params object[] arguments)
             where T : class
         {

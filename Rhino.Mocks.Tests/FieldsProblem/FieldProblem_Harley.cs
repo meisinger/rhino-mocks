@@ -23,7 +23,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             new ClassRaisingException(mockTestClass);
 
             Assert.Throws<ArgumentOutOfRangeException>(
-                () => mockTestClass.Raise(x => x.ChangeTestProperty += null, true));
+                () => mockTestClass.Raise(x => x.ChangeTestProperty += null, 
+                    new object[] { true }));
         }
     }
 

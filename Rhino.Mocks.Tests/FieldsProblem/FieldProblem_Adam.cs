@@ -18,7 +18,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             var foo = MockRepository.Mock<IFoo>();
 
             foo.Stub(x => x.Str = Arg<string>.Is.Anything)
-                .WhenCalled(() => foo.Raise(y => y.Event += null, foo, EventArgs.Empty));
+                .WhenCalled(() => foo.Raise(y => y.Event += null, 
+                    new object[] { foo, EventArgs.Empty }));
 
             int calls = 0;
             foo.Event += delegate
