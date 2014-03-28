@@ -39,7 +39,7 @@ namespace Rhino.Mocks.Tests
         
 		public HandlingProperties()
         {
-            demo = Repository.Mock<IDemo>();
+            demo = MockRepository.Mock<IDemo>();
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void IndexedPropertiesSupported()
         {
-            IWithIndexers with = Repository.Mock<IWithIndexers>();
+            IWithIndexers with = MockRepository.Mock<IWithIndexers>();
 
             //with.Expect(x => x[1])
             //    .PropertyBehavior();
@@ -99,7 +99,7 @@ namespace Rhino.Mocks.Tests
         [Fact(Skip = "Test No Longer Valid")]
         public void IndexPropertyWhenValueTypeAndNotFoundThrows()
         {
-            IWithIndexers with = Repository.Mock<IWithIndexers>();
+            IWithIndexers with = MockRepository.Mock<IWithIndexers>();
 
             with.ExpectProperty(x => x[1]);
 
@@ -110,7 +110,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void IndexPropertyWhenRefTypeAndNotFoundReturnNull()
         {
-            IWithIndexers with = Repository.Mock<IWithIndexers>();
+            IWithIndexers with = MockRepository.Mock<IWithIndexers>();
 
             with.ExpectProperty(x => x["", 3]);
             Assert.Null(with["", 2]);

@@ -22,7 +22,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             get
             {
                 if (_daoFactory == null)
-                    _daoFactory = Repository.Mock<IDaoFactory>();
+                    _daoFactory = MockRepository.Mock<IDaoFactory>();
                 
                 return _daoFactory;
             }
@@ -33,7 +33,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             get
             {
                 if (_blFactory == null)
-                    _blFactory = Repository.Mock<IBLFactory>();
+                    _blFactory = MockRepository.Mock<IBLFactory>();
                 
                 return _blFactory;
             }

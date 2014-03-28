@@ -12,7 +12,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		{
             int intTest = 0;
 
-            ITest mockProxy = Repository.Mock<ITest>();
+            ITest mockProxy = MockRepository.Mock<ITest>();
 
             mockProxy.Expect(x => x.Addnumber(out Arg<int>.Out(4).Dummy));
 

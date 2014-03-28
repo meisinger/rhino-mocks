@@ -14,7 +14,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void PropertyBehaviorForSinglePropertyTypeOfString()
 		{
-            GenericContainer<string> stringContainer = Repository.Mock<GenericContainer<string>>();
+            GenericContainer<string> stringContainer = MockRepository.Mock<GenericContainer<string>>();
 
             stringContainer.ExpectProperty(x => x.Item);
             // in order to make this work "strickly"
@@ -35,7 +35,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
 		public void PropertyBehaviourForSinglePropertyTypeOfDateTime()
 		{
-            GenericContainer<DateTime> dateTimeContainer = Repository.Mock<GenericContainer<DateTime>>();
+            GenericContainer<DateTime> dateTimeContainer = MockRepository.Mock<GenericContainer<DateTime>>();
 
             dateTimeContainer.ExpectProperty(x => x.Item);
             // in order to make this work "strickly"
@@ -56,7 +56,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
 		public void PropertyBehaviourForSinglePropertyTypeOfInteger()
 		{
-            GenericContainer<int> dateTimeContainer = Repository.Mock<GenericContainer<int>>();
+            GenericContainer<int> dateTimeContainer = MockRepository.Mock<GenericContainer<int>>();
 
             dateTimeContainer.ExpectProperty(x => x.Item);
             // in order to make this work "strickly"

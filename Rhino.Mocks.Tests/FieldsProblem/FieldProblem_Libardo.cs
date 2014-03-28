@@ -9,7 +9,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void Can_mix_assert_was_call_with_verify_all()
 		{
-            var errorHandler = Repository.Mock<IErrorHandler>();
+            var errorHandler = MockRepository.Mock<IErrorHandler>();
 			
 			var ex = new Exception("Take this");
 			errorHandler.HandleError(ex);

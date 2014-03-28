@@ -8,7 +8,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void CanUseSetupResultAndIgnoreArguments_WhenUsingUnorderedBlock()
 		{
-            IFetcher fetcher = Repository.Mock<IFetcher>();
+            IFetcher fetcher = MockRepository.Mock<IFetcher>();
 
             fetcher.Expect(x => x.GetUsersWithCriteriaLike(null))
                 .IgnoreArguments()
@@ -21,7 +21,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void CanUseSetupResultAndIgnoreArguments_WhenUsingOrderedBlock()
 		{
-			IFetcher fetcher = Repository.Mock<IFetcher>();
+			IFetcher fetcher = MockRepository.Mock<IFetcher>();
 
             fetcher.Expect(x => x.GetUsersWithCriteriaLike(null))
                 .IgnoreArguments()

@@ -95,7 +95,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
 		public PresenterBaseTestFixture()
 		{
-            viewMocks = Repository.Mock<IView>();
+            viewMocks = MockRepository.Mock<IView>();
 		}
 
 		public void Dispose()
@@ -113,7 +113,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             viewMocks.ExpectEvent(x => x.Load += null)
                 .IgnoreArguments();
 
-            PresenterBase<IView> presenterBase = Repository.Mock<PresenterBase<IView>>(viewMocks);
+            PresenterBase<IView> presenterBase = MockRepository.Mock<PresenterBase<IView>>(viewMocks);
 
             presenterBase.Expect(x => x.Initialize());
             presenterBase.Expect(x => x.Load());

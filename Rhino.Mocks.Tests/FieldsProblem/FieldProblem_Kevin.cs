@@ -42,7 +42,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 			string mockedResult = "mocked result";
 
             ConcreteProtectedMethodCalledFromCtor concreteProtectedMethodCalledFromCtor = 
-                Repository.Partial<ConcreteProtectedMethodCalledFromCtor>();
+                MockRepository.Partial<ConcreteProtectedMethodCalledFromCtor>();
 
             concreteProtectedMethodCalledFromCtor.Expect(x => x.SimplyHereSoThereIsSomethingToMock())
                 .Return(mockedResult);
@@ -61,7 +61,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 			string mockedResult = "mocked result";
 
             ConcretePublicMethodCalledFromCtor concretePublicMethodCalledFromCtor = 
-                Repository.Partial<ConcretePublicMethodCalledFromCtor>();
+                MockRepository.Partial<ConcretePublicMethodCalledFromCtor>();
 
             concretePublicMethodCalledFromCtor.Expect(x => x.SimplyHereSoThereIsSomethingToMock())
                 .Return(mockedResult);

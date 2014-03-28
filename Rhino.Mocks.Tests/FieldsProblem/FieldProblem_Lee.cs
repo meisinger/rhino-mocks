@@ -11,7 +11,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void IgnoringArgumentsOnGenericMethod()
 		{
-            IHaveGenericMethod mock = Repository.Mock<IHaveGenericMethod>();
+            IHaveGenericMethod mock = MockRepository.Mock<IHaveGenericMethod>();
 
             mock.Expect(x => x.Foo(15))
                 .IgnoreArguments()
@@ -27,7 +27,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		{
             List<Guid> results = new List<Guid>();
 
-            IFunkyList<int> list = Repository.Mock<IFunkyList<int>>();
+            IFunkyList<int> list = MockRepository.Mock<IFunkyList<int>>();
             Assert.NotNull(list);
 
             list.Expect(x => x.FunkItUp<Guid>(Arg.Is("1"), Arg.Is(2)))

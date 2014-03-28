@@ -39,7 +39,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void CreateClassWithDefaultCtor()
         {
-            ClassWithDefaultCtor cwdc = Repository.Partial<ClassWithDefaultCtor>();
+            ClassWithDefaultCtor cwdc = MockRepository.Partial<ClassWithDefaultCtor>();
             Assert.NotNull(cwdc);
         }
 

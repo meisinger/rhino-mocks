@@ -46,7 +46,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void NestedOrderedAndAtLeastOnce()
 		{
-			IMyObject myObject = Repository.Mock<IMyObject>();
+			IMyObject myObject = MockRepository.Mock<IMyObject>();
 
             myObject.Expect(x => x.SomeProperty)
                 .Return(null)
@@ -65,7 +65,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void ShouldFailInNestedOrderringIfMethodWasNotCalled()
 		{
-			IMyObject myObject = Repository.Mock<IMyObject>();
+			IMyObject myObject = MockRepository.Mock<IMyObject>();
 
             myObject.Expect(x => x.DoSomethingElse())
                 .Repeat.AtLeast(1);
@@ -80,7 +80,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void NestedInorderedAndAtLeastOnce()
 		{
-			IMyObject myObject = Repository.Mock<IMyObject>();
+			IMyObject myObject = MockRepository.Mock<IMyObject>();
 
             myObject.Expect(x => x.SomeProperty)
                 .Return(null)
@@ -99,7 +99,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void UnorderedAndAtLeastOnce_CallingAnExtraMethod()
 		{
-			IMyObject myObject = Repository.Mock<IMyObject>();
+			IMyObject myObject = MockRepository.Mock<IMyObject>();
 
             myObject.Expect(x => x.SomeProperty)
                 .Return(null)
@@ -120,7 +120,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void OrderedAndAtLeastOnce_CallingAnExtraMethod()
 		{
-			IMyObject myObject = Repository.Mock<IMyObject>();
+			IMyObject myObject = MockRepository.Mock<IMyObject>();
 
             myObject.Expect(x => x.SomeProperty)
                 .Return(null)

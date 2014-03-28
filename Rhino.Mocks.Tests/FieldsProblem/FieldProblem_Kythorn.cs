@@ -39,8 +39,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void CanUseStubSyntaxOnMocksInRecordMode()
 		{
-			var service = Repository.Mock<IService>();
-            var view = Repository.Mock<IView>();
+			var service = MockRepository.Mock<IService>();
+            var view = MockRepository.Mock<IView>();
 
 			service.Stub(x => x.GetString())
                 .Return("Test");
@@ -54,8 +54,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void Success()
 		{
-            var service = Repository.Mock<IService>();
-            var view = Repository.Mock<IView>();
+            var service = MockRepository.Mock<IService>();
+            var view = MockRepository.Mock<IView>();
 
 			service.Stub(x => x.GetString())
                 .Return("Test");

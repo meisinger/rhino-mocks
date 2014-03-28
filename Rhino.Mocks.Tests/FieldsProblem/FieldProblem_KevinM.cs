@@ -39,9 +39,9 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		public void VerifyListPropertyIsSetToList_WithAssert()
 		{
 			var sHolder =
-				Repository.Mock<IPropertyHolder>();
+				MockRepository.Mock<IPropertyHolder>();
 			var sManager =
-				Repository.Mock<IPropertyManager>();
+				MockRepository.Mock<IPropertyManager>();
 
 			var mList = new List<string> {"Foo", "Bar", "Baz"};
 
@@ -60,9 +60,9 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 			VerifyListPropertyIsSetToList_WithAssertWasCalled()
 		{
 			var sHolder =
-				Repository.Mock<IPropertyHolder>();
+				MockRepository.Mock<IPropertyHolder>();
 			var sManager =
-				Repository.Mock<IPropertyManager>();
+				MockRepository.Mock<IPropertyManager>();
 
 			// Stub list
 			var mList = new List<string> {"Foo", "Bar", "Baz"};

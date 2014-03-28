@@ -40,7 +40,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void SetExpectationOnNullableValue()
 		{
-			IFoo foo = Repository.Mock<IFoo>();
+			IFoo foo = MockRepository.Mock<IFoo>();
 
 			int? id = 2;
 
@@ -71,7 +71,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 			string testMethod = testClass.TestMethod();
 			string testProperty = testClass.TestProperty;
 
-			TestClass mockTestClass = Repository.Mock<TestClass>();
+			TestClass mockTestClass = MockRepository.Mock<TestClass>();
 
             mockTestClass.Expect(x => x.TestMethod())
                 .Return("MockTestMethod");

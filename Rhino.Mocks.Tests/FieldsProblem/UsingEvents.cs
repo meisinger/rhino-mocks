@@ -43,7 +43,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void VerifyingThatEventWasAttached()
 		{
-            IWithEvents events = Repository.Mock<IWithEvents>();
+            IWithEvents events = MockRepository.Mock<IWithEvents>();
             events.ExpectEvent(x => x.Blah += new EventHandler(events_Blah));
 
 			MethodThatSubscribeToEventBlah(events);
@@ -59,7 +59,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void VerifyingThatAnEventWasFired()
 		{
-            IEventSubscriber subscriber = Repository.Mock<IEventSubscriber>();
+            IEventSubscriber subscriber = MockRepository.Mock<IEventSubscriber>();
             IWithEvents events = new WithEvents();
 
             // This doesn't create an expectation because no method is called on subscriber!!
@@ -74,7 +74,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void VerifyingThatAnEventWasFiredThrowsForDifferentArgument()
 		{
-            IEventSubscriber subscriber = Repository.Mock<IEventSubscriber>();
+            IEventSubscriber subscriber = MockRepository.Mock<IEventSubscriber>();
 			IWithEvents events = new WithEvents();
 			
             // This doesn't create an expectation because no method is called on subscriber!!
@@ -90,7 +90,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void CanSetExpectationToUnsubscribeFromEvent()
 		{
-            IWithEvents events = Repository.Mock<IWithEvents>();
+            IWithEvents events = MockRepository.Mock<IWithEvents>();
 
             events.ExpectEvent(x => x.Blah += new EventHandler(events_Blah));
             events.ExpectEvent(x => x.Blah -= new EventHandler(events_Blah));
@@ -105,7 +105,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void VerifyingExceptionIfEventIsNotAttached()
 		{
-			IWithEvents events = Repository.Mock<IWithEvents>();
+			IWithEvents events = MockRepository.Mock<IWithEvents>();
 
             events.ExpectEvent(x => x.Blah += new EventHandler(events_Blah));
 
@@ -116,7 +116,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void VerifyingThatCanAttackOtherEvent()
 		{
-            IWithEvents events = Repository.Mock<IWithEvents>();
+            IWithEvents events = MockRepository.Mock<IWithEvents>();
 
             events.ExpectEvent(x => x.Blah += new EventHandler(events_Blah))
                 .IgnoreArguments();
@@ -129,7 +129,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void BetterErrorMessageOnIncorrectParametersCount()
         {
-            IWithEvents events = Repository.Mock<IWithEvents>();
+            IWithEvents events = MockRepository.Mock<IWithEvents>();
 
             events.ExpectEvent(x => x.Blah += null)
                 .IgnoreArguments();
@@ -143,7 +143,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void BetterErrorMessageOnIncorrectParameters()
         {
-            IWithEvents events = Repository.Mock<IWithEvents>();
+            IWithEvents events = MockRepository.Mock<IWithEvents>();
 
             events.ExpectEvent(x => x.Blah += null)
                 .IgnoreArguments();
@@ -157,7 +157,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void RaiseEvent()
         {
-            IWithEvents eventHolder = Repository.Mock<IWithEvents>();
+            IWithEvents eventHolder = MockRepository.Mock<IWithEvents>();
 
             eventHolder.ExpectEvent(x => x.Blah += null)
                 .IgnoreArguments();
@@ -168,7 +168,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
                         eventHolder.Raise(x => x.Blah += null, this, EventArgs.Empty);
                     }));
 
-            IEventSubscriber eventSubscriber = Repository.Mock<IEventSubscriber>();
+            IEventSubscriber eventSubscriber = MockRepository.Mock<IEventSubscriber>();
             eventSubscriber.Expect(x => x.Hanlder(this, EventArgs.Empty));
 
             eventHolder.Blah += new EventHandler(eventSubscriber.Hanlder);
@@ -181,7 +181,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void UsingEventRaiserCreate()
         {
-            IWithEvents eventHolder = Repository.Mock<IWithEvents>();
+            IWithEvents eventHolder = MockRepository.Mock<IWithEvents>();
 
             eventHolder.ExpectEvent(x => x.Blah += null);
 
@@ -200,7 +200,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void RaiseEventUsingExtensionMethod()
         {
-            IWithEvents eventHolder = Repository.Mock<IWithEvents>();
+            IWithEvents eventHolder = MockRepository.Mock<IWithEvents>();
 
             bool called = false;
             eventHolder.Blah += delegate
@@ -216,7 +216,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void UsingEventRaiserFromExtensionMethod()
         {
-            IWithEvents eventHolder = Repository.Mock<IWithEvents>();
+            IWithEvents eventHolder = MockRepository.Mock<IWithEvents>();
 
             eventHolder.StubEvent(x => x.Blah += null);
             

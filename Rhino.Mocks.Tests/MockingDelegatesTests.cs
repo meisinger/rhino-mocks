@@ -52,7 +52,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CallingMockedDelegatesWithoutOn()
         {
-            ObjectDelegateWithNoParams d1 = Repository.Mock<ObjectDelegateWithNoParams>();
+            ObjectDelegateWithNoParams d1 = MockRepository.Mock<ObjectDelegateWithNoParams>();
 
             d1.Expect(x => x())
                 .Return(1);
@@ -63,9 +63,9 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void MockTwoDelegatesWithTheSameName()
         {
-            ObjectDelegateWithNoParams d1 = Repository.Mock<ObjectDelegateWithNoParams>();
+            ObjectDelegateWithNoParams d1 = MockRepository.Mock<ObjectDelegateWithNoParams>();
 
-            Tests.ObjectDelegateWithNoParams d2 = Repository.Mock<Tests.ObjectDelegateWithNoParams>();
+            Tests.ObjectDelegateWithNoParams d2 = MockRepository.Mock<Tests.ObjectDelegateWithNoParams>();
 
             d1.Expect(x => x())
                 .Return(1);
@@ -83,7 +83,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void MockObjectDelegateWithNoParams()
         {
-            ObjectDelegateWithNoParams d = Repository.Mock<ObjectDelegateWithNoParams>();
+            ObjectDelegateWithNoParams d = MockRepository.Mock<ObjectDelegateWithNoParams>();
 
             d.Expect(x => x())
                 .Return("abc");
@@ -102,7 +102,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void MockVoidDelegateWithNoParams()
         {
-            VoidDelegateWithParams d = Repository.Mock<VoidDelegateWithParams>();
+            VoidDelegateWithParams d = MockRepository.Mock<VoidDelegateWithParams>();
 
             d.Expect(x => x("abc"));
             d.Expect(x => x("efg"));
@@ -118,7 +118,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void MockStringDelegateWithParams()
         {
-            StringDelegateWithParams d = Repository.Mock<StringDelegateWithParams>();
+            StringDelegateWithParams d = MockRepository.Mock<StringDelegateWithParams>();
 
             d.Expect(x => x(1, "111"))
                 .Return("abc");
@@ -138,13 +138,13 @@ namespace Rhino.Mocks.Tests
         public void DelegateBaseTypeCannotBeMocked()
         {
             Assert.Throws<InvalidOperationException>(
-                () => Repository.Mock<Delegate>());
+                () => MockRepository.Mock<Delegate>());
         }
 
         [Fact]
         public void GenericDelegate()
         {
-            Action<int> action = Repository.Mock<Action<int>>();
+            Action<int> action = MockRepository.Mock<Action<int>>();
 
             action.Expect(x =>
             {

@@ -47,7 +47,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void UseTheOutMethodToSpecifyOutputAndRefParameters()
         {
-            MyClass myClass = Repository.Mock<MyClass>();
+            MyClass myClass = MockRepository.Mock<MyClass>();
 
             int i;
             string s = null;
@@ -68,7 +68,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void UseTheOutMethodToSpecifyOutputAndRefParameters_CanOnlyBeCalledOnce()
         {
-            MyClass myClass = Repository.Mock<MyClass>();
+            MyClass myClass = MockRepository.Mock<MyClass>();
 
             int i;
             string s = null;
@@ -83,7 +83,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void GivingLessParametersThanWhatIsInTheMethodWillNotThrow()
         {
-            MyClass myClass = Repository.Mock<MyClass>();
+            MyClass myClass = MockRepository.Mock<MyClass>();
 
             int i;
             string s = null;

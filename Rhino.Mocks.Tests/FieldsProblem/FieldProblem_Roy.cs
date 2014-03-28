@@ -9,7 +9,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void StubNeverFailsTheTest()
         {
-            IGetResults resultGetter = Repository.Mock<IGetResults>();
+            IGetResults resultGetter = MockRepository.Mock<IGetResults>();
 
             resultGetter.Stub(x => x.GetSomeNumber("a"))
                 .Return(1);
@@ -23,7 +23,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void CanGetSetupResultFromStub()
         {
-            IGetResults resultGetter = Repository.Mock<IGetResults>();
+            IGetResults resultGetter = MockRepository.Mock<IGetResults>();
 
             resultGetter.Stub(x => x.GetSomeNumber("a"))
                 .Return(1);

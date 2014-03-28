@@ -45,7 +45,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         {
             ServiceDomain.Enter(new ServiceConfig());
 
-            ISomething something = Repository.Mock<ISomething>();
+            ISomething something = MockRepository.Mock<ISomething>();
             something.VerifyAllExpectations();
 
             ContextUtil.SetAbort();

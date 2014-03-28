@@ -88,7 +88,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void UsingPartialMocks()
         {
-            ProcessorBase proc = Repository.Partial<ProcessorBase>();
+            ProcessorBase proc = MockRepository.Partial<ProcessorBase>();
 
             proc.Expect(x => x.Add(1))
                 .Return(1);
@@ -133,7 +133,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void ExampleUsingParameterMatchingAndConstraints()
         {
-            ISongBird bird = Repository.Mock<ISongBird>();
+            ISongBird bird = MockRepository.Mock<ISongBird>();
 
             bird.Expect(x => x.Eat("seeds", 500));
 
@@ -162,8 +162,8 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void UnorderedExecutionOfOrderedSequence()
         {
-            ISongBird maleBird = Repository.Mock<ISongBird>();
-            ISongBird femaleBird = Repository.Mock<ISongBird>();
+            ISongBird maleBird = MockRepository.Mock<ISongBird>();
+            ISongBird femaleBird = MockRepository.Mock<ISongBird>();
 
             maleBird.Expect(x => x.Eat("seeds", 250));
             femaleBird.Expect(x => x.Eat("seeds", 250));
@@ -184,8 +184,8 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void OrderedExecutionOfUnorderedSequence()
         {
-            ISongBird maleBird = Repository.Mock<ISongBird>();
-            ISongBird femaleBird = Repository.Mock<ISongBird>();
+            ISongBird maleBird = MockRepository.Mock<ISongBird>();
+            ISongBird femaleBird = MockRepository.Mock<ISongBird>();
 
             maleBird.Expect(x => x.Eat("seeds", 250));
             femaleBird.Expect(x => x.Eat("seeds", 250));
@@ -206,8 +206,8 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void SetupResultWithNestedOrdering()
         {
-            ISongBird maleBird = Repository.Mock<ISongBird>();
-            ISongBird femaleBird = Repository.Mock<ISongBird>();
+            ISongBird maleBird = MockRepository.Mock<ISongBird>();
+            ISongBird femaleBird = MockRepository.Mock<ISongBird>();
 
             maleBird.Stub(x => x.Sing())
                 .Return("");

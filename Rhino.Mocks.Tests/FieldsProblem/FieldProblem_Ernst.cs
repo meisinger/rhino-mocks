@@ -39,7 +39,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void CallOriginalMethodProblem2()
 		{
-			MockedClass mock = Repository.Mock<MockedClass>();
+			MockedClass mock = MockRepository.Mock<MockedClass>();
 
             mock.Expect(x => x.Method(Arg.Is("parameter")))
                 .CallOriginalMethod();

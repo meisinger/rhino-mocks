@@ -39,7 +39,7 @@ namespace Rhino.Mocks.Tests
 
 		public DynamicMockTests()
 		{
-            demo = Repository.Mock<IDemo>();
+            demo = MockRepository.Mock<IDemo>();
 		}
 
 		public void Dispose()

@@ -8,7 +8,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void Setter_Expectation_With_Custom_Ignore_Arguments()
 		{
-            IBar bar = Repository.Mock<IBar>();
+            IBar bar = MockRepository.Mock<IBar>();
             bar.ExpectProperty(x => x.Foo = Arg<int>.Is.Anything);
 
             bar.Foo = 2;
@@ -18,7 +18,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void Setter_Expectation_Not_Fullfilled()
 		{
-            IBar bar = Repository.Mock<IBar>();
+            IBar bar = MockRepository.Mock<IBar>();
             bar.ExpectProperty(x => x.Foo = Arg<int>.Is.Anything);
 
             Assert.Throws<ExpectationViolationException>(
@@ -28,7 +28,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void Setter_Expectation_With_Correct_Argument()
 		{
-            IBar bar = Repository.Mock<IBar>();
+            IBar bar = MockRepository.Mock<IBar>();
             bar.ExpectProperty(x => x.Foo = Arg<int>.Is.Anything);
 
 			bar.Foo = 1;
@@ -38,7 +38,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void Setter_Expectation_With_Wrong_Argument()
 		{
-            IBar bar = Repository.Mock<IBar>();
+            IBar bar = MockRepository.Mock<IBar>();
             bar.ExpectProperty(x => x.Foo = 1);
 
             bar.Foo = 0;

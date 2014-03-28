@@ -11,7 +11,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void MockingPropertyThatReturnsStream()
 		{
-            IBaseMessagePart messagePart = Repository.Mock<IBaseMessagePart>();
+            IBaseMessagePart messagePart = MockRepository.Mock<IBaseMessagePart>();
 			
             MemoryStream stream = new MemoryStream();
             messagePart.Expect(x => x.Data)

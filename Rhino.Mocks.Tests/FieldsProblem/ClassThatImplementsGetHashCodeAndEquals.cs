@@ -50,7 +50,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void InitClass()
 		{
-			EmployeeInfo info = Repository.Mock<EmployeeInfo>("ID001");
+			EmployeeInfo info = MockRepository.Mock<EmployeeInfo>("ID001");
 			Assert.NotNull(info);
 		}
 

@@ -18,7 +18,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
 		public FieldProblem_oblomov()
 		{
-            service = Repository.Mock<IMyService>();
+            service = MockRepository.Mock<IMyService>();
 		}
 
 		public void Dispose()

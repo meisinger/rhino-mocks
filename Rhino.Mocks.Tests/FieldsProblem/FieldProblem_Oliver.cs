@@ -18,7 +18,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void StubGenericInterface_CanReadWriteProperties()
 		{
-            ITestGen<int> test = Repository.Mock<ITestGen<int>>();
+            ITestGen<int> test = MockRepository.Mock<ITestGen<int>>();
 
 			test.Foo = 10;
 			Assert.Equal(10, test.Foo);
@@ -29,7 +29,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void StubInterface_CanReadWriteProperties()
 		{
-			ITestNormal test = Repository.Mock<ITestNormal>();
+			ITestNormal test = MockRepository.Mock<ITestNormal>();
 
 			test.Foo = 10;
 			Assert.Equal(10, test.Foo);
@@ -40,7 +40,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void MockGenericInterface_CanSetProperties()
 		{
-			ITestGen<int> test = Repository.Mock<ITestGen<int>>();
+			ITestGen<int> test = MockRepository.Mock<ITestGen<int>>();
 
             test.ExpectProperty(x => x.Foo);
 
@@ -53,7 +53,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void MockNormalInterface_CanSetProperties()
 		{
-			ITestNormal test = Repository.Mock<ITestNormal>();
+			ITestNormal test = MockRepository.Mock<ITestNormal>();
 
             test.ExpectProperty(x => x.Foo);
 

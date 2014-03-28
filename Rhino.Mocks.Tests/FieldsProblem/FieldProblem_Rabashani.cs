@@ -8,7 +8,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void CanMockInternalInterface()
 		{
-            IInternal mock = Repository.Mock<IInternal>();
+            IInternal mock = MockRepository.Mock<IInternal>();
             mock.Expect(x => x.Foo());
 
 			mock.Foo();
@@ -18,7 +18,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void CanMockInternalClass()
 		{
-            Internal mock = Repository.Partial<Internal>();
+            Internal mock = MockRepository.Partial<Internal>();
 
             mock.Expect(x => x.Bar())
                 .Return("blah");
@@ -30,7 +30,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void CanPartialMockInternalClass()
 		{
-            Internal mock = Repository.Partial<Internal>();
+            Internal mock = MockRepository.Partial<Internal>();
 
             mock.Expect(x => x.Foo())
                 .Return("blah");

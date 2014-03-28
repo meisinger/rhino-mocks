@@ -10,8 +10,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void GenericConstrainedMethod()
 		{
-            IStore1 store1 = Repository.Mock<IStore1>();
-            IStore2 store2 = Repository.Mock<IStore2>();
+            IStore1 store1 = MockRepository.Mock<IStore1>();
+            IStore2 store2 = MockRepository.Mock<IStore2>();
 			Assert.NotNull(store2);
 			Assert.NotNull(store1);
 		}

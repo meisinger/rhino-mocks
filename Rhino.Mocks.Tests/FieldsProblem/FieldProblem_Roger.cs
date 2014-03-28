@@ -10,7 +10,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void VerifyMockCanBeSetupWhenExternalInterfaceUsingInnerClassWithInternalScope()
 		{
-            ISomeInterface<InnerClass> target = Repository.Mock<ISomeInterface<InnerClass>>();
+            ISomeInterface<InnerClass> target = MockRepository.Mock<ISomeInterface<InnerClass>>();
 		}
 	}
 

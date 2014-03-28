@@ -38,7 +38,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void StaticAccessorForStub()
 		{
-            IAnimal animal = Repository.Mock<IAnimal>();
+            IAnimal animal = MockRepository.Mock<IAnimal>();
 			animal.Eyes = 2;
 			Assert.Equal(2, animal.Eyes );
 		}
@@ -46,7 +46,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void StubHasPropertyBehaviorForAllProperties()
 		{
-            IAnimal animal = Repository.Mock<IAnimal>();
+            IAnimal animal = MockRepository.Mock<IAnimal>();
 			animal.Legs = 4;
 			Assert.Equal(4, animal.Legs);
 
@@ -83,7 +83,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void CallingMethodOnStubsDoesNotCreateExpectations()
 		{
-            IAnimal animal = Repository.Mock<IAnimal>();
+            IAnimal animal = MockRepository.Mock<IAnimal>();
 
             animal.Legs = 4;
             animal.Name = "Rose";
@@ -96,7 +96,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void DemoLegsProperty()
 		{
-            IAnimal animalStub = Repository.Mock<IAnimal>();
+            IAnimal animalStub = MockRepository.Mock<IAnimal>();
 
 			animalStub.Legs = 0;
 			Assert.Equal(0, animalStub.Legs);
@@ -109,7 +109,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void CanCreateExpectationOnMethod()
 		{
-            IAnimal animal = Repository.Mock<IAnimal>();
+            IAnimal animal = MockRepository.Mock<IAnimal>();
 
             animal.Legs = 4;
             animal.Name = "Rose";

@@ -37,7 +37,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void DeleteThisTest()
 		{
-			MockedClass mock = Repository.Partial<MockedClass>();
+			MockedClass mock = MockRepository.Partial<MockedClass>();
 			
             mock.Expect(x => x.Method("expectedParameter"));
             mock.Method("invalidParameter");

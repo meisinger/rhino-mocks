@@ -11,7 +11,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void ReadWritePropertyBug1()
         {
-            ISomeThing thing = Repository.Mock<ISomeThing>();
+            ISomeThing thing = MockRepository.Mock<ISomeThing>();
             thing.Number = 21;
 
             thing.Stub(x => x.Name)
@@ -25,7 +25,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact(Skip = "Test No Longer Valid")]
         public void ReadWritePropertyBug2()
         {
-            ISomeThing thing = Repository.Mock<ISomeThing>();
+            ISomeThing thing = MockRepository.Mock<ISomeThing>();
         	Assert.Throws<InvalidOperationException>(
         		() => thing.Stub(x => x.Number).Return(21));
             // InvalidOperationException :

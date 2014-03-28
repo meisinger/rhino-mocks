@@ -47,7 +47,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             List<Foo<int>> retval = new List<Foo<int>>();
 			retval.Add(new Foo<int>());
 
-            ILookupMapper<int> mapper = Repository.Mock<ILookupMapper<int>>();
+            ILookupMapper<int> mapper = MockRepository.Mock<ILookupMapper<int>>();
             mapper.Expect(x => x.FindAllFoo())
                 .Return(retval);
 			
@@ -60,7 +60,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		{
             Foo<int> retval = new Foo<int>();
 
-            ILookupMapper<int> mapper = Repository.Mock<ILookupMapper<int>>();
+            ILookupMapper<int> mapper = MockRepository.Mock<ILookupMapper<int>>();
             mapper.Expect(x => x.FindOneFoo())
                 .Return(retval);
 
@@ -71,7 +71,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void CanMockMethodsReturnIntPtr()
 		{
-            IFooWithIntPtr mock = Repository.Mock<IFooWithIntPtr>();
+            IFooWithIntPtr mock = MockRepository.Mock<IFooWithIntPtr>();
 
             mock.Expect(x => x.Buffer(15))
                 .Return(IntPtr.Zero);

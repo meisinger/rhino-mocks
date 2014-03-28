@@ -14,7 +14,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void TestSampleMatrixChanged()
         {
-            var mockTestClass = Repository.Mock<ClassToMock>();
+            var mockTestClass = MockRepository.Mock<ClassToMock>();
 
             var fireChangeTestProperty = mockTestClass
                 .ExpectEvent(x => x.ChangeTestProperty += null)

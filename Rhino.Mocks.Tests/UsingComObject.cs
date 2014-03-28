@@ -46,7 +46,7 @@ namespace Rhino.Mocks.Tests
             Type fsoType = Type.GetTypeFromProgID("Scripting.FileSystemObject");
             Scripting.FileSystemObject fso = (Scripting.FileSystemObject)Activator.CreateInstance(fsoType);
 
-            IMockTest test = Repository.Mock<IMockTest>();
+            IMockTest test = MockRepository.Mock<IMockTest>();
             test.Expect(x => x.GetFileSystemObject())
                 .Return(fso);
 

@@ -110,7 +110,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanMockVoidMethod()
         {
-            TestClass t = Repository.Mock<TestClass>();
+            TestClass t = MockRepository.Mock<TestClass>();
             
             t.Expect(x => x.Method());
             
@@ -121,7 +121,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void ThrowOnUnexpectedVoidMethod()
         {
-            TestClass t = Repository.Mock<TestClass>();
+            TestClass t = MockRepository.Mock<TestClass>();
             
             t.Method();
 
@@ -132,7 +132,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanMockMethodReturningInt()
         {
-            TestClass t = Repository.Mock<TestClass>();
+            TestClass t = MockRepository.Mock<TestClass>();
             
             t.Expect(x => x.MethodReturningInt())
                 .Return(42);
@@ -144,7 +144,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanMockMethodReturningString()
         {
-            TestClass t = Repository.Mock<TestClass>();
+            TestClass t = MockRepository.Mock<TestClass>();
             
             t.Expect(x => x.MethodReturningString())
                 .Return("foo");
@@ -156,7 +156,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanMockMethodGettingParameters()
         {
-            TestClass t = Repository.Mock<TestClass>();
+            TestClass t = MockRepository.Mock<TestClass>();
             
             t.Expect(x => x.MethodGettingParameters(42, "foo"))
                 .Return("bar");
@@ -168,7 +168,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanRejectIncorrectParameters()
         {
-            TestClass t = Repository.Mock<TestClass>();
+            TestClass t = MockRepository.Mock<TestClass>();
             
             t.Expect(x => x.MethodGettingParameters(42, "foo"))
                 .Return("bar");
@@ -182,7 +182,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanMockPropertyGet()
         {
-            TestClass t = Repository.Mock<TestClass>();
+            TestClass t = MockRepository.Mock<TestClass>();
             
             t.Expect(x => x.StringProperty)
                 .Return("foo");
@@ -194,7 +194,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanMockPropertySet()
         {
-            TestClass t = Repository.Mock<TestClass>();
+            TestClass t = MockRepository.Mock<TestClass>();
             
             t.Expect(x => x.StringProperty = "foo");
 
@@ -205,7 +205,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanRejectIncorrectPropertySet()
         {
-            TestClass t = Repository.Mock<TestClass>();
+            TestClass t = MockRepository.Mock<TestClass>();
             
             t.Expect(x => x.StringProperty = "foo");
 
@@ -218,7 +218,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanMockGenericClass()
         {
-            GenericTestClass<string> t = Repository.Mock<GenericTestClass<string>>();
+            GenericTestClass<string> t = MockRepository.Mock<GenericTestClass<string>>();
 
             t.Expect(x => x.Method("foo"))
                 .Return(42);
@@ -230,7 +230,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanMockGenericMethod()
         {
-            TestClass t = Repository.Mock<TestClass>();
+            TestClass t = MockRepository.Mock<TestClass>();
             
             t.Expect(x => x.GenericMethod<string>("foo"))
                 .Return(42);
@@ -242,7 +242,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void CanMockGenericMethod_WillErrorOnWrongType()
 		{
-            TestClass t = Repository.Mock<TestClass>();
+            TestClass t = MockRepository.Mock<TestClass>();
             
             t.Expect(x => x.GenericMethod<string>("foo"))
                 .Return(42);
@@ -257,7 +257,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanMockGenericMethodReturningGenericType()
         {
-            TestClass t = Repository.Mock<TestClass>();
+            TestClass t = MockRepository.Mock<TestClass>();
             
             t.Expect(x => x.GenericMethodReturningGenericType<string>("foo"))
                 .Return("bar");
@@ -269,7 +269,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanMockGenericMethodWithGenericParam()
         {
-            TestClass t = Repository.Mock<TestClass>();
+            TestClass t = MockRepository.Mock<TestClass>();
             
             t.Expect(x => x.GenericMethodWithGenericParam<string>("foo"))
                 .Return("bar");
@@ -281,7 +281,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanMockGenericMethodInGenericClass()
         {
-            GenericTestClass<string> t = Repository.Mock<GenericTestClass<string>>();
+            GenericTestClass<string> t = MockRepository.Mock<GenericTestClass<string>>();
 
             t.Expect(x => x.GenericMethod<int>("foo"))
                 .Return(42);
@@ -293,7 +293,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void CanMockAppDomain()
 		{
-            AppDomain appDomain = Repository.Mock<AppDomain>();
+            AppDomain appDomain = MockRepository.Mock<AppDomain>();
 
             appDomain.Expect(x => x.BaseDirectory)
                 .Return("/home/user/ayende");
@@ -305,7 +305,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
     	public void NotCallingExpectedMethodWillCauseVerificationError()
     	{
-            AppDomain appDomain = Repository.Mock<AppDomain>();
+            AppDomain appDomain = MockRepository.Mock<AppDomain>();
 
             appDomain.Expect(x => x.BaseDirectory)
                 .Return("/home/user/ayende");
@@ -317,8 +317,8 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanMockMethodAcceptingTestClass()
         {
-            TestClass t1 = Repository.Mock<TestClass>();
-            TestClass t2 = Repository.Mock<TestClass>();
+            TestClass t1 = MockRepository.Mock<TestClass>();
+            TestClass t2 = MockRepository.Mock<TestClass>();
 
             t1.Expect(x => x.MethodAcceptingTestClass(t2));
 
@@ -336,9 +336,9 @@ namespace Rhino.Mocks.Tests
             try
             {
 
-                TestClass t1 = Repository.Mock<TestClass>();
-                TestClass t2 = Repository.Mock<TestClass>();
-                TestClass t3 = Repository.Mock<TestClass>();
+                TestClass t1 = MockRepository.Mock<TestClass>();
+                TestClass t2 = MockRepository.Mock<TestClass>();
+                TestClass t3 = MockRepository.Mock<TestClass>();
                 
                 t2Text = t2.ToString();
                 t3Text = t3.ToString();
@@ -364,21 +364,21 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void StrictMockGetTypeReturnsMockedType()
         {
-            TestClass t = Repository.Mock<TestClass>();
+            TestClass t = MockRepository.Mock<TestClass>();
             Assert.Same(typeof(TestClass), t.GetType());
         }
 
         [Fact]
         public void StrictMockGetHashCodeWorks()
         {
-            TestClass t = Repository.Mock<TestClass>();
+            TestClass t = MockRepository.Mock<TestClass>();
             t.GetHashCode();
         }
 
         [Fact]
         public void StrictMockToStringReturnsDescription()
         {
-            TestClass t = Repository.Mock<TestClass>();
+            TestClass t = MockRepository.Mock<TestClass>();
 
             int hashCode = t.GetHashCode();
             string toString = t.ToString();
@@ -388,7 +388,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void StrictMockEquality()
         {
-            TestClass t = Repository.Mock<TestClass>();
+            TestClass t = MockRepository.Mock<TestClass>();
 
             Assert.False(t.Equals(null));
             Assert.False(t.Equals(42));

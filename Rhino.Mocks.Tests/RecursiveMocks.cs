@@ -11,7 +11,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanUseRecursiveMocks()
         {
-            var session = Repository.Mock<ISession>();
+            var session = MockRepository.Mock<ISession>();
             session.Stub(x => x.CreateCriteria(typeof(Customer)).List())
                 .Return(new[] 
                 {
@@ -32,7 +32,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CanUseRecursiveMocksSimpler()
         {
-            var repository = Repository.Mock<IMyService>();
+            var repository = MockRepository.Mock<IMyService>();
 
             repository.Expect(x => x.Identity.Name)
                 .Return("foo");
@@ -43,7 +43,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
         public void CanUseRecursiveMocksSimplerAlternateSyntax()
         {
-            var repository = Repository.Mock<IMyService>();
+            var repository = MockRepository.Mock<IMyService>();
 
             repository.Expect(x => x.Identity.Name)
                 .Return("foo");

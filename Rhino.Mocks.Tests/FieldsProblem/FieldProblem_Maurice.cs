@@ -10,7 +10,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void TwoGenericParametersWithConstraints()
 		{
-            IDemo2 demo = Repository.Mock<IDemo2>();
+            IDemo2 demo = MockRepository.Mock<IDemo2>();
 			Assert.NotNull(demo);
 		}
 	}

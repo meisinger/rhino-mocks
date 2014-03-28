@@ -32,7 +32,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             a.a = 10;
             a.b = 12;
 
-            MyInterface myInterface = Repository.Mock<MyInterface>();
+            MyInterface myInterface = MockRepository.Mock<MyInterface>();
             myInterface.Expect(x => x.retValue(Arg<A>.Matches(m => m.a == 10 && m.b == 12)))
                 .Return(5);
 

@@ -37,11 +37,11 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void ReproducedWithOutArraysContainingMockedObject2()
 		{
-			IPlugin plugin = Repository.Mock<IPlugin>();
+			IPlugin plugin = MockRepository.Mock<IPlugin>();
 			IPlugin[] allPlugins;
 
 			// PluginMng
-			IPluginMng pluginMng = Repository.Mock<IPluginMng>();
+			IPluginMng pluginMng = MockRepository.Mock<IPluginMng>();
             pluginMng.Expect(x => x.GetPlugins(out allPlugins))
                 .IgnoreArguments()
                 .OutRef(new object[] { new IPlugin[] { plugin } });
@@ -60,7 +60,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             byte myValue = 3;
             int returnedValue = 3;
 
-			IWithGeneric1 stubbed = Repository.Mock<IWithGeneric1>();
+			IWithGeneric1 stubbed = MockRepository.Mock<IWithGeneric1>();
             stubbed.Expect(s => s.DoNothing<byte>(myValue))
                 .Return(returnedValue);
 			
@@ -75,7 +75,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		{
             byte myValue = 4;
 
-			IWithGeneric2 stubbed = Repository.Mock<IWithGeneric2>();
+			IWithGeneric2 stubbed = MockRepository.Mock<IWithGeneric2>();
             stubbed.Expect(s => s.DoNothing<byte>(myValue))
                 .Return(myValue);
 			
@@ -92,7 +92,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             List<byte> bytes = new List<byte>();
             bytes.Add(myValue);
 
-            IWithGeneric2 stubbed = Repository.Mock<IWithGeneric2>();
+            IWithGeneric2 stubbed = MockRepository.Mock<IWithGeneric2>();
             stubbed.Expect(x => x.DoNothing<IList<byte>>(null))
                 .Return(bytes);
 

@@ -47,7 +47,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void Test_View_Events_WiredUp()
 		{
-			IView view = Repository.Mock<IView>();
+			IView view = MockRepository.Mock<IView>();
 
 			// expect that the model is set on the view
 			// NOTE: if I move this Expect.Call above

@@ -12,8 +12,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		
 		public FieldProblem_leftend()
 		{
-            viewMock = Repository.Mock<IAddAlbumPresenter>();
-            albumMock = Repository.Mock<IAlbum>();
+            viewMock = MockRepository.Mock<IAddAlbumPresenter>();
+            albumMock = MockRepository.Mock<IAlbum>();
 
             viewMock.ExpectEvent(x => x.Save += Arg<EventHandler<EventArgs>>.Is.NotNull);
 		}

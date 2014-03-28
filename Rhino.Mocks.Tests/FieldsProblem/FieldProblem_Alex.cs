@@ -9,10 +9,10 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void CanMockMethodWithEnvironmentPermissions()
         {
-            var withInt = Repository.Mock<IDoSomethingWith<int>>();
-            var withString = Repository.Mock<IDoSomethingWith<string>>();
+            var withInt = MockRepository.Mock<IDoSomethingWith<int>>();
+            var withString = MockRepository.Mock<IDoSomethingWith<string>>();
 
-            var doer = Repository.Mock<IDoSomethingTwice>();
+            var doer = MockRepository.Mock<IDoSomethingTwice>();
 
             // Fails
             new Doer(doer, withInt, withString);

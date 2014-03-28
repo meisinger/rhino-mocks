@@ -39,7 +39,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void CanCreateInterfaceWithGuid()
 		{
-			IUniqueID bridgeRemote = Repository.Mock<IUniqueID>();
+			IUniqueID bridgeRemote = MockRepository.Mock<IUniqueID>();
 			Assert.NotNull(bridgeRemote);
 		}
 
@@ -47,14 +47,14 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void MockingDataset()
 		{
-			MyDataSet controller = Repository.Mock<MyDataSet>();
+			MyDataSet controller = MockRepository.Mock<MyDataSet>();
 			Assert.NotNull(controller);
 		}
 
 		[Fact]
 		public void PassingMockToMock_WhenErrorOccurs()
 		{
-			Accepter accepter = Repository.Mock<Accepter>();
+			Accepter accepter = MockRepository.Mock<Accepter>();
 
             accepter.Accept(accepter);
             Assert.Throws<ExpectationViolationException>(

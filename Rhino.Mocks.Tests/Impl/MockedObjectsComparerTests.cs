@@ -39,8 +39,8 @@ namespace Rhino.Mocks.Tests.Impl
 
 		public MockedObjectsComparerTests()
 		{
-            one = Repository.Mock<IDemo>();
-            two = Repository.Mock<IDemo>();
+            one = MockRepository.Mock<IDemo>();
+            two = MockRepository.Mock<IDemo>();
 		}
 
 		[Fact]

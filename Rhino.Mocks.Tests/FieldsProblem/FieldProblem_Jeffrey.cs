@@ -41,8 +41,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void DelegateToGenericMock()
 		{
-			IEMailFormatter<string> formatterMock = Repository.Mock<IEMailFormatter<string>>();
-			SmtpEMailSenderBase<string> senderMock = Repository.Mock<SmtpEMailSenderBase<string>>();
+			IEMailFormatter<string> formatterMock = MockRepository.Mock<IEMailFormatter<string>>();
+			SmtpEMailSenderBase<string> senderMock = MockRepository.Mock<SmtpEMailSenderBase<string>>();
 
             senderMock.Expect(x => x.SetFormatter(formatterMock))
                 .DoInstead((Action<IEMailFormatter<string>>)delegate(IEMailFormatter<string> formatter)
@@ -57,8 +57,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void Invalid_DelegateToGenericMock()
 		{
-            IEMailFormatter<string> formatterMock = Repository.Mock<IEMailFormatter<string>>();
-            SmtpEMailSenderBase<string> senderMock = Repository.Mock<SmtpEMailSenderBase<string>>();
+            IEMailFormatter<string> formatterMock = MockRepository.Mock<IEMailFormatter<string>>();
+            SmtpEMailSenderBase<string> senderMock = MockRepository.Mock<SmtpEMailSenderBase<string>>();
             
 			Assert.Throws<InvalidOperationException>(
                 () => senderMock.Expect(x => x.SetFormatter(formatterMock))

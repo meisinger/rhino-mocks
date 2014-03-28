@@ -40,13 +40,13 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void CreatedClosedGenericType()
 		{
-            Repository.Mock<ClosedGenericType>();
+            MockRepository.Mock<ClosedGenericType>();
 		}
         
 		[Fact]
 		public void UsingdoOnMethodWithGenericReturnValue()
 		{
-            IGenericType<object> mock = Repository.Mock<IGenericType<object>>();
+            IGenericType<object> mock = MockRepository.Mock<IGenericType<object>>();
 
             mock.Expect(x => x.MyMethod())
                 .DoInstead((MyDelegate)delegate { return new object(); });
@@ -78,7 +78,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 				}
 			}
 
-            IDoubleGeneric<int> mock = Repository.Mock<IDoubleGeneric<int>>();
+            IDoubleGeneric<int> mock = MockRepository.Mock<IDoubleGeneric<int>>();
             mock.Expect(x => x.Method<string>(1, ""));
 		}
 	}

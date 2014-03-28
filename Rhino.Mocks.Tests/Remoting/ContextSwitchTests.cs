@@ -72,7 +72,7 @@ namespace Rhino.Mocks.Tests.Remoting
 		[Fact]
 		public void MockInterface()
 		{
-			IDemo demo = Repository.Mock<IDemo>();
+			IDemo demo = MockRepository.Mock<IDemo>();
 
             demo.Expect(x => x.ReturnIntNoArgs())
                 .Return(54);
@@ -86,8 +86,8 @@ namespace Rhino.Mocks.Tests.Remoting
 		[Fact]
 		public void MockInterfaceWithSameName()
 		{
-			IDemo demo = Repository.Mock<IDemo>();
-            Other.IDemo remotingDemo = Repository.Mock<Other.IDemo>();
+			IDemo demo = MockRepository.Mock<IDemo>();
+            Other.IDemo remotingDemo = MockRepository.Mock<Other.IDemo>();
 
             demo.Expect(x => x.ReturnIntNoArgs())
                 .Return(54);
@@ -106,7 +106,7 @@ namespace Rhino.Mocks.Tests.Remoting
 		[Fact]
 		public void MockInterfaceExpectException()
 		{
-            IDemo demo = Repository.Mock<IDemo>();
+            IDemo demo = MockRepository.Mock<IDemo>();
 
             demo.Expect(x => x.ReturnIntNoArgs())
                 .Throws<InvalidOperationException>();
@@ -118,7 +118,7 @@ namespace Rhino.Mocks.Tests.Remoting
 		[Fact]
 		public void MockInterfaceUnexpectedCall()
 		{
-			IDemo demo = Repository.Mock<IDemo>();
+			IDemo demo = MockRepository.Mock<IDemo>();
 
             demo.Expect(x => x.ReturnIntNoArgs())
                 .Return(34);
@@ -133,7 +133,7 @@ namespace Rhino.Mocks.Tests.Remoting
 		[Fact]
 		public void MockClass()
 		{
-			RemotableDemoClass demo = Repository.Mock<RemotableDemoClass>();
+			RemotableDemoClass demo = MockRepository.Mock<RemotableDemoClass>();
 
             demo.Expect(x => x.Two())
                 .Return(44);
@@ -144,7 +144,7 @@ namespace Rhino.Mocks.Tests.Remoting
 
 		public void MockClassExpectException()
 		{
-            RemotableDemoClass demo = Repository.Mock<RemotableDemoClass>();
+            RemotableDemoClass demo = MockRepository.Mock<RemotableDemoClass>();
 
             demo.Expect(x => x.Two())
                 .Throws<InvalidOperationException>();
@@ -156,7 +156,7 @@ namespace Rhino.Mocks.Tests.Remoting
 		[Fact]
 		public void MockClassUnexpectedCall()
 		{
-            RemotableDemoClass demo = Repository.Mock<RemotableDemoClass>();
+            RemotableDemoClass demo = MockRepository.Mock<RemotableDemoClass>();
 
             demo.Expect(x => x.Prop)
                 .Return(11);

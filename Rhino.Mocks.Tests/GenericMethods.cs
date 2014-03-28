@@ -38,13 +38,13 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void CanStrictMockOfInterfaceWithGenericMethod()
 		{
-            IFactory factory = Repository.Mock<IFactory>();
+            IFactory factory = MockRepository.Mock<IFactory>();
 		}
 
 		[Fact]
 		public void CanSetExpectationsOnInterfaceWithGenericMethod()
 		{
-            IFactory factory = Repository.Mock<IFactory>();
+            IFactory factory = MockRepository.Mock<IFactory>();
 
             factory.Expect(x => x.Create<string>())
                 .Return("working?");
@@ -58,7 +58,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void WillGetErrorIfCallingMethodWithDifferentGenericArgument()
 		{
-            IFactory factory = Repository.Mock<IFactory>();
+            IFactory factory = MockRepository.Mock<IFactory>();
 
             factory.Expect(x => x.Create<string>())
                 .Return("working?");
@@ -72,7 +72,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void WillGiveErrorIfMissingCallToGenericMethod()
 		{
-            IFactory factory = Repository.Mock<IFactory>();
+            IFactory factory = MockRepository.Mock<IFactory>();
 
             factory.Expect(x => x.Create<string>())
                 .Return("working?");

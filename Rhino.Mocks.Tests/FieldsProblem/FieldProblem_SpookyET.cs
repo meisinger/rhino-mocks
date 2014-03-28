@@ -51,8 +51,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             byte[] responseData = Encoding.UTF8.GetBytes("200 OK");
             Stream stream = new MemoryStream(responseData);
 
-            WebRequest request = Repository.Mock<WebRequest>();
-            WebResponse response = Repository.Mock<WebResponse>();
+            WebRequest request = MockRepository.Mock<WebRequest>();
+            WebResponse response = MockRepository.Mock<WebResponse>();
 
             request.Expect(x => x.GetResponse())
                 .Return(response);
@@ -77,7 +77,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void UsingReturnAndThenIgnoreArgs()
         {
-            IDemo demo = Repository.Mock<IDemo>();
+            IDemo demo = MockRepository.Mock<IDemo>();
 
             demo.Expect(x => x.StringArgString(null))
                 .IgnoreArguments()
@@ -90,8 +90,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void WebRequestWhenDisposing()
         {
-            WebRequest webRequestMock = Repository.Mock<WebRequest>();
-            WebResponse webResponseMock = Repository.Mock<WebResponse>();
+            WebRequest webRequestMock = MockRepository.Mock<WebRequest>();
+            WebResponse webResponseMock = MockRepository.Mock<WebResponse>();
 
             webRequestMock.Expect(x => x.GetResponse())
                 .Return(webResponseMock);

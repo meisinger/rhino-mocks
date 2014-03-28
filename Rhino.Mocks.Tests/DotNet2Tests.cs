@@ -39,7 +39,7 @@ namespace Rhino.Mocks.Tests
 
 		public DotNet2Tests()
 		{
-            demo = Repository.Mock<IDotNet2Features>();
+            demo = MockRepository.Mock<IDotNet2Features>();
 		}
 
         public void Dispose()
@@ -74,7 +74,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void CanStrictMockOnClassWithInternalMethod()
 		{
-            WithInternalMethod withInternalMethod = Repository.Partial<WithInternalMethod>();
+            WithInternalMethod withInternalMethod = MockRepository.Partial<WithInternalMethod>();
 
             withInternalMethod.Expect(x => x.Foo())
                 .Throws(new Exception("foo"));

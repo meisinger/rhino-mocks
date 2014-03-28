@@ -17,7 +17,7 @@ namespace Rhino.Mocks.Tests
 
 			RhinoMocks.Logger = expectationWriter;
 
-			IDemo mock = Repository.Mock<IDemo>();
+			IDemo mock = MockRepository.Mock<IDemo>();
             mock.Expect(x => x.VoidNoArgs());
 
 			mock.VoidNoArgs();

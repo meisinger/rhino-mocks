@@ -17,7 +17,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		public void ShouldIgnoreArgumentsOnGenericCallWhenTypeIsStruct()
 		{
 			// setup
-			ISomeService m_SomeServiceMock = Repository.Mock<ISomeService>();
+			ISomeService m_SomeServiceMock = MockRepository.Mock<ISomeService>();
 			SomeClient sut = new SomeClient(m_SomeServiceMock);
 
             m_SomeServiceMock.Expect(x => x.DoSomething<string>(null, null))
@@ -40,7 +40,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void UnexpectedCallToGenericMethod()
 		{
-			ISomeService m_SomeServiceMock = Repository.Mock<ISomeService>();
+			ISomeService m_SomeServiceMock = MockRepository.Mock<ISomeService>();
 
             m_SomeServiceMock.Expect(x => x.DoSomething<string>(null, "foo"));
 
@@ -55,7 +55,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		{
             bool didDo = false;
 
-			IDemo demo = Repository.Mock<IDemo>();
+			IDemo demo = MockRepository.Mock<IDemo>();
             demo.Expect(x => x.VoidNoArgs())
                 .IgnoreArguments()
                 .DoInstead(SetToTrue(out didDo));

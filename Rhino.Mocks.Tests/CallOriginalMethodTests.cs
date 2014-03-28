@@ -38,7 +38,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CallOriginalMethodOnPropGetAndSet()
         {
-            MockingClassesTests.DemoClass demo = Repository.Partial<MockingClassesTests.DemoClass>();
+            MockingClassesTests.DemoClass demo = MockRepository.Partial<MockingClassesTests.DemoClass>();
 
             demo.Expect(x => x.Prop)
                 .Repeat.Any()
@@ -59,7 +59,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CantCallOriginalMethodOnInterface()
         {
-            IDemo demo = Repository.Mock<IDemo>();
+            IDemo demo = MockRepository.Mock<IDemo>();
 
             Assert.Throws<InvalidOperationException>(
                 () => demo.Expect(x => x.ReturnIntNoArgs())
@@ -69,7 +69,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void CantCallOriginalMethodOnAbstractMethod()
         {
-            MockingClassesTests.AbstractDemo demo = Repository.Partial<MockingClassesTests.AbstractDemo>();
+            MockingClassesTests.AbstractDemo demo = MockRepository.Partial<MockingClassesTests.AbstractDemo>();
 
             Assert.Throws<InvalidOperationException>(
                 () => demo.Expect(x => x.Six())

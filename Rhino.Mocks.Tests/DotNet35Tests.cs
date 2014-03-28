@@ -9,7 +9,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void NaturalSyntaxForCallingMethods()
 		{
-            IDemo demo = Repository.Mock<IDemo>();
+            IDemo demo = MockRepository.Mock<IDemo>();
 
             demo.Expect(x => x.VoidNoArgs());
             demo.VoidNoArgs();
@@ -20,7 +20,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void NaturalSyntaxForCallingMethods_WithArguments()
 		{
-            IDemo demo = Repository.Mock<IDemo>();
+            IDemo demo = MockRepository.Mock<IDemo>();
 
             demo.Expect(x => x.VoidStringArg("blah"));
             demo.VoidStringArg("blah");
@@ -31,7 +31,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void NaturalSyntaxForCallingMethods_WithArguments_WhenNotCalled_WouldFailVerification()
 		{
-            IDemo demo = Repository.Mock<IDemo>();
+            IDemo demo = MockRepository.Mock<IDemo>();
 
 			demo.Expect(x => x.VoidStringArg("blah"));
 			
@@ -42,7 +42,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void NaturalSyntaxForCallingMethods_WithArguments_WhenCalledWithDifferentArgument()
 		{
-            IDemo demo = Repository.Mock<IDemo>();
+            IDemo demo = MockRepository.Mock<IDemo>();
 			
             demo.Expect(x => x.VoidStringArg("blah"));
             demo.VoidStringArg("arg");
@@ -54,7 +54,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void CanCallMethodWithParameters_WithoutSpecifyingParameters_WillAcceptAnyParameter()
 		{
-            IDemo demo = Repository.Mock<IDemo>();
+            IDemo demo = MockRepository.Mock<IDemo>();
 			
             demo.Expect(x => x.VoidStringArg("blah"))
                 .IgnoreArguments();

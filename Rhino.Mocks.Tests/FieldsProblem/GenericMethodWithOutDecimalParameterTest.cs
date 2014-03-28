@@ -13,7 +13,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void GenericMethodWithOutDecimalParameter()
 		{
-            IMyInterface mock = Repository.Mock<IMyInterface>();
+            IMyInterface mock = MockRepository.Mock<IMyInterface>();
 
 			decimal expectedOutParameter = 1.234M;
             //decimal emptyOutParameter;

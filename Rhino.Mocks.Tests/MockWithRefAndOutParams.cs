@@ -40,8 +40,8 @@ namespace Rhino.Mocks.Tests
 
 		public MockWithRefAndOutParams()
 		{
-			target = Repository.Mock<IRefAndOut>();
-			remotingTarget = Repository.Mock<RemotingProxyWithOutRef>();
+			target = MockRepository.Mock<IRefAndOut>();
+			remotingTarget = MockRepository.Mock<RemotingProxyWithOutRef>();
 		}
 
 		[Fact]

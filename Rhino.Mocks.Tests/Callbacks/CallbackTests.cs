@@ -44,7 +44,7 @@ namespace Rhino.Mocks.Tests.Callbacks
 		{
 			System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 
-            demo = Repository.Mock<IDemo>();
+            demo = MockRepository.Mock<IDemo>();
 			callbackCalled = false;
 		}
 

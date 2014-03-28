@@ -14,7 +14,7 @@ namespace Rhino.Mocks
     /// <summary>
     /// Repository for mocked objects and expectations.
     /// </summary>
-    public class Repository
+    public class MockRepository
     {
         private static readonly Dictionary<Type, ProxyGenerator> generators;
         private static readonly ObjectInterceptor objectInterceptor;
@@ -23,7 +23,7 @@ namespace Rhino.Mocks
         private readonly ProxyGenerationOptions generatorOptions;
         private readonly ProxyGenerationOptions defaultOptions;
         
-        static Repository()
+        static MockRepository()
         {
             generators = new Dictionary<Type, ProxyGenerator>();
             objectInterceptor = new ObjectInterceptor();
@@ -32,7 +32,7 @@ namespace Rhino.Mocks
         /// <summary>
         /// Constructor
         /// </summary>
-        public Repository()
+        public MockRepository()
         {
             delegateRepository = new RepositoryForDelegates();
             generatorOptions = new ProxyGenerationOptions
@@ -194,7 +194,7 @@ namespace Rhino.Mocks
             var type = typeof(T);
             var remoteType = typeof(MarshalByRefObject);
 
-            var repository = new Repository();
+            var repository = new MockRepository();
             if (remoteType.IsAssignableFrom(type))
             {
                 if (arguments == null || arguments.Length == 0)
@@ -213,7 +213,7 @@ namespace Rhino.Mocks
         public static T MockWithRemoting<T>()
         {
             var type = typeof(T);
-            var repository = new Repository();
+            var repository = new MockRepository();
 
             return (T)repository.CreateMockRemoted(type);
         }
@@ -311,7 +311,7 @@ namespace Rhino.Mocks
             if (type.IsInterface)
                 throw new InvalidOperationException("Interfaces cannot be used to create a Partial mock.");
 
-            var repository = new Repository();
+            var repository = new MockRepository();
             return repository.CreateMockClass(type, extraTypes, arguments, true) as T;
         }
 

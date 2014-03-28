@@ -37,7 +37,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void Can_do_nested_virtual_calls()
 		{
-			var subject = Repository.Partial<SUT>();
+			var subject = MockRepository.Partial<SUT>();
 			subject.VirtualMethod();
 
 			subject.AssertWasCalled(it => it.NestedVirtualMethod());
@@ -46,7 +46,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void Can_do_nested_virtual_calls_when_not_called()
 		{
-			var subject = Repository.Partial<SUT>();
+			var subject = MockRepository.Partial<SUT>();
 			
 			Assert.Throws<ExpectationViolationException>(
 				() => subject.AssertWasCalled(it => it.NestedVirtualMethod()));

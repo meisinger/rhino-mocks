@@ -11,7 +11,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void MockingConcreteForm()
 		{
-            Form frm = Repository.Partial<Form>();
+            Form frm = MockRepository.Partial<Form>();
 			Assert.NotNull(frm);
 		}
 	}

@@ -38,7 +38,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void StaticAccessorForStubAll()
 		{
-            ICat cat = Repository.Mock<ICat>();
+            ICat cat = MockRepository.Mock<ICat>();
             
 			cat.Eyes = 2;
             Assert.Equal(2, cat.Eyes);
@@ -47,7 +47,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void StubAllHasPropertyBehaviorForAllProperties()
 		{
-            ICat cat = Repository.Mock<ICat>();
+            ICat cat = MockRepository.Mock<ICat>();
             
 			cat.Legs = 4;
 			Assert.Equal(4, cat.Legs);
@@ -66,7 +66,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void StubAllHasPropertyBehaviorForAllPropertiesWhenStubbingClasses()
 		{
-            Housecat housecat = Repository.Partial<Housecat>();
+            Housecat housecat = MockRepository.Partial<Housecat>();
             
 			housecat.FurLength = 7;
 			Assert.Equal(7, housecat.FurLength);
@@ -100,7 +100,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void CallingMethodOnStubAllDoesNotCreateExpectations()
 		{
-            ICat cat = Repository.Mock<ICat>();
+            ICat cat = MockRepository.Mock<ICat>();
             
 			cat.Legs = 4;
 			cat.Name = "Esther";
@@ -115,7 +115,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void DemoStubAllLegsProperty()
 		{
-            ICat catStub = Repository.Mock<ICat>();
+            ICat catStub = MockRepository.Mock<ICat>();
             
 			catStub.Legs = 0;
 			Assert.Equal(0, catStub.Legs);
@@ -128,7 +128,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void StubAllCanCreateExpectationOnMethod()
 		{
-            ICat cat = Repository.Mock<ICat>();
+            ICat cat = MockRepository.Mock<ICat>();
             
             cat.Legs = 4;
             cat.Name = "Esther";
@@ -145,7 +145,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void StubAllCanHandlePropertiesGettingRegisteredMultipleTimes()
 		{
-            SpecificFish fish = Repository.Partial<SpecificFish>();
+            SpecificFish fish = MockRepository.Partial<SpecificFish>();
             
 			fish.IsFreshWater = true;
 			Assert.True(fish.IsFreshWater);
@@ -154,7 +154,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void StubCanHandlePolymorphicArgConstraints()
         {
-            IAquarium aquarium = Repository.Mock<IAquarium>();
+            IAquarium aquarium = MockRepository.Mock<IAquarium>();
             aquarium.Stub(x => x.DetermineAge(Arg<MartianFish>.Matches(arg => arg.Planet == "mars"))).Return(100);
             aquarium.Stub(x => x.DetermineAge(Arg<SpecificFish>.Is.TypeOf)).Return(5);
             
@@ -165,7 +165,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void Indexed_Based_Properties()
         {
-            var mock = Repository.Mock<ICat>();
+            var mock = MockRepository.Mock<ICat>();
 
             mock[1] = 10;
             mock[10] = 100;
@@ -205,7 +205,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void Properties_Can_Have_Expectations_Created_For_Get()
         {
-            var mock = Repository.Mock<ICat>();
+            var mock = MockRepository.Mock<ICat>();
 
             mock.Expect(x => x.Eyes)
                 .Return(52352);

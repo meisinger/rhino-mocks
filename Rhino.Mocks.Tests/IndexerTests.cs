@@ -42,7 +42,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void SettingExpectationOnIndexer()
 		{
-			IndexerInterface indexer = Repository.Mock<IndexerInterface>();
+			IndexerInterface indexer = MockRepository.Mock<IndexerInterface>();
 
             indexer.Expect(x => x["1"])
                 .Return("First");

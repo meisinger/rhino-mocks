@@ -40,7 +40,7 @@ namespace Rhino.Mocks.Tests
 
 		public MockRepositoryTests()
 		{
-            demo = Repository.Mock<IDemo>();
+            demo = MockRepository.Mock<IDemo>();
 		}
 
 		[Fact]
@@ -329,7 +329,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void MockObjectThrowsForUnexpectedCall()
 		{
-			IDemo demo = Repository.Mock<IDemo>();
+			IDemo demo = MockRepository.Mock<IDemo>();
 
             demo.VoidNoArgs();
 
@@ -340,7 +340,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void MockObjectThrowsForUnexpectedCall_WhenVerified_IfFirstExceptionWasCaught()
 		{
-            IDemo demo = Repository.Mock<IDemo>();
+            IDemo demo = MockRepository.Mock<IDemo>();
 			
 			try
 			{
@@ -355,7 +355,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void DyamicMockAcceptUnexpectedCall()
 		{
-            IDemo demo = Repository.Mock<IDemo>();
+            IDemo demo = MockRepository.Mock<IDemo>();
 			
 			demo.VoidNoArgs();
             demo.VerifyAllExpectations();
@@ -366,7 +366,7 @@ namespace Rhino.Mocks.Tests
 		{
             Assert.Throws<ArgumentException>(() =>
             {
-                IDemo demo = Repository.Mock<IDemo>("Foo");
+                IDemo demo = MockRepository.Mock<IDemo>("Foo");
             });
 		}
 
@@ -375,7 +375,7 @@ namespace Rhino.Mocks.Tests
 		{
             Assert.Throws<ArgumentException>(() =>
             {
-                EventHandler handler = Repository.Mock<EventHandler>("Foo");
+                EventHandler handler = MockRepository.Mock<EventHandler>("Foo");
             });
 		}
 
@@ -384,7 +384,7 @@ namespace Rhino.Mocks.Tests
 		{
 			try
             {
-                object o = Repository.Mock<object>("Foo");
+                object o = MockRepository.Mock<object>("Foo");
    
                 Assert.False(true, "The above call should have failed");
             }
@@ -397,32 +397,32 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void GenerateMockForClassWithNoDefaultConstructor() 
         {
-            Assert.NotNull(Repository.Partial<ClassWithNonDefaultConstructor>(null, 0));            
+            Assert.NotNull(MockRepository.Partial<ClassWithNonDefaultConstructor>(null, 0));            
         }
 
         [Fact]
         public void GenerateMockForClassWithDefaultConstructor() 
         {
-            Assert.NotNull(Repository.Partial<ClassWithDefaultConstructor>());
+            Assert.NotNull(MockRepository.Partial<ClassWithDefaultConstructor>());
         }
 
         [Fact]
         public void GenerateMockForInterface() 
         {
-            Assert.NotNull(Repository.Mock<IDemo>());
+            Assert.NotNull(MockRepository.Mock<IDemo>());
         }
 
 		[Fact]
 		public void GenerateStrictMockWithRemoting()
 		{
-            IDemo mock = Repository.Mock<IDemo>();
+            IDemo mock = MockRepository.Mock<IDemo>();
 			Assert.NotNull(mock);
 		}
 
 		[Fact]
 		public void GenerateDynamicMockWithRemoting()
 		{
-            IDemo mock = Repository.Mock<IDemo>();
+            IDemo mock = MockRepository.Mock<IDemo>();
 			Assert.NotNull(mock);
         }
 

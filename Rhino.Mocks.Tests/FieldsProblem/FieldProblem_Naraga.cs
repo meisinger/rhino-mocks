@@ -15,7 +15,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void MultiThreadedReplay()
 		{
-			var service = Repository.Mock<IService>();
+			var service = MockRepository.Mock<IService>();
 			for (int i = 0; i < 100; i++)
 			{
 				int i1 = i;

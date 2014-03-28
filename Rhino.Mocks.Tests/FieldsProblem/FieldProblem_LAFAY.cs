@@ -9,7 +9,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         
 		public FieldProblem_LAFAY()
         {
-            demo = Repository.Mock<IDemo>();
+            demo = MockRepository.Mock<IDemo>();
         }
 
         [Fact]

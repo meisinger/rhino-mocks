@@ -139,7 +139,7 @@
     <Compile Include="Remoting\RemotingInvocation.cs" />
     <Compile Include="Remoting\RemotingProxy.cs" />
     <Compile Include="Remoting\RemotingProxyDetector.cs" />
-    <Compile Include="Repository.cs" />
+    <Compile Include="MockRepository.cs" />
     <Compile Include="RepositoryExtensions.cs" />
     <Compile Include="RepositoryForDelegates.cs" />
     <Compile Include="RepositoryForRemoting.cs" />

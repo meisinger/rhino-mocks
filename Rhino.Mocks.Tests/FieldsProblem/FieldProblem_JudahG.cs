@@ -20,7 +20,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             //    return true;
             //};
 
-			IView view = Repository.Mock<IView>();
+			IView view = MockRepository.Mock<IView>();
 
             view.Expect(x => x.Foo = Arg<int>.Matches(y => true));
                 //.Constraints(Is.Matching(alwaysReturnsTrue));

@@ -40,8 +40,8 @@ namespace Rhino.Mocks.Tests
 
 		public  VerifyTests()
 		{
-            demoParam = Repository.Partial<ConcreteDemo>();
-            demo = Repository.Mock<IDemo>();
+            demoParam = MockRepository.Partial<ConcreteDemo>();
+            demo = MockRepository.Mock<IDemo>();
 		}
 
 		public void Dispose()

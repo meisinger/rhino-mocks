@@ -51,7 +51,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void MockClassWithEquals()
         {
-            ClassThatOverrideEquals c = Repository.Mock<ClassThatOverrideEquals>();
+            ClassThatOverrideEquals c = MockRepository.Mock<ClassThatOverrideEquals>();
 
             c.Expect(x => x.Equals(c))
                 .Return(false);

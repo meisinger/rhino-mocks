@@ -38,7 +38,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void StrictMockWithIndexedProp()
         {
-            IWithIndexedProperty index = Repository.Mock<IWithIndexedProperty>();
+            IWithIndexedProperty index = MockRepository.Mock<IWithIndexedProperty>();
 
             index.Expect(x => x.get_Foo("Blah"))
                 .Return(5);

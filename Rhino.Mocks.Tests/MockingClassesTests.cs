@@ -42,7 +42,7 @@ namespace Rhino.Mocks.Tests
 
 		public MockingClassesTests()
 		{
-			demoClass = Repository.Partial<DemoClass>();
+			demoClass = MockRepository.Partial<DemoClass>();
 		}
 
 		[Fact]
@@ -59,7 +59,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void MockClassWithParametrizedCtor()
 		{
-			ParametrizedCtor pc = Repository.Partial<ParametrizedCtor>(3, "Hello");
+			ParametrizedCtor pc = MockRepository.Partial<ParametrizedCtor>(3, "Hello");
 			Assert.Equal(3, pc.Int);
 			Assert.Equal("Hello", pc.String);
 
@@ -73,13 +73,13 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void MockClassWithOverloadedCtor()
 		{
-			OverLoadedCtor oc = Repository.Partial<OverLoadedCtor>(1);
+			OverLoadedCtor oc = MockRepository.Partial<OverLoadedCtor>(1);
 			OverLoadCtorExercise(oc, 1, null);
 
-			oc = Repository.Partial<OverLoadedCtor>("Hello");
+			oc = MockRepository.Partial<OverLoadedCtor>("Hello");
 			OverLoadCtorExercise(oc, 0, "Hello");
 
-			oc = Repository.Partial<OverLoadedCtor>(33, "Hello");
+			oc = MockRepository.Partial<OverLoadedCtor>(33, "Hello");
 			OverLoadCtorExercise(oc, 33, "Hello");
 		}
 
@@ -88,7 +88,7 @@ namespace Rhino.Mocks.Tests
 		{
 		    try
 		    {
-                Repository.Partial<OverLoadedCtor>("Ayende", 55);
+                MockRepository.Partial<OverLoadedCtor>("Ayende", 55);
 
                 Assert.False(true, "The above call should have failed");
 		    }

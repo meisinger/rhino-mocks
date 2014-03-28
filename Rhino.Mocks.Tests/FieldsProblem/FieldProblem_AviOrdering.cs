@@ -75,8 +75,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         public void SubmitDataToDB()
         {
             //Setup a mock view and ISumbition
-            IView myMockView = Repository.Mock<IView>();
-            ISumbition myMockSubmition = Repository.Mock<ISumbition>();
+            IView myMockView = MockRepository.Mock<IView>();
+            ISumbition myMockSubmition = MockRepository.Mock<ISumbition>();
 
             //Record expectations
             myMockView.Expect(x => x.UserID)

@@ -45,7 +45,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void MockAbsPropertyGetter()
 		{
-			AbsCls ac = Repository.Partial<AbsCls>();
+			AbsCls ac = MockRepository.Partial<AbsCls>();
 
             ac.Expect(x => x.AbPropGet)
                 .Return("n");
@@ -57,7 +57,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void MockAbsPropertySetter()
 		{
-			AbsCls ac = Repository.Mock<AbsCls>();
+			AbsCls ac = MockRepository.Mock<AbsCls>();
 
             ac.Expect(x => x.AbPropSet = "n");
 			
@@ -69,7 +69,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void MockAbsProp()
 		{
-			AbsCls ac = Repository.Mock<AbsCls>();
+			AbsCls ac = MockRepository.Mock<AbsCls>();
 
             ac.Expect(x => x.AbProp = "n");
             ac.Expect(x => x.AbProp)
@@ -83,7 +83,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void MockAbstractMethod()
 		{
-			AbsCls ac = Repository.Mock<AbsCls>();
+			AbsCls ac = MockRepository.Mock<AbsCls>();
 
             ac.Expect(x => x.Method())
                 .Return(45);

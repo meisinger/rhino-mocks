@@ -34,7 +34,7 @@ namespace Rhino.Mocks
             if (container == null)
                 throw new ArgumentOutOfRangeException("instance", "Assertion can only be performed on a mocked object or instance.");
 
-            var assertion = Repository.GetMethodCallArguments(instance, action);
+            var assertion = MockRepository.GetMethodCallArguments(instance, action);
             var methodName = assertion.GetDisplayName(invocation);
 
             var actuals = container.ListActuals();
@@ -71,7 +71,7 @@ namespace Rhino.Mocks
             if (container == null)
                 throw new ArgumentOutOfRangeException("instance", "Assertion can only be performed on a mocked object or instance.");
 
-            var assertion = Repository.GetMethodCallArguments(instance, func);
+            var assertion = MockRepository.GetMethodCallArguments(instance, func);
             var methodName = assertion.GetDisplayName(invocation);
 
             var actuals = container.ListActuals();
@@ -107,7 +107,7 @@ namespace Rhino.Mocks
             if (container == null)
                 throw new ArgumentOutOfRangeException("instance", "Assertion can only be performed on a mocked object or instance.");
 
-            var assertion = Repository.GetMethodCallArguments(instance, action);
+            var assertion = MockRepository.GetMethodCallArguments(instance, action);
             var methodName = assertion.GetDisplayName(invocation);
 
             var actuals = container.ListActuals();
@@ -142,7 +142,7 @@ namespace Rhino.Mocks
             if (container == null)
                 throw new ArgumentOutOfRangeException("instance", "Assertion can only be performed on a mocked object or instance.");
 
-            var assertion = Repository.GetMethodCallArguments(instance, func);
+            var assertion = MockRepository.GetMethodCallArguments(instance, func);
             var methodName = assertion.GetDisplayName(invocation);
 
             var actuals = container.ListActuals();
@@ -323,7 +323,7 @@ namespace Rhino.Mocks
             if (container == null)
                 throw new ArgumentOutOfRangeException("instance", "Assertion can only be performed on a mocked object or instance.");
 
-            var assertion = Repository.GetMethodCallArguments(instance, action);
+            var assertion = MockRepository.GetMethodCallArguments(instance, action);
             var methodName = assertion.GetDisplayName(invocation);
 
             var actuals = container.ListActuals();
@@ -356,7 +356,7 @@ namespace Rhino.Mocks
             if (container == null)
                 throw new ArgumentOutOfRangeException("instance", "Assertion can only be performed on a mocked object or instance.");
 
-            var assertion = Repository.GetMethodCallArguments(instance, func);
+            var assertion = MockRepository.GetMethodCallArguments(instance, func);
             var methodName = assertion.GetDisplayName(invocation);
 
             var actuals = container.ListActuals();

@@ -39,27 +39,27 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void CanMockIE()
 		{
-			IHTMLEventObj2 mock = Repository.Mock<IHTMLEventObj2>();
+			IHTMLEventObj2 mock = MockRepository.Mock<IHTMLEventObj2>();
 			Assert.NotNull(mock);
 		}
 
 		[Fact]
 		public void CanMockComInterface()
 		{
-			IServiceProvider serviceProvider = Repository.Mock<IServiceProvider, IHTMLDataTransfer>();
+			IServiceProvider serviceProvider = MockRepository.Mock<IServiceProvider, IHTMLDataTransfer>();
             Assert.NotNull(serviceProvider);
 		}
 
 		[Fact] 
 		public void TryToMockClassWithProtectedInternalAbstractClass()
 		{
-			Repository.Mock<SomeClassWithProtectedInternalAbstractClass>();
+			MockRepository.Mock<SomeClassWithProtectedInternalAbstractClass>();
 		}
 
 		[Fact] 
 		public void TryToMockClassWithProtectedAbstractClass()
 		{
-            Repository.Mock<SomeClassWithProtectedAbstractClass>();
+            MockRepository.Mock<SomeClassWithProtectedAbstractClass>();
 		}
 
 		public abstract class SomeClassWithProtectedInternalAbstractClass

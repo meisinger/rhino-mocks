@@ -9,8 +9,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
 		public void CanMockMethodWithEnvironmentPermissions()
 		{
-            IEmployeeRepository employeeRepository = Repository.Mock<IEmployeeRepository>();
-            IEmployee employee = Repository.Mock<IEmployee>();
+            IEmployeeRepository employeeRepository = MockRepository.Mock<IEmployeeRepository>();
+            IEmployee employee = MockRepository.Mock<IEmployee>();
 
             employeeRepository.Expect(x => x.GetEmployeeDetails("ayende"))
                 .Return(employee);

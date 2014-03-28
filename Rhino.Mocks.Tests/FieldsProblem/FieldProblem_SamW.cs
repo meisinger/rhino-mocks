@@ -12,7 +12,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         {
             string b;
 
-            ITest test = Repository.Mock<ITest>();
+            ITest test = MockRepository.Mock<ITest>();
             test.Expect(x => x.ArrayWithOut(Arg<string[]>.List.IsIn("data"), out Arg<string>.Out("SuccessWithOut2").Dummy))
                 .Return("SuccessWithOut1");
 

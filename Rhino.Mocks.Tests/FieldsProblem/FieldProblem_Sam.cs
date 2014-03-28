@@ -9,7 +9,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void Test()
 		{
-            SimpleOperations myMock = Repository.Partial<SimpleOperations>();
+            SimpleOperations myMock = MockRepository.Partial<SimpleOperations>();
 
             myMock.Expect(x => x.AddTwoValues(1, 2))
                 .Return(3);
@@ -21,7 +21,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void WillRememberExceptionInsideOrderRecorderEvenIfInsideCatchBlock()
 		{
-            IInterfaceWithThreeMethods interfaceWithThreeMethods = Repository.Mock<IInterfaceWithThreeMethods>();
+            IInterfaceWithThreeMethods interfaceWithThreeMethods = MockRepository.Mock<IInterfaceWithThreeMethods>();
 
             interfaceWithThreeMethods.Expect(x => x.A());
             interfaceWithThreeMethods.Expect(x => x.C());

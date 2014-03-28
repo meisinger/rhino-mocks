@@ -8,7 +8,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
         public void RepeatTimes_Fails_When_Called_More_Then_Expected()
         {
-            var interfaceMock = Repository.Mock<IRepeatsWithGenerate>();
+            var interfaceMock = MockRepository.Mock<IRepeatsWithGenerate>();
 
             interfaceMock.Expect(x => x.GetMyIntValue())
                 .Repeat.Times(1)
@@ -24,7 +24,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
         public void RepeatTimes_Works_When_Called_Less_Then_Expected()
         {
-            var interfaceMock = Repository.Mock<IRepeatsWithGenerate>();
+            var interfaceMock = MockRepository.Mock<IRepeatsWithGenerate>();
 
             interfaceMock.Expect(x => x.GetMyIntValue())
                 .Repeat.Times(2)

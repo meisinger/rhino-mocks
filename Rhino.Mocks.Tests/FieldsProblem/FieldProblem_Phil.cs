@@ -62,7 +62,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
 		public void VerifyingThatEventWasAttached()
 		{
-            IWithEvent events = Repository.Mock<IWithEvent>();
+            IWithEvent events = MockRepository.Mock<IWithEvent>();
 
             events.ExpectEvent(x => x.Load += null)
                 .IgnoreArguments();

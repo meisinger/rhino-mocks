@@ -42,7 +42,7 @@ namespace Rhino.Mocks.Tests.Constraints
 		
 		public ConstraintTests()
 		{
-			demo = Repository.Mock<IDemo>();
+			demo = MockRepository.Mock<IDemo>();
 		}
 
         [Fact]

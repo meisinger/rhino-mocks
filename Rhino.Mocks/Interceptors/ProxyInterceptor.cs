@@ -91,7 +91,7 @@ namespace Rhino.Mocks.Interceptors
 
                 try
                 {
-                    var repository = new Repository();
+                    var repository = new MockRepository();
                     typeInstance = repository.CreateMockObject(type, new Type[0], new object[0]);
                 }
                 catch (Exception)

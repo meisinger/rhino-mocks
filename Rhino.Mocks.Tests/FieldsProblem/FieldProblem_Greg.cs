@@ -7,8 +7,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
         public void IgnoreArguments()
         {
-            IFoo myFoo = Repository.Mock<IFoo>();
-            IBar<int> myBar = Repository.Mock<IBar<int>>();
+            IFoo myFoo = MockRepository.Mock<IFoo>();
+            IBar<int> myBar = MockRepository.Mock<IBar<int>>();
 
             myFoo.Expect(x => x.RunBar(myBar))
                 .IgnoreArguments()

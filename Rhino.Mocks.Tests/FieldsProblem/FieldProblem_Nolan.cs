@@ -22,8 +22,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
         public StubDemoTestFixture()
         {
-            _mockBase = Repository.Mock<IBase>();
-            _mockChild = Repository.Mock<IChild>();
+            _mockBase = MockRepository.Mock<IBase>();
+            _mockChild = MockRepository.Mock<IChild>();
         }
 
         public void Dispose()

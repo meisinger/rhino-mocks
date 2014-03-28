@@ -37,7 +37,7 @@ namespace Rhino.Mocks.Tests
 
 		public ExpectTests()
 		{
-            demo = Repository.Mock<IDemo>();
+            demo = MockRepository.Mock<IDemo>();
 		}
 
 		public void Dispose()

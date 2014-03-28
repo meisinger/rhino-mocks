@@ -56,8 +56,8 @@ namespace Rhino.Mocks.Tests
 
 		public ArgConstraintTests()
 		{
-			demoMock = Repository.Mock<IDemo>();
-            testMock = Repository.Mock<ITestInterface>();
+			demoMock = MockRepository.Mock<IDemo>();
+            testMock = MockRepository.Mock<ITestInterface>();
 		}
 
 		[Fact]
@@ -126,7 +126,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void Event()
 		{
-            ITestInterface eventMock = Repository.Mock<ITestInterface>();
+            ITestInterface eventMock = MockRepository.Mock<ITestInterface>();
 
             eventMock.Expect(x => x.AnEvent += Arg<EventHandler<EventArgs>>.Is.Anything);
             eventMock.AnEvent += handler;
@@ -137,7 +137,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void ListTest()
 		{
-            ITestInterface testMock = Repository.Mock<ITestInterface>();
+            ITestInterface testMock = MockRepository.Mock<ITestInterface>();
 
             testMock.Expect(x => x.VoidList(Arg<List<string>>.List.Count(Is.GreaterThan(3))));
             testMock.Expect(x => x.VoidList(Arg<List<string>>.List.IsIn("hello")));
@@ -172,7 +172,7 @@ namespace Rhino.Mocks.Tests
 			Arg<int>.Is.Equal(4);
 			Arg<int>.Is.Equal(4);
 
-			demoMock = Repository.Mock<IDemo>();
+			demoMock = MockRepository.Mock<IDemo>();
 
             demoMock.Expect(x => x.VoidThreeArgs(
                 Arg<int>.Is.Equal(4), Arg.Text.Contains("World"), Arg<float>.Is.Equal(3.14f)));
@@ -241,7 +241,7 @@ namespace Rhino.Mocks.Tests
 		[Fact]
 		public void MockStringDelegateWithParams()
 		{
-            StringDelegateWithParams d = Repository.Mock<StringDelegateWithParams>(null);
+            StringDelegateWithParams d = MockRepository.Mock<StringDelegateWithParams>(null);
 
             d.Expect(x => x(Arg<int>.Is.Equal(1), Arg<string>.Is.Equal("111")))
                 .Return("abc");
@@ -261,7 +261,7 @@ namespace Rhino.Mocks.Tests
         public void Mock_object_using_ExpectMethod_with_ArgConstraints_allow_for_multiple_calls_as_default_behavior()
         {
             // Arrange
-            var mock = Repository.Mock<IDemo>();
+            var mock = MockRepository.Mock<IDemo>();
             mock.Expect(x => x.StringArgString(Arg<string>.Is.Equal("input")))
                 .Return("output");
 
@@ -278,7 +278,7 @@ namespace Rhino.Mocks.Tests
         public void Stub_object_using_ExpectMethod_with_ArgConstraints_allow_for_multiple_calls_as_default_behavior()
         {
             // Arrange
-            var mock = Repository.Mock<IDemo>();
+            var mock = MockRepository.Mock<IDemo>();
             mock.Expect(x => x.StringArgString(Arg<string>.Is.Equal("input")))
                 .Return("output");
 
@@ -295,7 +295,7 @@ namespace Rhino.Mocks.Tests
         public void Stub_object_using_StubMethod_with_ArgConstraints_allow_for_multiple_calls_as_default_behavior()
         {
             // Arrange
-            var stub = Repository.Mock<IDemo>();
+            var stub = MockRepository.Mock<IDemo>();
             stub.Stub(x => x.StringArgString(Arg<string>.Is.Equal("input")))
                 .Return("output");
 
@@ -312,7 +312,7 @@ namespace Rhino.Mocks.Tests
         public void Mock_object_using_StubMethod_with_ArgConstraints_allow_for_multiple_calls_as_default_behavior()
         {
             // Arrange
-            var mock = Repository.Mock<IDemo>();
+            var mock = MockRepository.Mock<IDemo>();
             mock.Stub(x => x.StringArgString(Arg<string>.Is.Equal("input")))
                 .Return("output");
 
@@ -329,7 +329,7 @@ namespace Rhino.Mocks.Tests
         public void ImplicitlyConverted_parameter_is_properly_compared_when_using_IsEqual()
         {
             // Arrange
-            var stub = Repository.Mock<ITestService>();
+            var stub = MockRepository.Mock<ITestService>();
             stub.Stub(x => x.GetUser(Arg<long>.Is.Equal(1))).Return("test"); // 1 is inferred as Int32 (not Int64)
 
             // Assert
@@ -341,7 +341,7 @@ namespace Rhino.Mocks.Tests
         public void ImplicitlyConverted_parameter_is_properly_compared_when_using_IsNotEqual()
         {
             // Arrange
-            var stub = Repository.Mock<ITestService>();
+            var stub = MockRepository.Mock<ITestService>();
             stub.Stub(x => x.GetUser(Arg<long>.Is.NotEqual(1))).Return("test"); // 1 is inferred as Int32 (not Int64)
 
             var actual = stub.GetUser(0);
@@ -355,7 +355,7 @@ namespace Rhino.Mocks.Tests
         public void ImplicitlyConverted_parameter_is_properly_compared_when_using_IsGreaterThan()
         {
             // Arrange
-            var stub = Repository.Mock<ITestService>();
+            var stub = MockRepository.Mock<ITestService>();
             stub.Stub(x => x.GetUser(Arg<long>.Is.GreaterThan(1))).Return("test"); // 1 is inferred as Int32 (not Int64)
 
             // Assert
@@ -368,7 +368,7 @@ namespace Rhino.Mocks.Tests
         public void ImplicitlyConverted_parameter_is_properly_compared_when_using_IsGreaterThanOrEqual()
         {
             // Arrange
-            var stub = Repository.Mock<ITestService>();
+            var stub = MockRepository.Mock<ITestService>();
             stub.Stub(x => x.GetUser(Arg<long>.Is.GreaterThanOrEqual(2))).Return("test"); // 1 is inferred as Int32 (not Int64)
 
             // Assert
@@ -381,7 +381,7 @@ namespace Rhino.Mocks.Tests
         public void ImplicitlyConverted_parameter_is_properly_compared_when_using_IsLessThan()
         {
             // Arrange
-            var stub = Repository.Mock<ITestService>();
+            var stub = MockRepository.Mock<ITestService>();
             stub.Stub(x => x.GetUser(Arg<long>.Is.LessThan(2))).Return("test"); // 1 is inferred as Int32 (not Int64)
 
             // Assert
@@ -394,7 +394,7 @@ namespace Rhino.Mocks.Tests
         public void ImplicitlyConverted_parameter_is_properly_compared_when_using_IsLessThanOrEqual()
         {
             // Arrange
-            var stub = Repository.Mock<ITestService>();
+            var stub = MockRepository.Mock<ITestService>();
             stub.Stub(x => x.GetUser(Arg<long>.Is.LessThanOrEqual(2))).Return("test"); // 1 is inferred as Int32 (not Int64)
 
             // Assert

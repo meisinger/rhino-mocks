@@ -44,7 +44,7 @@ namespace Rhino.Mocks.Tests
 
 		public DoHanlderTests()
         {
-            demo = Repository.Mock<IDemo>();
+            demo = MockRepository.Mock<IDemo>();
         }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace Rhino.Mocks.Tests
         [Fact]
         public void SayHelloWorld()
         {
-            INameSource nameSource = Repository.Mock<INameSource>();
+            INameSource nameSource = MockRepository.Mock<INameSource>();
 
             nameSource.Expect(x => x.CreateName(null, null))
                 .IgnoreArguments()

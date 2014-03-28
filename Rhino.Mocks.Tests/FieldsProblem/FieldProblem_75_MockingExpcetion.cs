@@ -37,7 +37,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void MockingException()
 		{
-			InvalidOperationException mock = Repository.Mock<InvalidOperationException>();
+			InvalidOperationException mock = MockRepository.Mock<InvalidOperationException>();
 			Assert.NotNull(mock);
 		}
 	}

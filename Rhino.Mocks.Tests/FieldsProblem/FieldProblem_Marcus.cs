@@ -53,7 +53,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         {
             try
             {
-                ClassWithThrowingCtor c = Repository.Mock<ClassWithThrowingCtor>();
+                ClassWithThrowingCtor c = MockRepository.Mock<ClassWithThrowingCtor>();
                 Assert.NotNull(c);
                 Assert.False(true, "Exception expected");
             }

@@ -9,7 +9,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         public void CallingMethodTwiceAndAssertingWasCalledOnce()
         {
             // IFormatProvider was the first thing that popped up, the type really doesn't matter here
-            var mock = Repository.Mock<IFormatProvider>();
+            var mock = MockRepository.Mock<IFormatProvider>();
 
             // two calls to the same method
             mock.GetFormat(typeof(string));
@@ -25,7 +25,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         public void CallingMethodTwiceAndAssertingWasCalledTwice()
         {
             // IFormatProvider was the first thing that popped up, the type really doesn't matter here
-            var mock = Repository.Mock<IFormatProvider>();
+            var mock = MockRepository.Mock<IFormatProvider>();
 
             // two calls to the same method
             mock.GetFormat(typeof(string));

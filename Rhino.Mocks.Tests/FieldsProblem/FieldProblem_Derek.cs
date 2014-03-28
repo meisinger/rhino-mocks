@@ -38,7 +38,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
 		public FieldProblem_Derek()
 		{
-            mockedInterface = Repository.Mock<IMockInterface>();
+            mockedInterface = MockRepository.Mock<IMockInterface>();
 		}
         
 		public void Dispose()

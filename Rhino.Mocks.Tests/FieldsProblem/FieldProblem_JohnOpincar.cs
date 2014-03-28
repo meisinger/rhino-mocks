@@ -47,7 +47,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		{
 		    Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 			
-            IDaSchedulerView m_view = Repository.Mock<IDaSchedulerView>();
+            IDaSchedulerView m_view = MockRepository.Mock<IDaSchedulerView>();
 //			DaSchedulerPresenter presenter = new DaSchedulerPresenter(m_view, new TestScheduleLoader(0)); 
 
             m_view.Expect(x => x.DateOf = new DateTime(2006, 8, 8));

@@ -12,7 +12,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void HostingMockedService()
         {
-            var mock = Repository.Partial<ServiceClassImpl>();
+            var mock = MockRepository.Partial<ServiceClassImpl>();
 
             ServiceHost host = new ServiceHost((IServiceClassInterface)mock, new Uri("net.tcp://localhost:9876/MyService"));
             ServiceEndpoint endpoint = host.AddServiceEndpoint(typeof(IServiceClassInterface), new NetTcpBinding(), "net.tcp://localhost:9876/MyService");

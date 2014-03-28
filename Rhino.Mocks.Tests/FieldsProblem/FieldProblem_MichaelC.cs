@@ -13,7 +13,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
             int countOne = 0;
             int countTwo = 0;
 
-            IWithEvent mock = Repository.Mock<IWithEvent>();
+            IWithEvent mock = MockRepository.Mock<IWithEvent>();
 
             mock.ExpectEvent(x => x.Load += null)
                 .IgnoreArguments();

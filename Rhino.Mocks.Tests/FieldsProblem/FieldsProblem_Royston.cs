@@ -53,8 +53,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
 			// This should not blow up.
 
-            IDuplicateType<object[]> mock1 = Repository.Mock<IDuplicateType<object[]>>();
-            IDuplicateType<object[]> mock2 = Repository.Mock<IDuplicateType<object[]>>();
+            IDuplicateType<object[]> mock1 = MockRepository.Mock<IDuplicateType<object[]>>();
+            IDuplicateType<object[]> mock2 = MockRepository.Mock<IDuplicateType<object[]>>();
 
             mock1.VerifyExpectations(true);
             mock2.VerifyExpectations(true);
@@ -80,7 +80,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 
         private IIntf1 CreateAndConfigureMock()
         {
-            IIntf1 i1 = (IIntf1)Repository.Partial<Cls1>();
+            IIntf1 i1 = (IIntf1)MockRepository.Partial<Cls1>();
             i1.Expect(x => x.A());
             i1.Expect(x => x.B());
             i1.Expect(x => x.A());

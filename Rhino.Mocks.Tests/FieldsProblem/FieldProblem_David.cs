@@ -39,7 +39,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         [Fact]
         public void MockWebUIPageClass()
         {
-            Page page = Repository.Mock<Page>();
+            Page page = MockRepository.Mock<Page>();
 
             page.Expect(x => x.Validate());
 
@@ -51,7 +51,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
         public void MockClassWithVirtualMethodCallFromConstructor()
         {
             ClassWithVirtualMethodCallFromConstructor cwvmcfc = 
-                Repository.Mock<ClassWithVirtualMethodCallFromConstructor>();
+                MockRepository.Mock<ClassWithVirtualMethodCallFromConstructor>();
 
             Assert.NotNull(cwvmcfc);
 

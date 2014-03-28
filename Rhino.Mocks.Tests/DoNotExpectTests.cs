@@ -39,7 +39,7 @@ namespace Rhino.Mocks.Tests
 
 		public DoNotExpectTests()
         {
-            demo = Repository.Mock<IDemo>();
+            demo = MockRepository.Mock<IDemo>();
         }
 
         [Fact]

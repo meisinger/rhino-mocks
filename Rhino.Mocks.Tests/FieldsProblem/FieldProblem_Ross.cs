@@ -39,8 +39,8 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void GenericMethodWithConstrait()
 		{
-			IClass1 class1 = Repository.Mock<IClass1>();
-            IClass2 class2 = Repository.Mock<IClass2>();
+			IClass1 class1 = MockRepository.Mock<IClass1>();
+            IClass2 class2 = MockRepository.Mock<IClass2>();
 
             class1.Expect(x => x.Method1<int>(1));
             class2.Expect(x => x.Method2(new ExampleClass()));

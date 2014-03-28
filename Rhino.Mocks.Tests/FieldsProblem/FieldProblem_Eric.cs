@@ -45,7 +45,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 		[Fact]
 		public void MockAClassWithFinalizer()
 		{
-			ClassWithFinalizer withFinalizer = Repository.Mock<ClassWithFinalizer>();
+			ClassWithFinalizer withFinalizer = MockRepository.Mock<ClassWithFinalizer>();
 
             withFinalizer.VerifyExpectations(true);
 			withFinalizer = null; // abandon the variable, will make it avialable for GC.
@@ -58,7 +58,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 			[Fact]
 			public void ThisWorks()
 			{
-                IFoo mockFoo = Repository.Mock<IFoo>();
+                IFoo mockFoo = MockRepository.Mock<IFoo>();
 
 				int junk = 3;
                 mockFoo.Expect(x => x.foo(ref Arg<int>.Ref(junk).Dummy))
@@ -73,7 +73,7 @@ namespace Rhino.Mocks.Tests.FieldsProblem
 			[Fact]
 			public void ThisDoesnt()
 			{
-				IFoo mockFoo = Repository.Mock<IFoo>();
+				IFoo mockFoo = MockRepository.Mock<IFoo>();
 
 				int junk = 3;
                 mockFoo.Expect(x => x.foo(ref Arg<int>.Ref(junk).Dummy))
