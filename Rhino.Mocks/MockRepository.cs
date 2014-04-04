@@ -8,6 +8,7 @@ using Rhino.Mocks.Interceptors;
 using Rhino.Mocks.Interfaces;
 using Rhino.Mocks.Remoting;
 using Rhino.Mocks.Expectations;
+using Castle.DynamicProxy.Internal;
 
 namespace Rhino.Mocks
 {
@@ -44,9 +45,11 @@ namespace Rhino.Mocks
             delegateRepository = new RepositoryForDelegates();
             generatorOptions = new ProxyGenerationOptions
             {
-                AttributesToAddToGeneratedTypes = { new __ProtectAttribute() },
                 Selector = new RhinoSelector(),
             };
+
+            generatorOptions.AdditionalAttributes
+                .Add(AttributeUtil.CreateBuilder<__ProtectAttribute>());
 
             defaultOptions = new ProxyGenerationOptions
             {
