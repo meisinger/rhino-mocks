@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
+using Castle.DynamicProxy.Internal;
 using Rhino.Mocks.Helpers;
 using Rhino.Mocks.Interceptors;
 using Rhino.Mocks.Interfaces;
 using Rhino.Mocks.Remoting;
 using Rhino.Mocks.Expectations;
-using Castle.DynamicProxy.Internal;
 
 namespace Rhino.Mocks
 {
