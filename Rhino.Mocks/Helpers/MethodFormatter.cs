@@ -125,6 +125,11 @@ namespace Rhino.Mocks.Helpers
                         .Append(", ");
                 }
 
+                if (buffer.Length == 1)
+                    return buffer
+                        .Append("]")
+                        .ToString();
+
                 return buffer
                     .Remove(buffer.Length - 2, 2)
                     .Append("]")
